@@ -1,15 +1,11 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-"use client";
 
-import { Heart, Users, Star } from "lucide-react";
+import {  Users, Star } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
 import { Button } from "../button";
 
-import image from "../../../../public/alpine-mountain-hiking-adventure.png"
-// /tropical-beach-island-getaway.png
 interface TripCardProps {
-  image: string;
+  image: string; 
   destination: string;
   title: string;
   duration: string;
@@ -29,20 +25,22 @@ export default function TripCard({
   travelers,
   tags,
 }: TripCardProps) {
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
 
   return (
     <div className="rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 group cursor-pointer">
       <div className="relative h-48 overflow-hidden bg-card">
         <Image
-          src={`/../../../../public${image}` || "/placeholder.svg"}
+          src={image || "/placeholder.svg"} 
           alt={title}
-          width={100}
-          height={100}
+          width={500}
+          height={300}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
+
         <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <Button
+
+        {/* <Button
           onClick={() => setLiked(!liked)}
           className="absolute top-3 right-3 p-2 rounded-full bg-background/80 hover:bg-background transition-colors"
         >
@@ -51,7 +49,7 @@ export default function TripCard({
               liked ? "fill-accent text-accent" : "text-foreground"
             }`}
           />
-        </Button>
+        </Button> */}
       </div>
 
       <div className="p-5 bg-background">

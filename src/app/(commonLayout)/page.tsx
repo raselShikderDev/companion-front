@@ -1,13 +1,13 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-"use client"
-import { Button } from "@/components/ui/button"
-import Header from "@/components/ui/shared/header"
-import Hero from "@/components/ui/shared/hero"
-import TripCard from "@/components/ui/shared/tripCard"
-import MatchingFeature from "@/components/ui/shared/matchingFeature"
-import ReviewCard from "@/components/ui/shared/reviewCard"
-import Footer from "@/components/ui/shared/footer"
-import { ChevronRight, Shield, Users, Zap } from "lucide-react"
+"use client";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/shared/header";
+import Hero from "@/components/ui/shared/hero";
+import TripCard from "@/components/ui/shared/tripCard";
+import MatchingFeature from "@/components/ui/shared/matchingFeature";
+import ReviewCard from "@/components/ui/shared/reviewCard";
+import Footer from "@/components/ui/shared/footer";
+import { ChevronRight, Shield, Users, Zap } from "lucide-react";
 
 export default function Page() {
   return (
@@ -19,10 +19,15 @@ export default function Page() {
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-background to-background/95">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">Explore Destinations</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">Curated Trips for Every Traveler</h2>
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+              Explore Destinations
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">
+              Curated Trips for Every Traveler
+            </h2>
             <p className="text-muted-foreground text-lg max-w-2xl">
-              Handpicked experiences designed by travel experts, matching your style and preferences.
+              Handpicked experiences designed by travel experts, matching your
+              style and preferences.
             </p>
           </div>
 
@@ -37,6 +42,7 @@ export default function Page() {
               travelers={24}
               tags={["Beach", "Adventure", "Culture"]}
             />
+
             <TripCard
               image="/alpine-mountain-hiking-adventure.png"
               destination="Swiss Alps"
@@ -47,6 +53,7 @@ export default function Page() {
               travelers={18}
               tags={["Hiking", "Nature", "Photography"]}
             />
+
             <TripCard
               image="/ancient-temple-historic-city-tour.png"
               destination="Kyoto, Japan"
@@ -57,6 +64,7 @@ export default function Page() {
               travelers={32}
               tags={["Culture", "History", "Food"]}
             />
+
             <TripCard
               image="/safari-wildlife-savanna-africa.png"
               destination="Serengeti, Tanzania"
@@ -67,6 +75,7 @@ export default function Page() {
               travelers={12}
               tags={["Safari", "Wildlife", "Photography"]}
             />
+
             <TripCard
               image="/colorful-street-art-urban-exploration.png"
               destination="Buenos Aires, Argentina"
@@ -77,6 +86,7 @@ export default function Page() {
               travelers={28}
               tags={["Culture", "Food", "Nightlife"]}
             />
+
             <TripCard
               image="/northern-lights-iceland-aurora.png"
               destination="Iceland"
@@ -105,11 +115,15 @@ export default function Page() {
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-card/50">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">AI-Powered</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">Smart Matching Technology</h2>
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+              AI-Powered
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">
+              Smart Matching Technology
+            </h2>
             <p className="text-muted-foreground text-lg max-w-2xl">
-              Our algorithm learns your preferences to connect you with perfect travel companions and personalized
-              experiences.
+              Our algorithm learns your preferences to connect you with perfect
+              travel companions and personalized experiences.
             </p>
           </div>
 
@@ -137,10 +151,15 @@ export default function Page() {
       <section className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">Community Stories</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">Real Experiences from Real Travelers</h2>
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+              Community Stories
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">
+              Real Experiences from Real Travelers
+            </h2>
             <p className="text-muted-foreground text-lg max-w-2xl">
-              Read authentic reviews and stories from travelers who've made unforgettable memories.
+              Read authentic reviews and stories from travelers who've made
+              unforgettable memories.
             </p>
           </div>
 
@@ -177,10 +196,15 @@ export default function Page() {
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-card/50">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">Flexible Plans</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">Choose Your Adventure Level</h2>
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+              Flexible Plans
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-balance mb-4">
+              Choose Your Adventure Level
+            </h2>
             <p className="text-muted-foreground text-lg">
-              Secure, flexible subscriptions that give you access to exclusive trips and matching features.
+              Secure, flexible subscriptions that give you access to exclusive
+              trips and matching features.
             </p>
           </div>
 
@@ -193,7 +217,9 @@ export default function Page() {
                 <span className="text-4xl font-bold">$9</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
-              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mb-6">Get Started</Button>
+              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mb-6">
+                Get Started
+              </Button>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center">
@@ -263,12 +289,16 @@ export default function Page() {
             {/* Expedition Plan */}
             <div className="rounded-lg border border-border bg-background p-8 hover:border-accent transition-colors">
               <h3 className="text-2xl font-bold mb-2">Expedition</h3>
-              <p className="text-muted-foreground mb-6">For serious adventurers</p>
+              <p className="text-muted-foreground mb-6">
+                For serious adventurers
+              </p>
               <div className="mb-6">
                 <span className="text-4xl font-bold">$79</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
-              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mb-6">Contact Sales</Button>
+              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mb-6">
+                Contact Sales
+              </Button>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center">
@@ -299,7 +329,8 @@ export default function Page() {
           </div>
 
           <p className="text-center text-muted-foreground text-sm mt-8">
-            All plans include secure payment processing and 30-day money-back guarantee.
+            All plans include secure payment processing and 30-day money-back
+            guarantee.
           </p>
         </div>
       </section>
@@ -311,10 +342,14 @@ export default function Page() {
             Ready to Travel Better?
           </h2>
           <p className="text-lg text-accent-foreground/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of travelers discovering the world together. Your next adventure is just one click away.
+            Join thousands of travelers discovering the world together. Your
+            next adventure is just one click away.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent-foreground text-accent hover:bg-accent-foreground/90">
+            <Button
+              size="lg"
+              className="bg-accent-foreground text-accent hover:bg-accent-foreground/90"
+            >
               Start Your Journey
             </Button>
             <Button
@@ -330,5 +365,5 @@ export default function Page() {
 
       <Footer />
     </div>
-  )
+  );
 }
