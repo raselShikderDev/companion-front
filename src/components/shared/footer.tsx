@@ -3,6 +3,7 @@
 import { IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandLinkedin } from "@tabler/icons-react";
 
 import Link from "next/link";
+import Logo from "./Logo";
 
 export default function Footer() {
   return (
@@ -115,9 +116,9 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-bold text-accent-foreground text-sm">
-                WD
+                <Logo/>
               </div>
-              <span className="font-semibold">Wanderlust</span>
+              <span className="font-semibold">Companion</span>
             </div>
             <div className="flex items-center gap-4">
               <Link href="#" className="text-muted-foreground hover:text-accent transition-colors">
@@ -133,7 +134,7 @@ export default function Footer() {
                 <IconBrandLinkedin className="w-5 h-5" />
               </Link>
             </div>
-            <p className="text-muted-foreground text-sm">© 2025 Wanderlust. All rights reserved.</p>
+            <p className="text-muted-foreground text-sm">© 2025 Companion. All rights reserved.</p>
           </div>
         </div>
       </div>

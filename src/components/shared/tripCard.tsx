@@ -1,11 +1,11 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 
-import {  Users, Star } from "lucide-react";
+import { Users, Star } from "lucide-react";
 import Image from "next/image";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 
 interface TripCardProps {
-  image: string; 
+  image: string;
   destination: string;
   title: string;
   duration: string;
@@ -31,7 +31,7 @@ export default function TripCard({
     <div className="rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 group cursor-pointer">
       <div className="relative h-48 overflow-hidden bg-card">
         <Image
-          src={image || "/placeholder.svg"} 
+          src={image || "/placeholder.svg"}
           alt={title}
           width={500}
           height={300}

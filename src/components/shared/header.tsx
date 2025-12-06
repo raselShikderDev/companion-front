@@ -48,15 +48,13 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="sm">
-            Sign In
-          </Button>
-          <Button
-            size="sm"
-            className="bg-accent text-accent-foreground hover:bg-accent/90"
+          <Link href={"/signin"}>Sign In</Link>
+          <Link
+            href="/signup"
+            className="bg-accent py-1.5 px-4 text-accent-foreground hover:bg-accent/90"
           >
             Get Started
-          </Button>
+          </Link>
         </div>
 
         <Button

@@ -4,11 +4,11 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
-import Header from "@/components/ui/shared/header";
-import Footer from "@/components/ui/shared/footer";
+import Header from "@/components/shared/header";
+import Footer from "@/components/shared/footer";
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const _geist = Geist({ subsets: ["latin"] })
+const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Companion - Connect Travelers, Share Adventures",

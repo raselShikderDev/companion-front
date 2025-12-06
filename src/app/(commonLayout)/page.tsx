@@ -1,6 +1,5 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 "use client";
-import { Button } from "@/components/ui/button";
 import Hero from "@/components/homePage/hero";
 import MatchingFeature from "@/components/homePage/matchingFeature";
 import RealTimeReview from "@/components/homePage/RealTimeReview";
