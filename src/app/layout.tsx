@@ -1,12 +1,14 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-import type React from "react"
-import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import type React from "react";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 
-import "./globals.css"
+import "./globals.css";
+import Header from "@/components/ui/shared/header";
+import Footer from "@/components/ui/shared/footer";
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const _geist = Geist({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Companion - Connect Travelers, Share Adventures",
@@ -30,26 +32,28 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: "#2dd4cf",
   userScalable: true,
   width: "device-width",
   initialScale: 1,
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>
+        <Header />
         {children}
+        <Footer />
         {/* <Analytics /> */}
       </body>
     </html>
-  )
+  );
 }

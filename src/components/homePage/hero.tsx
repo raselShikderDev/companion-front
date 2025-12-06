@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { PlayCircle } from "lucide-react"
 import Image from "next/image"
-import travelersExploringCityAdventureTogether from "../../../../public/travelers-exploring-city-adventure-together.png"
+import travelersExploringCityAdventureTogether from "../../../public/travelers-exploring-city-adventure-together.png"
 
 export default function Hero() {
   return (
