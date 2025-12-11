@@ -1,159 +1,201 @@
 "use client";
 
-import { SignupFormValues, signupSchema } from "@/zodSchemas/auth.zodValidation"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useActionState, useEffect, useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "react-toastify";
+import { signupExplorer } from "@/services/auth/createExplorer.service";
+import InputFeildError from "@/lib/inputFeildError";
+import { Label } from "@radix-ui/react-label";
+import { Eye, EyeOff, Lock } from "lucide-react";
 
-const SignUpForm = () => {
-     const [isLoading, setIsLoading] = useState(false)
+const explorerForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmShowPassword, setConfirmShowPassword] = useState(false);
 
-  const form = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      agreeToTerms: false,
-    },
-  })
+  const [state, formAction, isPending] = useActionState(signupExplorer, null);
 
-  async function onSubmit(data: SignupFormValues) {
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log("Signup data:", data)
-    setIsLoading(false)
-  }
+  // Initialize gender from wrongData OR fallback default
+  const initialGender =
+    state?.wrongData?.gender === "MALE" ||
+    state?.wrongData?.gender === "FEMALE"
+      ? state.wrongData.gender
+      : "MALE";
+
+  const [gender, setGender] = useState<"MALE" | "FEMALE">(initialGender);
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message || "Something went wrong! SignUp failed");
+    }
+    if (state && state.success && state.message) {
+      toast.success(state.message || "Account successfully created");
+    }
+  }, [state]);
 
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {/* Full Name Field */}
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" disabled={isLoading} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+      <form action={formAction} className="space-y-5">
+        <FieldGroup className="space-y-4">
 
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="you@example.com" type="email" disabled={isLoading} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          {/* Full Name */}
+          <Field>
+            <FieldLabel htmlFor="fullName">Full Name</FieldLabel>
+            <Input
+              id="fullName"
+              name="fullName"
+              type="text"
+              placeholder="John Doe"
+              defaultValue={state?.wrongData?.fullName}
+            />
+            <InputFeildError feild="fullName" state={state} />
+          </Field>
 
-                {/* Password Field */}
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="••••••••" type="password" disabled={isLoading} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                      <p className="text-xs text-muted-foreground mt-2">
-                        At least 8 characters, 1 uppercase letter, and 1 number
-                      </p>
-                    </FormItem>
-                  )}
-                />
+          {/* Email */}
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="m@example.com"
+              defaultValue={state?.wrongData?.email}
+            />
+            <InputFeildError feild="email" state={state} />
+          </Field>
 
-                {/* Confirm Password Field */}
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="••••••••" type="password" disabled={isLoading} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          {/* Phone */}
+          <Field>
+            <FieldLabel htmlFor="phone">Phone</FieldLabel>
+            <Input
+              id="phone"
+              name="phone"
+              type="text"
+              placeholder="+8801912345678"
+              defaultValue={state?.wrongData?.phone}
+            />
+            <InputFeildError feild="phone" state={state} />
+          </Field>
 
-                {/* Terms Agreement */}
-                <FormField
-                  control={form.control}
-                  name="agreeToTerms"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-2 space-y-0 mt-5">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={isLoading} />
-                      </FormControl>
-                      <label className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
-                        I agree to the{" "}
-                        <Link href="#" className="text-accent hover:text-accent/80">
-                          Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link href="#" className="text-accent hover:text-accent/80">
-                          Privacy Policy
-                        </Link>
-                      </label>
-                    </FormItem>
-                  )}
-                />
-                {form.formState.errors.agreeToTerms && (
-                  <p className="text-sm font-medium text-destructive">{form.formState.errors.agreeToTerms.message}</p>
-                )}
+          {/* Gender */}
+          <Field>
+            <FieldLabel>Gender</FieldLabel>
 
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-10 mt-6"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating Account..." : "Create Account"}
-                </Button>
-              </form>
-            </Form>
+            {/* Hidden input to submit gender */}
+            <Input type="hidden" name="gender" value={gender} />
 
-            {/* Divider */}
-            <div className="my-6 flex items-center gap-3">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-sm text-muted-foreground">or</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
+            <Select
+              value={gender}
+              onValueChange={(value) =>
+                setGender(value as "MALE" | "FEMALE")
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="MALE">Male</SelectItem>
+                <SelectItem value="FEMALE">Female</SelectItem>
+              </SelectContent>
+            </Select>
 
-            {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="border-border bg-transparent" disabled={isLoading}>
-                Google
-              </Button>
-              <Button variant="outline" className="border-border bg-transparent" disabled={isLoading}>
-                GitHub
+            <InputFeildError feild="gender" state={state} />
+          </Field>
+
+          {/* Password */}
+          <Field>
+            <Label htmlFor="password">Password</Label>
+            <div className="relative mt-1">
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="pl-10"
+                defaultValue={state?.wrongData?.password}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
               </Button>
             </div>
-          </div>
-  )
-}
+            <InputFeildError feild="password" state={state} />
+          </Field>
 
-export default SignUpForm
+          {/* Confirm Password */}
+          <Field>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="relative mt-1">
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={confirmShowPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="pl-10"
+                defaultValue={state?.wrongData?.confirmPassword}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() =>
+                  setConfirmShowPassword((prev) => !prev)
+                }
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {confirmShowPassword ? <EyeOff /> : <Eye />}
+              </Button>
+            </div>
+            <InputFeildError feild="confirmPassword" state={state} />
+          </Field>
+
+          {/* Submit */}
+          <FieldGroup>
+            <Field>
+              <Button
+                disabled={isPending}
+                type="submit"
+                className="w-full"
+              >
+                Create Account
+              </Button>
+
+              <FieldDescription className="text-center pt-2">
+                Already have an account?{" "}
+                <Link href="/login">Sign in</Link>
+              </FieldDescription>
+            </Field>
+          </FieldGroup>
+        </FieldGroup>
+      </form>
+
+      {/* Divider */}
+      <div className="my-6 flex items-center gap-3">
+        <div className="flex-1 h-px bg-border" />
+        <span className="text-sm text-muted-foreground">or</span>
+        <div className="flex-1 h-px bg-border" />
+      </div>
+    </div>
+  );
+};
+
+export default explorerForm;

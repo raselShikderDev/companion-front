@@ -1,0 +1,9 @@
+# NEXT_PUBLIC_BASE_URL=http://localhost:5000/api/v1
+NEXT_PUBLIC_BASE_URL="http://localhost:5000/api/v1"
+NODE_ENV=development
+
+
+JWT_ACCESS_SECRET=OwnSecretSignatureForJWT
+JWT_ACCESS_EXPIRES=1h
+JWT_REFRESH_SECRET=OwnSecretRefreshForJWT
+JWT_REFRESH_EXPIRES=30d
