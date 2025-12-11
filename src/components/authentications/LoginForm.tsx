@@ -11,121 +11,108 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginFormValues, loginSchema } from "@/zodSchemas/auth.zodValidation"
 import Link from "next/link"
+import { logInUser } from "@/services/auth/login";
+import { toast } from "react-toastify";
+import InputFeildError from "@/lib/inputFeildError";
+import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
+import { IInputErrorState } from "@/lib/getInputFeildError";
 
 
-const LoginForm = () => {
-const [isLoading, setIsLoading] = useState(false)
-
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false, 
-    },
-  })
+export default function({ redirect }: { redirect?: string }) {
+ const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [state, formActoin, isPending] = useActionState(logInUser, null);
+ 
 
 
-  const onSubmit = async (data: LoginFormValues): Promise<void> => {
-    setIsLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+useEffect(() => {
+  if (!state) return;
 
-    console.log("Login data:", data)
-    setIsLoading(false)
+  if ("message" in state && typeof state.message === "string") {
+    toast.error(state.message);
   }
-
+}, [state]);
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-5"
+            <form action={formActoin} className="space-y-4">
+          {redirect && <Input type="hidden" name="redirect" value={redirect} />}
+          {/* Email */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email or Username
+            </label>
+            <Input
+              id="email"
+              name="email"
+              className={`mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none `}
+              placeholder="you@example.com"
+            />
+        
+              <InputFeildError feild="email" state={state as IInputErrorState} />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <div className="mt-1 relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                className={`block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none pr-10 `}
+                placeholder="Enter your password"
+              />
+              <Button
+                type="button"
+                variant={"ghost"}
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute cursor-poiner inset-y-0 right-0 px-3 flex items-center text-gray-500"
               >
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="you@example.com"
-                          type="email"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </Button>
+            </div>
+             <InputFeildError feild="password" state={state as IInputErrorState} />
+          </div>
 
-                {/* Password Field */}
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center justify-between">
-                        <FormLabel>Password</FormLabel>
-                        <Link
-                          href="/forgot-password"
-                          className="text-sm text-accent hover:text-accent/80 transition-colors"
-                        >
-                          Forgot password?
-                        </Link>
-                      </div>
-                      <FormControl>
-                        <Input
-                          placeholder="••••••••"
-                          type="password"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          {/* Remember me & forgot password */}
+          <div className="flex items-center justify-between text-sm">
+            <Link href="#" className="text-blue-600 hover:underline">
+              Forgot password?
+            </Link>
+          </div>
 
-                {/* Remember Me */}
-                <FormField
-                  control={form.control}
-                  name="rememberMe"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        Remember me
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
+          {/* Login button */}
+          <Button
+            type="submit"
+            className="w-full cursor-pointer py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+            disabled={isPending}
+          >
+            {isPending ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <LogIn className="w-5 h-5" />
+            )}
+            {!isPending && "LogIn"}
+          </Button>
+        </form>
 
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-10 mt-6"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
-              </form>
-            </Form>
 
             {/* Divider */}
             <div className="my-6 flex items-center gap-3">
@@ -134,25 +121,8 @@ const [isLoading, setIsLoading] = useState(false)
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                variant="outline"
-                className="border-border bg-transparent"
-                disabled={isLoading}
-              >
-                Google
-              </Button>
-              <Button
-                variant="outline"
-                className="border-border bg-transparent"
-                disabled={isLoading}
-              >
-                GitHub
-              </Button>
-            </div>
           </div>
   )
 }
 
-export default LoginForm
+

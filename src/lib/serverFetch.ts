@@ -19,6 +19,8 @@ const serverFetchHelper = async (
     }${endpoint}`,
   });
 
+  
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL as string}${endpoint}`,
     {

@@ -14,6 +14,7 @@ export const zodValidator = <T>(paylaod: T, schema: ZodObject) => {
                     message: issue.message,
                 };
             }),
+            wrongData:paylaod
         };
     }
     return {
