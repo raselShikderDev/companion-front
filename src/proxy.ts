@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
     if (typeof verifiedToken === "string") {
       await deleteCookie("accessToken");
       await deleteCookie("refreshToken");
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/signin", request.url));
     }
     userRole = verifiedToken.role;
   }
@@ -65,7 +65,7 @@ export async function proxy(request: NextRequest) {
 
   // Rule 1 & 2 is open for public routes
   if (!accessToken) {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL("/signin", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }

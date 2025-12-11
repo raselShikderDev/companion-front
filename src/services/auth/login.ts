@@ -32,7 +32,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
   const validatedData = zodValidator(signInData, loginSchema).data;
 
   try {
-    const res = await serverFetch.post(`/auth/login`, {
+    const res = await serverFetch.post(`/auth/signin`, {
       body: JSON.stringify(validatedData),
       headers: {
         "Content-Type": "application/json",
