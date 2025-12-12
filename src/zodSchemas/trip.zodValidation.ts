@@ -7,16 +7,9 @@ export const createTripZodSchema = z.object({
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().min(1, "End date is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-
-  budget: z
-    .string()
-    .regex(/^\d+$/, "Budget must be a number"),
-
-  image: z.string().url("Invalid image URL"),
-
+  budget: z.string().regex(/^\d+$/, "Budget must be a number"),
+  image: z.string().url("Invalid image URL"), // required
   journeyType: z.array(z.string()).min(1, "Select at least one journey type"),
-
-  duration: z.string().min(2, "Duration is required"),
-
-  languages: z.array(z.string()).min(1, "Select at least one language"),
+  duration: z.string().min(1, "Duration is required"), // allow "5" etc.
+  Languages: z.array(z.string()).min(1, "Select at least one language"),
 });
