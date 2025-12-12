@@ -30,7 +30,7 @@ export async function getMyTrips({
   });
   // ?page=${page}&limit=${limit}
   try {
-    const res = await serverFetch.get(`/trip/my-trips`, {
+    const res = await serverFetch.get(`/trip/my-trips?page=${page}&limit=${limit}`, {
       cache: "no-store",
     });
 
