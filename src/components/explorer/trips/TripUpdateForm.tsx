@@ -1,5 +1,4 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
-/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
@@ -12,37 +11,56 @@ import Image from "next/image";
 import { uploadToImageBB } from "@/lib/uploadImage";
 import { updateTrip } from "@/services/trips/updateTrip.service";
 
-export default function UpdateTripForm({ trip }: { trip: any }) {
+
+export default function UpdateTripForm({
+  trip,
+  onSuccess,
+}: {
+  trip: any;
+  onSuccess: () => void;
+}) {
   const [state, formAction, isPending] = useActionState(updateTrip, null);
 
-  const journeyOptions = ["Bus", "Train", "Flight", "Ship"];
-  const languageOptions = ["Bangla", "English", "Hindi"];
+  const initialLanguages =
+    trip.languages || trip.Languages || [];
+
+  const journeyOptions = ["Bus", "Train", "Flight", "Ship", "Others"];
+  const languageOptions = ["Bangla", "English", "Hindi", "Others"];
 
   const [journeyType, setJourneyType] = useState<string[]>(trip.journeyType || []);
-  const [languages, setLanguages] = useState<string[]>(trip.languages || []);
+  const [languages, setLanguages] = useState<string[]>(initialLanguages);
   const [previewImage, setPreviewImage] = useState<string | null>(trip.image || null);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(trip.image || null);
 
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Restore previous selections on validation error
+  // Restore form on validation error
   useEffect(() => {
-    if (state?.wrongData) {
-      setJourneyType(state.wrongData.journeyType || []);
-      setLanguages(state.wrongData.languages || []);
-      setPreviewImage(state.wrongData.image || null);
-      setUploadedUrl(state.wrongData.image || null);
-    }
+    if (!state?.wrongData) return;
+
+    const wrong = state.wrongData;
+
+    setJourneyType(wrong.journeyType || []);
+    setLanguages(wrong.languages || []);
+    setPreviewImage(wrong.image || null);
+    setUploadedUrl(wrong.image || null);
   }, [state]);
 
-  // Toast notifications
+  // Toast feedback + auto-close modal
   useEffect(() => {
     if (!state) return;
 
-    if (state.success && state.message) toast.success(state.message);
-    if (!state.success && state.message) toast.error(state.message);
-  }, [state]);
+    if (state.success) {
+      
+      toast.success(state.message || "Trip updated!");
+      onSuccess(); 
+    }
+
+    if (!state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state, onSuccess]);
 
   const toggleJourney = (item: string) =>
     setJourneyType((prev) =>
@@ -54,7 +72,7 @@ export default function UpdateTripForm({ trip }: { trip: any }) {
       prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]
     );
 
-  // Handle new image selection
+  // File selection
   const handleFileChange = (e: any) => {
     const f = e.target.files?.[0];
     if (!f) return;
@@ -64,6 +82,7 @@ export default function UpdateTripForm({ trip }: { trip: any }) {
     setUploadedUrl(null);
   };
 
+  // Upload to ImageBB
   const handleUpload = async () => {
     if (!file) return;
 
@@ -85,10 +104,11 @@ export default function UpdateTripForm({ trip }: { trip: any }) {
     setFile(null);
   };
 
+  // FIX: Allow update if user keeps old image
   const disableSubmit = isPending || uploading || !uploadedUrl;
 
   return (
-    <div className="bg-card border border-border p-8 rounded-xl shadow-sm max-w-3xl mx-auto">
+    <div className="bg-card border border-border p-8 rounded-xl shadow-sm">
       <form action={formAction} className="space-y-6">
         <input type="hidden" name="tripId" value={trip.id} />
 
@@ -146,13 +166,6 @@ export default function UpdateTripForm({ trip }: { trip: any }) {
             <FieldLabel>Budget</FieldLabel>
             <Input name="budget" defaultValue={trip.budget} />
             <InputFeildError feild="budget" state={state} />
-          </Field>
-
-          {/* Required Person */}
-          <Field>
-            <FieldLabel>Required Person</FieldLabel>
-            <Input name="requiredPerson" defaultValue={trip.requiredPerson} />
-            <InputFeildError feild="requiredPerson" state={state} />
           </Field>
 
           {/* Duration */}
@@ -253,10 +266,7 @@ export default function UpdateTripForm({ trip }: { trip: any }) {
               </div>
             )}
 
-            {uploadedUrl && (
-              <input type="hidden" name="image" value={uploadedUrl} />
-            )}
-
+            {uploadedUrl && <input type="hidden" name="image" value={uploadedUrl} />}
             <InputFeildError feild="image" state={state} />
           </Field>
 

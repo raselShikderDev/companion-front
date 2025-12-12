@@ -5,6 +5,7 @@
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { createTripZodSchema } from "@/zodSchemas/trip.zodValidation";
+import { revalidatePath } from "next/cache";
 
 export const createTrip = async (_state: any, formData: FormData): Promise<any> => {
   try {
@@ -24,7 +25,7 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
       description: normalize(formData.get("description")),
       budget: normalize(formData.get("budget")),
       duration: normalize(formData.get("duration")),
-      image: normalize(formData.get("image")), 
+      image: normalize(formData.get("image")),
       journeyType,
       Languages,
     };
@@ -47,7 +48,7 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
         wrongData: payload,
       };
     }
-
+    revalidatePath("/all-explorer")
     return {
       success: true,
       message: "Trip created successfully!",

@@ -16,7 +16,7 @@ const EmptyTripCard = () => {
               Create a new trip to start finding travel companions
             </p>
             <Button asChild>
-              <Link href="/explorer/create-trip">Create Trip</Link>
+              <Link href="/dashboard/create-trip">Create Trip</Link>
             </Button>
           </CardContent>
         </Card>

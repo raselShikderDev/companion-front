@@ -12,6 +12,7 @@ import Image from "next/image";
 import { uploadToImageBB } from "@/lib/uploadImage";
 import { createTrip } from "@/services/auth/createExplorer.service";
 
+
 export default function CreateTripForm() {
   const [state, formAction, isPending] = useActionState(createTrip, null);
 
@@ -43,7 +44,9 @@ export default function CreateTripForm() {
     setLanguages([]);
     setPreviewImage(null);
     setUploadedUrl(null);
-    if (state.success && state.message) toast.success(state.message);
+    if (state.success && state.message) { 
+      toast.success(state.message); 
+    }
     if (!state.success && state.message) toast.error(state.message);
   }, [state]);
 
@@ -207,11 +210,10 @@ export default function CreateTripForm() {
                   key={jt}
                   type="button"
                   onClick={() => toggleJourney(jt)}
-                  className={`px-3 py-1 rounded-lg border ${
-                    journeyType.includes(jt)
+                  className={`px-3 py-1 rounded-lg border ${journeyType.includes(jt)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                  }`}
+                    }`}
                 >
                   {jt}
                 </button>
@@ -233,11 +235,10 @@ export default function CreateTripForm() {
                   key={lng}
                   type="button"
                   onClick={() => toggleLanguage(lng)}
-                  className={`px-3 py-1 rounded-lg border ${
-                    languages.includes(lng)
+                  className={`px-3 py-1 rounded-lg border ${languages.includes(lng)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                  }`}
+                    }`}
                 >
                   {lng}
                 </button>

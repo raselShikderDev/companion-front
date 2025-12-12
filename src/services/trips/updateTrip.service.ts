@@ -4,6 +4,7 @@
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { updateTripZodSchema } from "@/zodSchemas/trip.zodValidation";
+import { revalidatePath } from "next/cache";
 
 export const updateTrip = async (
   _state: any,
@@ -20,7 +21,7 @@ export const updateTrip = async (
     }
 
     const journeyType = formData.getAll("journeyType");
-    const languages = formData.getAll("languages");
+    const Languages = formData.getAll("languages");
 
     const payload = {
       title: formData.get("title"),
@@ -33,7 +34,7 @@ export const updateTrip = async (
       requiredPerson: formData.get("requiredPerson"),
       duration: formData.get("duration"),
       journeyType,
-      languages,
+      Languages,
     };
 
     // Validate using Zod
@@ -57,7 +58,7 @@ export const updateTrip = async (
         wrongData: payload,
       };
     }
-
+revalidatePath("dashboard/my-trips")
     return {
       success: true,
       message: "Trip updated successfully!",

@@ -24,7 +24,6 @@ export const updateTripZodSchema = z.object({
   endDate: z.string().min(1, "End date is required"),
   description: z.string().min(1, "Description is required"),
   budget: z.string().min(1, "Budget is required"),
-  requiredPerson: z.string().min(1, "Required person is required"),
   duration: z.string().min(1, "Duration is required"),
 
   journeyType: z
