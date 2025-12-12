@@ -260,22 +260,25 @@ export default function CreateTripForm() {
             )}
 
             {previewImage && (
-              <div className="relative mt-3 space-y-2">
-                <Image
-                  src={previewImage}
-                  alt="preview"
-                  width={400}
-                  height={250}
-                  className="rounded border object-cover"
-                />
+              <div className="mt-3 space-y-2">
+                {/* FIXED IMAGE WRAPPER */}
+                <div className="relative w-[400px] h-[250px] rounded overflow-hidden border">
+                  <Image
+                    src={previewImage}
+                    alt="preview"
+                    fill
+                    className="object-cover"
+                  />
 
-                {/* Upload overlay loader */}
-                {uploading && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded">
-                    <div className="animate-spin h-10 w-10 border-4 border-white border-t-transparent rounded-full"></div>
-                  </div>
-                )}
+                  {/* FIXED OVERLAY: now only covers the image */}
+                  {uploading && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <div className="animate-spin h-10 w-10 border-4 border-white border-t-transparent rounded-full"></div>
+                    </div>
+                  )}
+                </div>
 
+                {/* Buttons below image, no overlap */}
                 {!uploadedUrl && !uploading && (
                   <Button type="button" onClick={handleUpload}>
                     Upload Image
