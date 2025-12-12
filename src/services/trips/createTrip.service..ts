@@ -7,11 +7,9 @@ import { createTripZodSchema } from "@/zodSchemas/trip.zodValidation";
 
 export const createTrip = async (_state: any, formData: FormData): Promise<any> => {
   try {
-    // Extract array fields
     const journeyType = formData.getAll("journeyType");
     const languages = formData.getAll("languages");
 
-    // Build payload
     const payload = {
       title: formData.get("title"),
       destination: formData.get("destination"),
@@ -20,24 +18,18 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
       endDate: formData.get("endDate"),
       description: formData.get("description"),
       budget: formData.get("budget"),
-      image: formData.get("image"),
-      journeyType: journeyType,
       duration: formData.get("duration"),
-      languages: languages,
+      image: formData.get("image"), // NOW ALWAYS URL
+      journeyType,
+      languages,
     };
 
-    // Validate input
     const validated = zodValidator(payload, createTripZodSchema);
 
-    if (!validated.success) {
-      return validated; 
-    }
+    if (!validated.success) return validated;
 
-    const finalData = validated.data;
-
-    // Send to backend
     const res = await serverFetch.post(`/trip/create-trip`, {
-      body: JSON.stringify(finalData),
+      body: JSON.stringify(validated.data),
       headers: { "Content-Type": "application/json" },
     });
 

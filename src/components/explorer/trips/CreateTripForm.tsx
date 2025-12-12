@@ -1,8 +1,8 @@
-/** biome-ignore-all assist/source/organizeImports: <> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,10 +11,10 @@ import {
   FieldGroup,
 } from "@/components/ui/field";
 import InputFeildError from "@/lib/inputFeildError";
-
 import { toast } from "react-toastify";
 import { createTrip } from "@/services/trips/createTrip.service.";
 import Image from "next/image";
+import { uploadToImageBB } from "@/lib/uploadImage";
 
 export default function CreateTripForm() {
   const [state, formAction, isPending] = useActionState(createTrip, null);
@@ -25,36 +25,61 @@ export default function CreateTripForm() {
   const [journeyType, setJourneyType] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
+  // Restore form state after validation fail
   useEffect(() => {
     if (state?.wrongData) {
       setJourneyType(state.wrongData.journeyType || []);
       setLanguages(state.wrongData.languages || []);
       setPreviewImage(state.wrongData.image || null);
+      setUploadedUrl(state.wrongData.image || null);
     }
   }, [state]);
 
+  // Toast Feedback
   useEffect(() => {
-    if (state?.success && state.message) {
-      toast.success(state.message);
-    } else if (state && !state.success && state.message) {
-      toast.error(state.message);
-    }
+    if (state?.success && state.message) toast.success(state.message);
+    else if (state && !state.success && state.message) toast.error(state.message);
   }, [state]);
 
-  const toggleJourney = (item: string) => {
-    setJourneyType((prev) =>
-      prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]
-    );
+  const toggleJourney = (item: string) =>
+    setJourneyType((prev) => prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]);
+
+  const toggleLanguage = (item: string) =>
+    setLanguages((prev) => prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]);
+
+  const handleFileChange = (e: any) => {
+    const f = e.target.files[0];
+    if (!f) return;
+
+    setFile(f);
+    setPreviewImage(URL.createObjectURL(f));
   };
 
-  const toggleLanguage = (item: string) => {
-    setLanguages((prev) =>
-      prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]
-    );
+  const handleUpload = async () => {
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const url = await uploadToImageBB(file);
+      setUploadedUrl(url);
+      toast.success("Image uploaded successfully!");
+    } catch (err:any) {
+        console.log(err);
+        
+      toast.error("Image upload failed");
+    }
+    setUploading(false);
   };
 
-  const removeImage = () => setPreviewImage(null);
+  const removeImage = () => {
+    setPreviewImage(null);
+    setUploadedUrl(null);
+    setFile(null);
+  };
 
   return (
     <div className="bg-card border border-border p-8 rounded-xl shadow-sm max-w-3xl mx-auto">
@@ -123,7 +148,6 @@ export default function CreateTripForm() {
               name="description"
               className="w-full p-3 rounded-md border bg-background"
               rows={4}
-              placeholder="Write trip details..."
               defaultValue={state?.wrongData?.description}
             ></textarea>
             <InputFeildError feild="description" state={state} />
@@ -131,7 +155,7 @@ export default function CreateTripForm() {
 
           {/* Budget */}
           <Field>
-            <FieldLabel>Budget (in thousands)</FieldLabel>
+            <FieldLabel>Budget</FieldLabel>
             <Input
               name="budget"
               placeholder="12"
@@ -151,7 +175,7 @@ export default function CreateTripForm() {
             <InputFeildError feild="duration" state={state} />
           </Field>
 
-          {/* Journey Type Multi-select */}
+          {/* Journey Type */}
           <Field>
             <FieldLabel>Journey Type</FieldLabel>
             <div className="flex flex-wrap gap-3">
@@ -170,15 +194,12 @@ export default function CreateTripForm() {
                 </button>
               ))}
             </div>
-
             {journeyType.map((j) => (
               <input key={j} type="hidden" name="journeyType" value={j} />
             ))}
-
-            <InputFeildError feild="journeyType" state={state} />
           </Field>
 
-          {/* Languages Multi-select */}
+          {/* Languages */}
           <Field>
             <FieldLabel>Languages</FieldLabel>
             <div className="flex flex-wrap gap-3">
@@ -201,47 +222,51 @@ export default function CreateTripForm() {
             {languages.map((l) => (
               <input key={l} type="hidden" name="languages" value={l} />
             ))}
-
-            <InputFeildError feild="languages" state={state} />
           </Field>
 
-          {/* Image URL */}
+          {/* Image Upload + Preview */}
           <Field>
-            <FieldLabel>Image URL</FieldLabel>
-            <Input
-              name="image"
-              placeholder="https://image.com/example.jpg"
-              defaultValue={state?.wrongData?.image}
-              onChange={(e) => setPreviewImage(e.target.value)}
-            />
-            <InputFeildError feild="image" state={state} />
+            <FieldLabel>Upload Trip Image</FieldLabel>
 
-            {/* Preview */}
+            {!previewImage && (
+              <Input type="file" accept="image/*" onChange={handleFileChange} />
+            )}
+
             {previewImage && (
-              <div className="mt-3">
+              <div className="mt-3 space-y-2">
                 <Image
                   src={previewImage}
-                  alt="Image preview"
-                  className="w-full h-48 object-cover rounded border"
+                  alt="preview"
+                  width={300}
+                  height={200}
+                  className="rounded border object-cover"
                 />
+
+                {!uploadedUrl && (
+                  <Button type="button" onClick={handleUpload} disabled={uploading}>
+                    {uploading ? "Uploading..." : "Upload Image"}
+                  </Button>
+                )}
+
                 <Button
                   type="button"
                   variant="destructive"
-                  className="mt-2"
                   onClick={removeImage}
                 >
                   Remove Image
                 </Button>
               </div>
             )}
+
+            {/* Final URL sent to server */}
+            <input type="hidden" name="image" value={uploadedUrl || ""} />
+
+            <InputFeildError feild="image" state={state} />
           </Field>
 
-          {/* Submit Button */}
-          <Field className="pt-4">
-            <Button type="submit" disabled={isPending} className="w-full">
-              {isPending ? "Creating Trip..." : "Create Trip"}
-            </Button>
-          </Field>
+          <Button type="submit" disabled={isPending} className="w-full">
+            {isPending ? "Creating Trip..." : "Create Trip"}
+          </Button>
         </FieldGroup>
       </form>
     </div>

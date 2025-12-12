@@ -1,32 +1,24 @@
 /** biome-ignore-all assist/source/organizeImports: <> */
-"use client"
-
-import type React from "react"
-
-import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import CreateTripForm from "@/components/explorer/trips/CreateTripForm"
 
-export default function CreateTrip() {
-  const [formData, setFormData] = useState({
-    title: "",
-    destination: "",
-    startDate: "",
-    endDate: "",
-    budget: "",
-    description: "",
-    interests: [] as string[],
-  })
+export default function CreateTripPage() {
+  // const [formData, setFormData] = useState({
+  //   title: "",
+  //   destination: "",
+  //   startDate: "",
+  //   endDate: "",
+  //   budget: "",
+  //   description: "",
+  //   interests: [] as string[],
+  // })
 
-  const interests = ["Adventure", "Culture", "Beach", "Food", "Nature", "Nightlife", "History", "Shopping"]
+  // const interests = ["Adventure", "Culture", "Beach", "Food", "Nature", "Nightlife", "History", "Shopping"]
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Trip created:", formData)
-  }
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   console.log("Trip created:", formData)
+  // }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-2xl">
@@ -41,7 +33,8 @@ export default function CreateTrip() {
           <CardDescription>Fill in the information about your planned trip</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <CreateTripForm/>
+          {/* <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Label htmlFor="title">Trip Title</Label>
               <Input
@@ -141,7 +134,7 @@ export default function CreateTrip() {
                 Save as Draft
               </Button>
             </div>
-          </form>
+          </form> */}
         </CardContent>
       </Card>
     </div>
