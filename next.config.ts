@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* config options here */
   images: {
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
       {
         protocol: "https",
         hostname: "i.ibb.co",
@@ -19,17 +24,25 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
-
-// export default {
+// const nextConfig: NextConfig = {
 //   images: {
 //     remotePatterns: [
 //       {
 //         protocol: "https",
-//         hostname: "**",
+//         hostname: "i.ibb.co",
+//         pathname: "/**",
+//       },
+//       {
+//         protocol: "https",
+//         hostname: "cdn.imagedb.com",
+//         pathname: "/uploads/**",
 //       },
 //     ],
 //   },
 // };
+
+
+
 
 // import type { NextConfig } from "next";
 
