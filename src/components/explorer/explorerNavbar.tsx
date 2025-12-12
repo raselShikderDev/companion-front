@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { MapPin, Users, MessageSquare, CreditCard, Home, Briefcase } from "lucide-react"
+import { MapPin, Users, MessageSquare, Home, Briefcase, Search } from "lucide-react"
 import ExplorerLogoutButton from "./ExplorerLogoutButton"
 
 const explorerNavItems = [
@@ -14,7 +14,7 @@ const explorerNavItems = [
   { href: "/dashboard/my-trips", label: "My Trips", icon: Briefcase },
   { href: "/dashboard/matches", label: "Find Matches", icon: Users },
   { href: "/dashboard/reviews", label: "Reviews", icon: MessageSquare },
-  { href: "/dashboard/subscriptions", label: "Plans", icon: CreditCard },
+  { href: "/dashboard/find-trips", label: "Plans", icon: Search },
 ]
 
 export function ExplorerNavbar() {

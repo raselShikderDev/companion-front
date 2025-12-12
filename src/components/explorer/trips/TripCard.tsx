@@ -1,15 +1,23 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 "use client";
 
 import Image from "next/image";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Wallet, Clock, Pencil, Eye } from "lucide-react";
 import Link from "next/link";
 
 export default function ExplorerTripCard({ trip, onEdit }: any) {
-  console.log({image:trip.image});
-  
+  console.log({ image: trip.image });
+
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
       {trip.image && (
@@ -50,30 +58,46 @@ export default function ExplorerTripCard({ trip, onEdit }: any) {
           </div>
 
           <div className="flex items-center gap-1">
-            <Wallet className="h-4 w-4 text-primary" />
-            ${trip.budget}
+            <Wallet className="h-4 w-4 text-primary" />${trip.budget}
           </div>
         </div>
 
         <div className="flex flex-wrap gap-1">
           {trip.journeyType.map((type: string) => (
-            <Badge key={type} variant="outline">{type}</Badge>
+            <Badge key={type} variant="outline">
+              {type}
+            </Badge>
           ))}
         </div>
 
         <div className="flex flex-wrap gap-1">
           {trip.Languages.map((lang: string) => (
-            <Badge key={lang} variant="secondary">{lang}</Badge>
+            <Badge key={lang} variant="secondary">
+              {lang}
+            </Badge>
           ))}
         </div>
-        <Link href={`/dashboard/my-trips/${trip.id}`}>
-          <Button size="sm" variant="outline" className="w-full gap-2 cursor-pointer" onClick={onEdit}>
-            <Eye className="h-4 w-4" /> View
+        <div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="w-full gap-2 cursor-pointer"
+            onClick={onEdit}
+          >
+            <Pencil className="h-4 w-4" /> Edit
           </Button>
-        </Link>
-        <Button size="sm" variant="outline" className="w-full gap-2 cursor-pointer" onClick={onEdit}>
-          <Pencil className="h-4 w-4" /> Edit
-        </Button>
+        </div>
+        <div>
+          <Link href={`/dashboard/my-trips/${trip.id}`}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full gap-2 cursor-pointer"
+            >
+              <Eye className="h-4 w-4" /> View
+            </Button>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );

@@ -1,3 +1,5 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+
 import { getMyTrips } from "@/services/trips/getMyTrips.service";
 import TripsGrid from "@/components/explorer/trips/TripsGrid";
 

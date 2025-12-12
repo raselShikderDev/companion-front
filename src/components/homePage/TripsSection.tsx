@@ -1,7 +1,7 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 import { ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
-import TripCard from "../shared/tripCard";
+import PublicTripCard from "../shared/PublicTripCard";
 
 const TripsSection = () => {
   return (
@@ -21,7 +21,7 @@ const TripsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <TripCard
+          <PublicTripCard
             image="/tropical-beach-island-getaway.png"
             destination="Bali, Indonesia"
             title="Tropical Paradise Escape"
@@ -32,7 +32,7 @@ const TripsSection = () => {
             tags={["Beach", "Adventure", "Culture"]}
           />
 
-          <TripCard
+          <PublicTripCard
             image="/alpine-mountain-hiking-adventure.png"
             destination="Swiss Alps"
             title="Alpine Mountain Expedition"
@@ -43,7 +43,7 @@ const TripsSection = () => {
             tags={["Hiking", "Nature", "Photography"]}
           />
 
-          <TripCard
+          <PublicTripCard
             image="/ancient-temple-historic-city-tour.png"
             destination="Kyoto, Japan"
             title="Ancient Temple Discovery"
@@ -54,7 +54,7 @@ const TripsSection = () => {
             tags={["Culture", "History", "Food"]}
           />
 
-          <TripCard
+          <PublicTripCard
             image="/safari-wildlife-savanna-africa.png"
             destination="Serengeti, Tanzania"
             title="Wildlife Safari Adventure"
@@ -65,7 +65,7 @@ const TripsSection = () => {
             tags={["Safari", "Wildlife", "Photography"]}
           />
 
-          <TripCard
+          <PublicTripCard
             image="/colorful-street-art-urban-exploration.png"
             destination="Buenos Aires, Argentina"
             title="Urban Culture Immersion"
@@ -76,7 +76,7 @@ const TripsSection = () => {
             tags={["Culture", "Food", "Nightlife"]}
           />
 
-          <TripCard
+          <PublicTripCard
             image="/northern-lights-iceland-aurora.png"
             destination="Iceland"
             title="Northern Lights Quest"
