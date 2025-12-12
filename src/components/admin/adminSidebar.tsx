@@ -1,16 +1,18 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Users, MapPin, Share2, BarChart3, LogOut } from "lucide-react"
+import { Users, MapPin, Share2, BarChart3 } from "lucide-react"
+import LogoutButton from "./LogOutButton"
 
 const adminNavItems = [
-  { href: "/admin", label: "Dashboard", icon: BarChart3 },
-  { href: "/admin/explorers", label: "Manage Explorers", icon: Users },
-  { href: "/admin/trips", label: "Manage Trips", icon: MapPin },
-  { href: "/admin/matches", label: "Manage Matches", icon: Share2 },
+  { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
+  { href: "/admin/dashboard/explorers", label: "Manage Explorers", icon: Users },
+  { href: "/admin/dashboard/trips", label: "Manage Trips", icon: MapPin },
+  { href: "/admin/dashboard/matches", label: "Manage Matches", icon: Share2 },
 ]
 
 export function AdminSidebar() {
@@ -46,10 +48,7 @@ export function AdminSidebar() {
 
       <div className="absolute bottom-6 left-4 right-4">
         <Link href="/">
-          <Button variant="outline" className="w-full gap-2 bg-transparent">
-            <LogOut className="w-4 h-4" />
-            Exit Admin
-          </Button>
+          <LogoutButton/>
         </Link>
       </div>
     </aside>

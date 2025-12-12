@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client"
 
 import Link from "next/link"
@@ -5,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { MapPin, Users, MessageSquare, CreditCard, Home } from "lucide-react"
+import ExplorerLogoutButton from "./ExplorerLogoutButton"
 
 const explorerNavItems = [
   { href: "/dashboard", label: "Home", icon: Home },
@@ -45,9 +47,7 @@ export function ExplorerNavbar() {
           </div>
 
           <Link href="/">
-            <Button variant="outline" size="sm">
-              Logout
-            </Button>
+            <ExplorerLogoutButton/>
           </Link>
         </div>
       </div>
