@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
@@ -42,7 +43,7 @@ const explorerForm = () => {
     if (state && !state.success && state.message) {
       toast.error(state.message || "Something went wrong! SignUp failed");
     }
-    if (state && state.success && state.message) {
+    if (state?.success && state.message) {
       toast.success(state.message || "Account successfully created");
     }
   }, [state]);

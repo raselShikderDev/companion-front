@@ -1,9 +1,54 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.imagedb.com",
+        pathname: "/uploads/**",
+      },
+    ],
+  },
+};
 
 export default nextConfig;
 
+// const nextConfig: NextConfig = {
+//   images: {
+//     remotePatterns: [
+//       {
+//         protocol: "https",
+//         hostname: "i.ibb.co",
+//         pathname: "/**",
+//       },
+//       {
+//         protocol: "https",
+//         hostname: "cdn.imagedb.com",
+//         pathname: "/uploads/**",
+//       },
+//     ],
+//   },
+// };
+
+
+
+
+// import type { NextConfig } from "next";
+
+// const nextConfig: NextConfig = {};
+
+// export default nextConfig;
 
 // import type { NextConfig } from "next";
 
@@ -13,4 +58,3 @@ export default nextConfig;
 // };
 
 // export default nextConfig;
-

@@ -15,7 +15,7 @@ interface TripCardProps {
   tags: string[];
 }
 
-export default function TripCard({
+export default function PublicTripCard({
   image,
   destination,
   title,
@@ -25,7 +25,6 @@ export default function TripCard({
   travelers,
   tags,
 }: TripCardProps) {
-  // const [liked, setLiked] = useState(false);
 
   return (
     <div className="rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 group cursor-pointer">
@@ -39,17 +38,6 @@ export default function TripCard({
         />
 
         <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-        {/* <Button
-          onClick={() => setLiked(!liked)}
-          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 hover:bg-background transition-colors"
-        >
-          <Heart
-            className={`w-5 h-5 ${
-              liked ? "fill-accent text-accent" : "text-foreground"
-            }`}
-          />
-        </Button> */}
       </div>
 
       <div className="p-5 bg-background">
