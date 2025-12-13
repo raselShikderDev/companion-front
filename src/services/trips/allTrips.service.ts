@@ -2,6 +2,8 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 
+
+// Only for admin
 export async function getAllTrips() {
   try {
     const res = await serverFetch.get(`/trip`, {
@@ -20,3 +22,6 @@ export async function getAllTrips() {
     return [];
   }
 }
+
+
+//

@@ -4,7 +4,7 @@ import { getMyTrips } from "@/services/trips/getMyTrips.service";
 import TripsGrid from "@/components/explorer/trips/TripsGrid";
 
 export default async function MyTripsPage() {
-  const res = await getMyTrips({ page: 1, limit: 30 });
+  const res = await getMyTrips({ page: 1, limit: 10 });
 
   const trips = res.success ? res.data : [];
 
