@@ -25,3 +25,29 @@ export interface ITrip {
   creator?: IExplorer;
   matches?: IMatch[];
 }
+
+
+export interface IAvailableTrip {
+  id: string;
+  title: string;
+  image: string | null;
+  creatorId: string;
+  destination: string;
+  departureLocation: string;
+  startDate: Date | string; // ISO date string
+  endDate: Date | string;   // ISO date string
+  description: string;
+  budget: string;
+  journeyType: string[];
+  matchCompleted: boolean;
+  duration: string;
+  Languages: string[];
+  status: TripStatus
+  createdAt: Date| string; // ISO date string
+  updatedAt: Date | string; // ISO date string
+  creator: {
+    id: string;
+    fullName: string;
+    profilePicture: string;
+  };
+}

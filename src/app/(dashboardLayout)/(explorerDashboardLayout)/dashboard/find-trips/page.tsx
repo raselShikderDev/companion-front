@@ -1,3 +1,36 @@
+// /** biome-ignore-all lint/style/useTemplate: > */
+// /** biome-ignore-all assist/source/organizeImports: > */
+// /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+
+// import TripCardForBookGrid from "@/components/explorer/match/TripCardForBookGrid";
+// import EmptyTripCard from "@/components/shared/EmptyTripCard";
+// import { getAvailableTrips } from "@/services/trips/getAvailableTrips.service";
+// import { IAvailableTrip } from "@/types/trip.interface";
+
+// export default async function FindTripsPage() {
+//   const res = await getAvailableTrips({page:1, limit:10});
+//   let trips:IAvailableTrip[] | [] = []
+// if (res.success) {
+//   trips = res.data
+// } else {
+//   trips = []
+// }
+
+// if (trips.length === 0) return  <EmptyTripCard/>
+      
+//   return (
+//     <div className="container mx-auto px-4 py-8">
+//       <h1 className="text-4xl font-bold mb-6">All Trips</h1>
+//       <p className="text-muted-foreground mb-8">
+//         Explore exciting trips and start your adventure
+//       </p>
+
+//       <TripCardForBookGrid trips={trips} />
+//     </div>
+//   );
+// }
+
+
 /** biome-ignore-all lint/style/useTemplate: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
