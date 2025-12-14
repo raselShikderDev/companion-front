@@ -54,7 +54,7 @@ export default function ExplorerTripCard({ trip, onEdit }: any) {
 
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4 text-primary" />
-            {trip.duration}
+            {trip.duration} Days
           </div>
 
           <div className="flex items-center gap-1">

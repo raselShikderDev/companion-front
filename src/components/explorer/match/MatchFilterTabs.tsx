@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 
-const FILTERS = ["ALL", "PENDING", "ACCEPTED", "REJECTED"] as const;
+const FILTERS = ["ALL", "PENDING", "REJECTED"] as const;
 
 export function MatchFilterTabs({
   active,

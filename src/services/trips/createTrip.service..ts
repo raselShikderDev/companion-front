@@ -4,8 +4,12 @@
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { createTripZodSchema } from "@/zodSchemas/trip.zodValidation";
+import { revalidatePath } from "next/cache";
 
-export const createTrip = async (_state: any, formData: FormData): Promise<any> => {
+export const createTrip = async (
+  _state: any,
+  formData: FormData
+): Promise<any> => {
   try {
     const journeyType = formData.getAll("journeyType");
     const languages = formData.getAll("languages");
@@ -42,12 +46,12 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
         wrongData: payload,
       };
     }
-
+    revalidatePath("dashboard/my-trips");
+    revalidatePath("dashboard/find-trips");
     return {
       success: true,
       message: "Trip created successfully!",
     };
-
   } catch (error: any) {
     console.error("Trip Create Error:", error.message);
 

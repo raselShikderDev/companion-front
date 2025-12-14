@@ -8,6 +8,7 @@ import { IAvailableTrip } from "@/types/trip.interface";
 import { cookies } from "next/headers";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default async function TripCardForBook({
   trip,
@@ -49,9 +50,9 @@ export default async function TripCardForBook({
         <p className="text-sm text-muted-foreground mb-3">
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4 text-primary" />
-            {trip.duration}
+            {trip.duration} Days
           </div>
-          </p>
+        </p>
 
         <div className="flex gap-2 flex-wrap mb-4">
           {trip?.journeyType.map((tag) => (
@@ -61,6 +62,13 @@ export default async function TripCardForBook({
             >
               {tag}
             </span>
+          ))}
+        </div>
+        <div className="flex gap-2 flex-wrap mb-4">
+          {trip?.Languages.map((lang) => (
+            <Badge key={lang} variant="secondary">
+              {lang}
+            </Badge>
           ))}
         </div>
 

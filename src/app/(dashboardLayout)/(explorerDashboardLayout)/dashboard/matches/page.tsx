@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/style/useImportType: > */
 import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
+import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
 import { Match } from "@/types/match.interface";
 
@@ -14,9 +15,7 @@ export default async function MyMatchesPage() {
 
   if (!res?.success) {
     return (
-      <div className="container mx-auto p-8 text-center text-red-500">
-        Failed to load matches
-      </div>
+      <EmptyTripCard/>
     );
   }
 
