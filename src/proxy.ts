@@ -12,7 +12,6 @@ import {
 } from "./lib/authUtils";
 import { getNewAccessToken } from "./services/auth/auth.services";
 import { deleteCookie } from "./lib/tokenHandeler";
-import { getUserInfo } from "./services/auth/getUserInfo";
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -108,18 +107,9 @@ export async function proxy(request: NextRequest) {
   }
 
   
-  // PASSWORD RESET LOGIC
   
-  const userInfo = await getUserInfo();
 
-  if (userInfo?.needPasswordChange) {
-    if (pathname !== "/reset-password") {
-      const resetPasswordUrl = new URL("/reset-password", request.url);
-      resetPasswordUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(resetPasswordUrl);
-    }
-    return NextResponse.next();
-  }
+  
 
   if (pathname === "/reset-password") {
     return NextResponse.redirect(

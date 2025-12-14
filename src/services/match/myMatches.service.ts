@@ -5,7 +5,7 @@ import { serverFetch } from "@/lib/serverFetch";
 
 export const getMyMatches = async (
   params?: { page?: number; limit?: number }
-): Promise<any> => {
+) => {
   try {
     const query = new URLSearchParams();
 
