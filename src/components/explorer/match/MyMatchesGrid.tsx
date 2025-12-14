@@ -6,8 +6,8 @@
 import { useState } from "react";
 import { MatchFilterTabs } from "./MatchFilterTabs";
 import { Match } from "@/types/match.interface";
-import { MatchCard } from "./MatchCard";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
+import MatchCard from "./MatchCard";
 
 export function MyMatchesGrid({ matches }: { matches: any }) {
   console.log({ matches });
