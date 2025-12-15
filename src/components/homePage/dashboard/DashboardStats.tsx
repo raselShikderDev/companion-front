@@ -1,6 +1,8 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 "use client"
 import { MapPin, Star, Users, Zap } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getUserInfo } from "@/services/auth/getUserInfo"
 import { useEffect, useState } from "react"
 
@@ -13,22 +15,8 @@ import { useEffect, useState } from "react"
   ]
 
 const DashboardStats = () => {
-const [user, setUser] = useState<any>(null)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userInfo = await getUserInfo()
-        setUser(userInfo)
-      } catch (error) {
-        console.error("Failed to fetch user:", error)
-      }
-    }
 
-    fetchUser()
-  }, [])
-
-console.log({user});
 
  return(
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

@@ -1,6 +1,5 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 
-import { MapPin, Users, Zap, Star, } from "lucide-react"
-import { getUserInfo } from "@/services/auth/getUserInfo"
 import DashboardStats from "@/components/homePage/dashboard/DashboardStats"
 import DashboardQuickLinks from "@/components/homePage/dashboard/DashboardQuickLinks"
 

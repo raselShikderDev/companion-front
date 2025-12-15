@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
@@ -9,7 +12,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 export const getUserInfo = async (): Promise<IUser | any> => {
   let userInfo: IUser | any;
   try {
-    const response = await serverFetch.get("/auth/me", {
+    const response = await serverFetch.get("/users/me", {
       cache: "force-cache",
       next: { tags: ["user-info"] },
     });

@@ -1,14 +1,38 @@
 /** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "./Logo";
+import { getUserInfo } from "@/services/auth/getUserInfo";
+import { Role } from "@/types/enum.interface";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userInfo = await getUserInfo();
+        setUser(userInfo);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+  console.log(user?.role);
+  const getSignupRedirect = () => {
+    if (user?.role === Role.ADMIN) return "/admin/dashboard";
+    if (user?.role === Role.SUPER_ADMIN) return "/admin/dashboard/";
+    if (user?.role === Role.EXPLORER) return "/dashboard";
+    return "/signup";
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
@@ -48,10 +72,11 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link href={"/signin"}>Sign In</Link>
+          {user?.id === null && <Link href={"/signin"}>Sign In</Link>}
+
           <Link
-            href="/signup"
-            className="bg-accent py-1.5 px-4 text-accent-foreground hover:bg-accent/90"
+            href={getSignupRedirect()}
+            className="bg-accent rounded-sm py-1.5 w-full text-accent-foreground hover:bg-accent/90"
           >
             Get Started
           </Link>
@@ -97,15 +122,21 @@ export default function Header() {
             >
               Pricing
             </Link>
-            <Button variant="ghost" size="sm" className="justify-start mt-2">
+            {/* <Button variant="ghost" size="sm" className="justify-start mt-2">
               Sign In
-            </Button>
-            <Button
-              size="sm"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 w-full"
+            </Button> */}
+            {user?.id === null && (
+              <Link className="justify-start mt-2" href={"/signin"}>
+                Sign In
+              </Link>
+            )}
+
+            <Link
+              href={getSignupRedirect()}
+              className="bg-accent py-1.5 px-2 rounded w-full text-accent-foreground hover:bg-accent/90"
             >
               Get Started
-            </Button>
+            </Link>
           </nav>
         </div>
       )}
