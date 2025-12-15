@@ -1,9 +1,15 @@
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
+/** biome-ignore-all assist/source/organizeImports: > */
+import { IMyMatches } from "@/app/(dashboardLayout)/(explorerDashboardLayout)/dashboard/page"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, Users } from "lucide-react"
 import Link from "next/link"
 
-const RecentMatchs = () => {
+const RecentMatchs = ({matches}:{matches:IMyMatches[]}) => {
+    console.log(matches);
+    
     return (
         <Card className="border-2 border-border">
             <CardHeader>
