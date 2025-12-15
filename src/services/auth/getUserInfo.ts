@@ -50,7 +50,7 @@ export const getUserInfo = async (): Promise<IUser | any> => {
       ...result.data,
     };
 
-    // console.log({ userInfo });
+    console.log({ userInfo });
     return userInfo;
   } catch (error: any) {
     console.log(error);
