@@ -1,5 +1,5 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 "use client";
 
 import { Menu, X } from "lucide-react";
