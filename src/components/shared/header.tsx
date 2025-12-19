@@ -71,14 +71,16 @@ export default function Header() {
           </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
-          {user?.id === null && <Link href={"/signin"}>Sign In</Link>}
+        <div className="hidden md:flex items-center py-1.5 gap-3">
+          {!user?.id && <Link href={"/signin"}>
+          <Button className="bg-transparent text-black hover:text-white">Sign In</Button>
+          </Link>}
 
           <Link
             href={getSignupRedirect()}
-            className="bg-accent rounded-sm py-1.5 w-full text-accent-foreground hover:bg-accent/90"
+            className="bg-accent rounded-sm text-accent-foreground hover:bg-accent/90"
           >
-            Get Started
+            <Button variant={"ghost"}>Get Started</Button>
           </Link>
         </div>
 

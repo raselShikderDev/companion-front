@@ -1,10 +1,11 @@
 /** @format */
+/** biome-ignore-all assist/source/organizeImports: > */
 
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MapPin, User, ArrowLeft } from "lucide-react";
+import { Calendar, MapPin, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMatchById } from "@/services/match/getMatchById.service";
