@@ -9,27 +9,29 @@ import { Button } from "@/components/ui/button";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMatchById } from "@/services/match/getMatchById.service";
 
-export default async function MatchDetailsPage({
-  params,
-}: {
-  params: { matchId: string };
-}) {
-  const matchId = params.matchId;
 
-  if (!matchId) {
-    return (
-      <EmptyTripCard/>
-    );
+interface MatchDetailsPageProps {
+  params: Promise<{
+    matchId: string;
+  }>;
+}
+
+export default async function MatchDetailsPage({ params }: MatchDetailsPageProps) {
+    const matchId = await params;
+
+
+  if (!matchId.matchId) {
+    return <EmptyTripCard />;
   }
 
-  const response = await getMatchById(matchId);
+  console.log({ matchId });
+
+  const response = await getMatchById(matchId.matchId);
 
   if (!response?.success) {
     return (
       <div className="container mx-auto py-10 text-center">
-        <h2 className="text-xl font-semibold text-red-500">
-          Match not found
-        </h2>
+        <h2 className="text-xl font-semibold text-red-500">Match not found</h2>
         <Link href="/dashboard/my-matches">
           <Button className="mt-4">Back to Matches</Button>
         </Link>
@@ -42,7 +44,10 @@ export default async function MatchDetailsPage({
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10 space-y-8">
       {/* Back */}
-      <Link href="/dashboard/my-matches" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+      <Link
+        href="/dashboard/my-matches"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to Matches
       </Link>
@@ -62,9 +67,7 @@ export default async function MatchDetailsPage({
 
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
-            <CardTitle className="text-2xl">
-              {match.trip.title}
-            </CardTitle>
+            <CardTitle className="text-2xl">{match.trip.title}</CardTitle>
 
             <Badge
               variant={
@@ -89,8 +92,7 @@ export default async function MatchDetailsPage({
           {/* Match Dates */}
           <div className="flex items-center gap-3 text-sm">
             <Calendar className="h-4 w-4 text-primary" />
-            Matched on{" "}
-            {new Date(match.createdAt).toLocaleDateString()}
+            Matched on {new Date(match.createdAt).toLocaleDateString()}
           </div>
 
           {/* Users */}
@@ -129,19 +131,12 @@ function UserCard({
   return (
     <Card className="border">
       <CardHeader>
-        <CardTitle className="text-sm text-muted-foreground">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-sm text-muted-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent className="flex items-center gap-4">
         <div className="relative h-12 w-12 rounded-full overflow-hidden bg-muted">
           {avatar && (
-            <Image
-              src={avatar}
-              alt={name}
-              fill
-              className="object-cover"
-            />
+            <Image src={avatar} alt={name} fill className="object-cover" />
           )}
         </div>
         <div>
