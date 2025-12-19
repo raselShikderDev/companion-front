@@ -83,8 +83,9 @@ export default function ExplorerTripCard({ trip, onEdit }: any) {
             variant="outline"
             className="w-full gap-2 cursor-pointer"
             onClick={onEdit}
+            disabled={trip.matchCompleted}
           >
-            <Pencil className="h-4 w-4" /> Edit
+            {trip.matchCompleted ?  "" : (<Pencil className="h-4 w-4" />) }{trip.matchCompleted ?  "Match Completed" : "Edit"}
           </Button>
         </div>
         <div>

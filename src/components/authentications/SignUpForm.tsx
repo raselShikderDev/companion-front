@@ -19,12 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "react-toastify";
-import { signupExplorer } from "@/services/auth/createExplorer.service";
 import InputFeildError from "@/lib/inputFeildError";
 import { Label } from "@radix-ui/react-label";
 import { Eye, EyeOff, Lock } from "lucide-react";
+import { signupExplorer } from "@/services/auth/createExplorer.service";
 
-const explorerForm = () => {
+const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
 
@@ -47,6 +47,7 @@ const explorerForm = () => {
       toast.success(state.message || "Account successfully created");
     }
   }, [state]);
+console.log({state});
 
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
@@ -199,4 +200,4 @@ const explorerForm = () => {
   );
 };
 
-export default explorerForm;
+export default SignUpForm;
