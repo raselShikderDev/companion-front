@@ -40,11 +40,12 @@ export default function CompleteTripButton({
           text-primary-foreground 
           hover:bg-primary/90 
           flex items-center justify-center gap-2
-          ${status === TripStatus.COMPLETED ? "bg-primary/90":""}   `}
+          ${status === TripStatus.COMPLETED ? "bg-primary/90" : ""}   `}
       >
         {isPending && <Loader2 className="h-5 w-5 animate-spin" />}
-        {status === TripStatus.COMPLETED ? "Trip ":""} 
+        {status === TripStatus.COMPLETED ? "Trip " : ""}
         {isPending ? "Completing..." : "Complete"}
+        {status === TripStatus.COMPLETED ? "d" : ""}
       </Button>
     </form>
   );

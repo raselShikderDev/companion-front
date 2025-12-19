@@ -10,6 +10,7 @@ import { updateMatchStatus } from "@/services/match/updateMatchStatus.service";
 import { MatchStatus } from "@/types/enum.interface";
 import Link from "next/link";
 import { Eye } from "lucide-react";
+import CreateReviewForm from "../review/CreateReviewForm";
 
 interface Props {
   matchId: string;
@@ -53,9 +54,10 @@ export default function MatchActionButtons({ matchId, status }: Props) {
           </Link>
         </div>
         {status === MatchStatus.COMPLETED && (
-          <Button size="sm" className="w-full gap-2 cursor-pointer bg-green-500 hover:bg-green-400">
-            Give Review
-          </Button>
+          // <Button size="sm" className="w-full gap-2 cursor-pointer bg-green-500 hover:bg-green-400">
+          //   Give Review
+          // </Button>
+          <CreateReviewForm matchId={matchId} />
         )}
       </div>
     );

@@ -9,6 +9,8 @@ import { Calendar, MapPin, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMatchById } from "@/services/match/getMatchById.service";
+import ReviewsSection from "@/components/explorer/review/ReviewsSection";
+import CreateReviewForm from "@/components/explorer/review/CreateReviewForm";
 
 
 interface MatchDetailsPageProps {
@@ -114,6 +116,23 @@ export default async function MatchDetailsPage({ params }: MatchDetailsPageProps
           </div>
         </CardContent>
       </Card>
+      {/* Reviews */}
+<Card>
+  <CardHeader className="flex items-center justify-between">
+    <CardTitle>Reviews</CardTitle>
+  </CardHeader>
+
+  <CardContent className="space-y-6">
+    {/* Review Form */}
+    {match.status === "COMPLETED" && (
+      <CreateReviewForm matchId={match.id} />
+    )}
+
+    {/* Review List */}
+    <ReviewsSection matchId={match.id} />
+  </CardContent>
+</Card>
+
     </div>
   );
 }
