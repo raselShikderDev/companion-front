@@ -16,12 +16,7 @@ import { Calendar, MapPin, Wallet, Clock, Pencil, Eye } from "lucide-react";
 import Link from "next/link";
 import CompleteTripButton from "./CompleteTripButton";
 
-export default function ExplorerTripCard({
-  trip,
-  onEdit,
-  onCompleteTrip,
-}: any) {
-  console.log({ matchID: trip });
+export default function ExplorerTripCard({ trip, onEdit }: any) {
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
@@ -84,7 +79,7 @@ export default function ExplorerTripCard({
         </div>
         <div>
           {trip.matchCompleted ? (
-            <CompleteTripButton tripId={trip.id} />
+            <CompleteTripButton status={trip.status} tripId={trip.id} />
           ) : (
             <Button
               size="sm"

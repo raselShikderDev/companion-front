@@ -8,6 +8,7 @@ import { Calendar, Clock, MapPin, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BookMatchButton from "@/components/explorer/match/BookMatchButton";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
+import CompleteTripButton from "@/components/explorer/trips/CompleteTripButton";
 
 interface TripDetailsPageProps {
   params: Promise<{
@@ -123,11 +124,16 @@ export default async function BookTripDetailsPage({ params }: TripDetailsPagePro
         </div>
 
         {/* ACTIONS */}
-        <div className="flex flex-col md:flex-row gap-4 pt-6">
+        <div className="flex flex-col md:flex-row gap-4 space-y-3 pt-6">
 
           {/* MATCH / BOOK BUTTON */}
           <div className="w-full">
-            <BookMatchButton tripId={trip.id} />
+             {trip.matchCompleted ? (
+              <CompleteTripButton status={trip.status} tripId={trip.id} />
+            ) : (
+              <BookMatchButton tripId={trip.id} />
+            )}
+            {/* <BookMatchButton tripId={trip.id} /> */}
           </div>
 
          
