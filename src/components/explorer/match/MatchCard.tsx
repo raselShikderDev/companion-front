@@ -10,9 +10,9 @@ import { formatDate } from "@/lib/formateDate";
 import MatchActionButtons from "./UpdateMatchStatusButton";
 import { MatchStatus } from "@/types/enum.interface";
 
-
-
 export default function MatchCard({ match }: { match: Match }) {
+  console.log({ status: match.status });
+
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
       {/* IMAGE */}
@@ -33,13 +33,24 @@ export default function MatchCard({ match }: { match: Match }) {
           <h3 className="font-semibold">{match.trip.title}</h3>
 
           <Badge
-            variant={
+            className={`${
               match.status === "ACCEPTED"
-                ? "default"
+                ? "bg-primary"
+                : match.status === "COMPLETED"
+                ? "bg-accent"
                 : match.status === "REJECTED"
-                ? "destructive"
+                ? "bg-red-500"
                 : "secondary"
-            }
+            }`}
+            // variant={
+            //   match.status === "ACCEPTED"
+            //     ? "default"
+            //     : match.status === "REJECTED"
+            //     ? "destructive"
+            //     : match.status === "PENDING"
+            //     ? "secondary"
+            //     : "outline"
+            // }
           >
             {match.status}
           </Badge>
@@ -56,16 +67,13 @@ export default function MatchCard({ match }: { match: Match }) {
         {/* DATE */}
         <div className="flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4 text-primary" />
-          {formatDate(match.trip.startDate)} –{" "}
-          {formatDate(match.trip.endDate)}
+          {formatDate(match.trip.startDate)} – {formatDate(match.trip.endDate)}
         </div>
 
         {/* USER */}
         <div className="text-sm text-muted-foreground">
           Matched with{" "}
-          <span className="font-medium">
-            {match.requester.fullName}
-          </span>
+          <span className="font-medium">{match.requester.fullName}</span>
         </div>
 
         <MatchActionButtons

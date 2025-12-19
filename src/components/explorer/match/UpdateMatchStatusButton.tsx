@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { updateMatchStatus } from "@/services/match/updateMatchStatus.service";
 import { MatchStatus } from "@/types/enum.interface";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 interface Props {
   matchId: string;
@@ -38,14 +40,29 @@ export default function MatchActionButtons({ matchId, status }: Props) {
   // If already decided → show disabled state
   if (status !== MatchStatus.PENDING) {
     return (
-      <Button size="sm" className="w-full" disabled>
-        {status}
-      </Button>
+      <div className="space-y-3.5">
+        <div className={`${status === MatchStatus.COMPLETED ? "mb-3.5" : ""}`}>
+          <Link href={`/dashboard/matches/${matchId}`}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full gap-2 cursor-pointer"
+            >
+              <Eye className="h-4 w-4" /> View
+            </Button>
+          </Link>
+        </div>
+        {status === MatchStatus.COMPLETED && (
+          <Button size="sm" className="w-full gap-2 cursor-pointer bg-green-500 hover:bg-green-400">
+            Give Review
+          </Button>
+        )}
+      </div>
     );
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 space-y-3">
       <Button
         size="sm"
         className="flex-1 bg-green-400"

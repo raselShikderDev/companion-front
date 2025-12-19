@@ -15,6 +15,7 @@ export enum MatchStatus {
   ACCEPTED = "ACCEPTED",
   REJECTED = "REJECTED",
   BLOCKED = "BLOCKED",
+  COMPLETED = "COMPLETED",
 }
 
 export enum UserStatus {
