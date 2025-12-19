@@ -8,6 +8,7 @@ import UpdateTripDialog from "./UpdateTripDialog";
 export default function TripsGrid({ trips }: { trips: any[] }) {
   const [editingTrip, setEditingTrip] = useState<any | null>(null);
 
+
   if (!trips || trips.length === 0) {
     return (
       <p className="text-muted-foreground text-center py-10">

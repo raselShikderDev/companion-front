@@ -43,6 +43,7 @@ export default async function BookTripDetailsPage({ params }: TripDetailsPagePro
   }
 
   const trip = response.data;
+console.log({trip});
 
   return (
     <div className="container mx-auto px-6 py-10 max-w-4xl">

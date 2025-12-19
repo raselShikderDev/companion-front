@@ -14,9 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Wallet, Clock, Pencil, Eye } from "lucide-react";
 import Link from "next/link";
+import CompleteTripButton from "./CompleteTripButton";
 
-export default function ExplorerTripCard({ trip, onEdit }: any) {
-  console.log({ image: trip.image });
+export default function ExplorerTripCard({
+  trip,
+  onEdit,
+  onCompleteTrip,
+}: any) {
+  console.log({ matchID: trip });
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
@@ -78,15 +83,20 @@ export default function ExplorerTripCard({ trip, onEdit }: any) {
           ))}
         </div>
         <div>
-          <Button
-            size="sm"
-            variant="outline"
-            className="w-full gap-2 cursor-pointer"
-            onClick={onEdit}
-            disabled={trip.matchCompleted}
-          >
-            {trip.matchCompleted ?  "" : (<Pencil className="h-4 w-4" />) }{trip.matchCompleted ?  "Match Completed" : "Edit"}
-          </Button>
+          {trip.matchCompleted ? (
+            <CompleteTripButton tripId={trip.id} />
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full gap-2 cursor-pointer"
+              onClick={onEdit}
+              disabled={trip.matchCompleted}
+            >
+              <Pencil className="h-4 w-4" />
+              Edit
+            </Button>
+          )}
         </div>
         <div>
           <Link href={`/dashboard/my-trips/${trip.id}`}>
