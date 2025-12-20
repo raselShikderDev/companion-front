@@ -12,22 +12,21 @@ import { getMatchById } from "@/services/match/getMatchById.service";
 import ReviewsSection from "@/components/explorer/review/ReviewsSection";
 import CreateReviewForm from "@/components/explorer/review/CreateReviewForm";
 
-
 interface MatchDetailsPageProps {
   params: Promise<{
     matchId: string;
   }>;
 }
 
-export default async function MatchDetailsPage({ params }: MatchDetailsPageProps) {
-    const matchId = await params;
-
+export default async function MatchDetailsPage({
+  params,
+}: MatchDetailsPageProps) {
+  const matchId = await params;
 
   if (!matchId.matchId) {
     return <EmptyTripCard />;
   }
 
-  console.log({ matchId });
 
   const response = await getMatchById(matchId.matchId);
 
@@ -43,6 +42,7 @@ export default async function MatchDetailsPage({ params }: MatchDetailsPageProps
   }
 
   const match = response.data;
+  console.log({ match });
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10 space-y-8">
@@ -117,22 +117,21 @@ export default async function MatchDetailsPage({ params }: MatchDetailsPageProps
         </CardContent>
       </Card>
       {/* Reviews */}
-<Card>
-  <CardHeader className="flex items-center justify-between">
-    <CardTitle>Reviews</CardTitle>
-  </CardHeader>
+      <Card>
+        <CardHeader className="flex items-center justify-between">
+          <CardTitle>Reviews</CardTitle>
+        </CardHeader>
 
-  <CardContent className="space-y-6">
-    {/* Review Form */}
-    {match.status === "COMPLETED" && (
-      <CreateReviewForm matchId={match.id} />
-    )}
+        <CardContent className="space-y-6">
+          {/* Review Form */}
+          {match.status === "COMPLETED" && (
+            <CreateReviewForm matchId={match.id} />
+          )}
 
-    {/* Review List */}
-    <ReviewsSection matchId={match.id} />
-  </CardContent>
-</Card>
-
+          {/* Review List */}
+          <ReviewsSection reviews={match?.reviews} matchId={match?.id} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
