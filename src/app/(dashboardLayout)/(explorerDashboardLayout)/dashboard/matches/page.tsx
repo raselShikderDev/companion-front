@@ -6,9 +6,16 @@ import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
 import { Match } from "@/types/match.interface";
 import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
+import { queryStringFormatter } from "@/lib/allFormattors";
 
-export default async function MyMatchesPage() {
-  const res = await getMyMatches({ page: 1, limit: 20 });
+export default async function MyMatchesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParamsObj = await searchParams;
+  const queryString = queryStringFormatter(searchParamsObj);
+  const res = await getMyMatches(queryString);
   let matches: Match[] | [];
   if (res.success) {
     matches = res.data;
