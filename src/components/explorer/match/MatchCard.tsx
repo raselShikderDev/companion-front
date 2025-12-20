@@ -25,7 +25,7 @@ export default async function MatchCard({
   const hasAlreadyReviewed = match.reviews?.some(
     (review: any) => review.reviewerId === currentExplorerId
   );
-console.log("Reviews for this match:", match.reviews);
+  console.log("Reviews for this match:", match.reviews);
   const canGiveReview =
     match.status === "COMPLETED" && isMatchParticipant && !hasAlreadyReviewed;
   // console.log({canGiveReview});
@@ -41,20 +41,26 @@ console.log("Reviews for this match:", match.reviews);
           validReviews.length
         ).toFixed(1)
       : null;
-      console.log();
-      
-  console.log({ matchStatus: match.status, tripStatus: match.trip.status, tripName: match.trip.title });
+  console.log();
+
+  console.log({
+    matchStatus: match.status,
+    tripStatus: match.trip.status,
+    tripName: match.trip.title,
+  });
   console.log({ currentExplorerId, matchCreator: match?.requesterId });
 
   const isTripCreator = currentExplorerId === match?.trip?.creatorId;
+  const isMatchCreator = currentExplorerId === match?.requesterId;
   console.log({ isTripCreator });
 
-  console.log("DEBUG REVIEW LOGIC:", {
-  matchStatusIsCompleted: match.status === "COMPLETED",
-  isParticipant: isMatchParticipant,
-  alreadyReviewed: hasAlreadyReviewed,
-  FINAL_RESULT: canGiveReview
-});
+  const statusStyles: Record<string, string> = {
+    ACCEPTED: "bg-emerald-500 hover:bg-emerald-600 text-white border-none",
+    COMPLETED: "bg-blue-600 hover:bg-blue-700 text-white border-none",
+    REJECTED: "bg-red-500 hover:bg-red-600 text-white border-none",
+    PENDING: "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100",
+    DEFAULT: "bg-slate-100 text-slate-600",
+  };
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
@@ -76,24 +82,10 @@ console.log("Reviews for this match:", match.reviews);
           <h3 className="font-semibold">{match.trip.title}</h3>
 
           <Badge
-            className={`${
-              match.status === "ACCEPTED"
-                ? "bg-primary"
-                : match.status === "COMPLETED"
-                ? "bg-accent"
-                : match.status === "REJECTED"
-                ? "bg-red-500"
-                : "secondary"
+            variant="outline" // Base variant
+            className={`px-2.5 py-0.5 text-xs font-semibold transition-colors shadow-sm ${
+              statusStyles[match.status] || statusStyles.DEFAULT
             }`}
-            // variant={
-            //   match.status === "ACCEPTED"
-            //     ? "default"
-            //     : match.status === "REJECTED"
-            //     ? "destructive"
-            //     : match.status === "PENDING"
-            //     ? "secondary"
-            //     : "outline"
-            // }
           >
             {match.status}
           </Badge>
@@ -136,9 +128,9 @@ console.log("Reviews for this match:", match.reviews);
           status={match.status as MatchStatus}
           canGiveReview={canGiveReview}
           isTripCreator={isTripCreator}
+          isMatchCreator={isMatchCreator}
         />
       </CardContent>
     </Card>
   );
 }
-
