@@ -67,6 +67,8 @@ export default async function MatchDetailsPage({
     (review: any) => review.reviewerId === currentExplorerId
   );
 
+  console.log("Reviews for this match:", match.reviews);
+
   const canGiveReview =
     match.status === "COMPLETED" &&
     isMatchParticipant &&
@@ -168,8 +170,8 @@ export default async function MatchDetailsPage({
 
           {/* Review List */}
           <ReviewsSection
-            reviews={match.reviews}
-            matchId={match.id}
+            
+            match={match}
           />
         </CardContent>
       </Card>
