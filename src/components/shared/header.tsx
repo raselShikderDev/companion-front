@@ -26,7 +26,7 @@ export default function Header() {
 
     fetchUser();
   }, []);
-  console.log(user?.role);
+  console.log(user);
   const getSignupRedirect = () => {
     if (user?.role === Role.ADMIN) return "/admin/dashboard";
     if (user?.role === Role.SUPER_ADMIN) return "/admin/dashboard/";

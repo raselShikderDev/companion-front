@@ -5,9 +5,7 @@ import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
 import { Match } from "@/types/match.interface";
-import { getCookie } from "@/lib/tokenHandeler";
-import { JwtPayload } from "jsonwebtoken";
-import { verifyAccessToken } from "@/lib/jwtHandler";
+import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
 
 export default async function MyMatchesPage() {
   const res = await getMyMatches({ page: 1, limit: 20 });
@@ -19,26 +17,18 @@ export default async function MyMatchesPage() {
   }
 
   if (!res?.success) {
-    return (
-      <EmptyTripCard/>
-    );
+    return <EmptyTripCard />;
   }
 
-   const accessToken = await getCookie("accessToken");
+  const { id } = await getUserVerifiedDetails();
   let currentExplorerId: string | null = null;
 
-  if (accessToken) {
-    const verifiedToken = (await verifyAccessToken(
-      accessToken
-    )) as JwtPayload & { payload?: any };
-
-    currentExplorerId = verifiedToken?.payload?.userId ?? null;
+  if (!id) {
+    console.error("No explorer id found");
   }
-  console.log("matchCard user id", currentExplorerId);
 
- if (!currentExplorerId) {
-  console.error("No explorer id found")
- }
+  currentExplorerId = id ;
+  console.log({ matches });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -48,7 +38,10 @@ export default async function MyMatchesPage() {
       </p>
 
       {/* <MyMatchesGrid matches={matches} /> */}
-      <MyMatchesGrid currentExplorerId={currentExplorerId as string} matches={matches} />
+      <MyMatchesGrid
+        currentExplorerId={currentExplorerId as string}
+        matches={matches}
+      />
     </div>
   );
 }

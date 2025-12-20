@@ -17,8 +17,13 @@ import Link from "next/link";
 import CompleteTripButton from "./CompleteTripButton";
 import { formatDateTime } from "@/lib/allFormattors";
 
-export default function ExplorerTripCard({ trip, onEdit }: any) {
+export default function ExplorerTripCard({ trip, onEdit, currentExplorerId }: any) {
+ console.log({currentExplorerId});
+ console.log({creatorId:trip?.creatorId});
 
+ const isCreator = currentExplorerId === trip?.creatorId
+ console.log({isCreator});
+ 
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
       {trip.image && (

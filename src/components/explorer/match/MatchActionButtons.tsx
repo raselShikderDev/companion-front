@@ -16,11 +16,13 @@ interface Props {
   matchId: string;
   status: MatchStatus;
   canGiveReview: boolean;
+  isTripCreator: boolean;
 }
 export default function MatchActionButtons({
   matchId,
   status,
   canGiveReview,
+  isTripCreator,
 }: Props) {
   const [loading, setLoading] = useState<null | MatchStatus>(null);
   console.log({ canGiveReview });
@@ -63,6 +65,12 @@ export default function MatchActionButtons({
         )}
       </div>
     );
+  }
+
+  if(isTripCreator){
+    return (
+      <Button variant={"link"}>Request sent</Button>
+    )
   }
 
   return (
