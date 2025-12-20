@@ -1,32 +1,53 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all lint/style/useImportType: > */
 
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Calendar, MapPin } from "lucide-react";
-import { formatDate } from "@/lib/formateDate";
 import { MatchStatus } from "@/types/enum.interface";
 import MatchActionButtons from "./MatchActionButtons";
+import RatingStars from "@/components/shared/StarRating";
+import { formatDateTime } from "@/lib/allFormattors";
 
-export default async function MatchCard({ match, currentExplorerId }: { match: any, currentExplorerId:string }) {
+export default async function MatchCard({
+  match,
+  currentExplorerId,
+}: {
+  match: any;
+  currentExplorerId: string;
+}) {
+  console.log({ currentExplorerId });
 
-console.log({currentExplorerId});
-
-const isMatchParticipant =
+  const isMatchParticipant =
     currentExplorerId === match.requesterId ||
     currentExplorerId === match.recipientId;
 
   const hasAlreadyReviewed = match.reviews?.some(
-    (review:any) => review.reviewerId === currentExplorerId
+    (review: any) => review.reviewerId === currentExplorerId
   );
 
   const canGiveReview =
-    match.status === "COMPLETED" &&
-    isMatchParticipant &&
-    !hasAlreadyReviewed;
-// console.log({canGiveReview});
+    match.status === "COMPLETED" && isMatchParticipant && !hasAlreadyReviewed;
+  // console.log({canGiveReview});
+
+  const validReviews =
+    match.reviews?.filter((review: any) => typeof review.rating === "number") ??
+    [];
+
+  const averageRating =
+    validReviews.length > 0
+      ? (
+          validReviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
+          validReviews.length
+        ).toFixed(1)
+      : null;
+
+  console.log({ match });
+
+  console.log({ statrtDate: match.trip.startDate });
+  console.log({ endDate: match.trip.endDate });
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
@@ -82,7 +103,8 @@ const isMatchParticipant =
         {/* DATE */}
         <div className="flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4 text-primary" />
-          {formatDate(match.trip.startDate)} – {formatDate(match.trip.endDate)}
+          {formatDateTime(match.trip.startDate)} –{" "}
+          {formatDateTime(match.trip.endDate)}
         </div>
 
         {/* USER */}
@@ -90,7 +112,18 @@ const isMatchParticipant =
           Matched with{" "}
           <span className="font-medium">{match.requester.fullName}</span>
         </div>
-
+        <div className="text-sm">
+          {averageRating ? (
+            <div className="flex items-center gap-2">
+              <RatingStars rating={Number(averageRating)} />
+              <span className="text-xs text-muted-foreground">
+                ({averageRating}/5 · {validReviews.length} reviews)
+              </span>
+            </div>
+          ) : (
+            <span></span>
+          )}
+        </div>
         <MatchActionButtons
           matchId={match.id}
           status={match.status as MatchStatus}
@@ -100,8 +133,6 @@ const isMatchParticipant =
     </Card>
   );
 }
-
-
 
 // import Image from "next/image";
 // import { Badge } from "@/components/ui/badge";

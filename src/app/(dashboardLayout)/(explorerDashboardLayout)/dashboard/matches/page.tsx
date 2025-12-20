@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/style/useImportType: > */
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";

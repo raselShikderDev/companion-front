@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Wallet, Clock, Pencil, Eye } from "lucide-react";
 import Link from "next/link";
 import CompleteTripButton from "./CompleteTripButton";
+import { formatDateTime } from "@/lib/allFormattors";
 
 export default function ExplorerTripCard({ trip, onEdit }: any) {
 
@@ -49,7 +50,7 @@ export default function ExplorerTripCard({ trip, onEdit }: any) {
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-primary" />
-            {new Date(trip.startDate).toLocaleDateString()}
+            {formatDateTime(trip.startDate)}
           </div>
 
           <div className="flex items-center gap-1">
