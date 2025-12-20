@@ -10,7 +10,7 @@ import InputFeildError from "@/lib/inputFeildError";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { uploadToImageBB } from "@/lib/uploadImage";
-import { createTrip } from "@/services/auth/createExplorer.service";
+import { createTrip } from "@/services/trips/createTrip.service.";
 
 
 export default function CreateTripForm() {

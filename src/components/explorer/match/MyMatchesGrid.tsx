@@ -1,13 +1,13 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/suspicious/noExplicitAny: <> */
 /** biome-ignore-all lint/style/useImportType: > */
-"use client";
+
 
 import { Match } from "@/types/match.interface";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import MatchCard from "./MatchCard";
-import SearchFilter from "@/components/shared/SearchFilter";
 import SelectFilter from "@/components/shared/SelectFilter";
+import ClearFiltersButton from "@/components/shared/ClearFilter";
 
 export function MyMatchesGrid({
   matches,
@@ -23,13 +23,11 @@ export function MyMatchesGrid({
   }
 
   return (
-    <>
-      {/* <MatchFilterTabs active={filter} onChange={setFilter} /> */}
+    <div className="space-y-3.5">
       <div className="flex items-center gap-3">
-        <SearchFilter paramName="searchTerm" placeholder="Search matches..." />
         <SelectFilter
           paramName="status"
-          placheholder="Match Status"
+          placheholder="Tr Status"
           defaultValue="All Matches"
           options={[
             { label: "PENDING", value: "false" },
@@ -38,6 +36,7 @@ export function MyMatchesGrid({
             { label: "COMPLETED", value: "true" },
           ]}
         />
+        <ClearFiltersButton />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -49,7 +48,7 @@ export function MyMatchesGrid({
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
