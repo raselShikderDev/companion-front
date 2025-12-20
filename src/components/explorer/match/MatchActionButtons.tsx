@@ -23,7 +23,6 @@ export default function MatchActionButtons({
   matchId,
   status,
   canGiveReview,
-  isTripCreator,
   isMatchCreator,
 }: Props) {
   const [loading, setLoading] = useState<null | MatchStatus>(null);
