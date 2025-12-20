@@ -1,17 +1,13 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/correctness/useParseIntRadix: > */
+/** biome-ignore-all lint/complexity/useLiteralKeys: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { parse } from "cookie";
-import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
-import { getUserInfo } from "./getUserInfo";
 // import { resetPasswordSchema } from "@/zod/auth.validation";
 import { deleteCookie, getCookie, setCookie } from "@/lib/tokenHandeler";
-import {
-  getDefaultDashboard,
-  isValidRedirectRoute,
-  UserRole,
-} from "@/lib/authUtils";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { serverFetch } from "@/lib/serverFetch";
 
@@ -59,100 +55,6 @@ export async function updateMyProfile(formData: FormData) {
   }
 }
 
-// // Reset Password
-// export async function resetPassword(_prevState: any, formData: FormData) {
-//   console.log("Reset password triggered");
-
-//   const redirectTo = formData.get("redirect") || null;
-
-//   // Build validation payload
-//   const validationPayload = {
-//     newPassword: formData.get("newPassword") as string,
-//     confirmPassword: formData.get("confirmPassword") as string,
-//   };
-
-//   // Validate
-//   const validatedPayload = zodValidator(validationPayload, resetPasswordSchema);
-
-//   if (!validatedPayload.success && validatedPayload.errors) {
-//     return {
-//       success: false,
-//       message: "Validation failed",
-//       formData: validationPayload,
-//       errors: validatedPayload.errors,
-//     };
-//   }
-
-//   try {
-//     const accessToken = await getCookie("accessToken");
-
-//     if (!accessToken) {
-//       throw new Error("User not authenticated");
-//     }
-//     console.log({ accessToken });
-//     console.log({ jwtSecret: process.env.JWT_ACCESS_SECRET! });
-
-//     const verifiedToken = jwt.verify(
-//       accessToken as string,
-//       process.env.JWT_ACCESS_SECRET!
-//     ) as jwt.JwtPayload;
-
-//     console.log({ verifiedToken });
-//     const userRole: UserRole = verifiedToken?.role;
-
-//     const user = await getUserInfo();
-//     console.log({ user });
-
-//     const userData = {
-//       id: user?.id,
-//       password: validationPayload.newPassword,
-//     };
-//     console.log({ userData });
-
-//     // API Call
-//     const response = await serverFetch.post("/auth/reset-password", {
-//       body: JSON.stringify(userData),
-//       headers: {
-//         Authorization: accessToken,
-//         "Content-Type": "application/json",
-//       },
-//       credentials: "include",
-//     });
-
-//     const result = await response.json();
-//     console.log({ result });
-
-//     if (!result.success) {
-//       throw new Error(result.message || "Reset password failed");
-//     }
-
-//     if (result.success) {
-//       // await get
-//       revalidateTag("user-info", { expire: 0 });
-//     }
-
-//     if (redirectTo) {
-//       const requestedPath = redirectTo.toString();
-//       if (isValidRedirectRoute(requestedPath, userRole)) {
-//         redirect(`${requestedPath}?loggedIn=true`);
-//       } else {
-//         redirect(`${getDefaultDashboard(userRole)}?loggedIn=true`);
-//       }
-//     } else {
-//       redirect(`${getDefaultDashboard(userRole)}?loggedIn=true`);
-//     }
-//   } catch (error: any) {
-//     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
-//     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
-//       throw error;
-//     }
-//     return {
-//       success: false,
-//       message: error?.message || "Something went wrong",
-//       formData: validationPayload,
-//     };
-//   }
-// }
 
 export async function getNewAccessToken() {
   try {

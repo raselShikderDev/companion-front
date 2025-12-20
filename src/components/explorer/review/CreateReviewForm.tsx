@@ -9,7 +9,6 @@ import { createReview } from "@/services/review/createReview.service";
 
 export default function CreateReviewForm({ matchId }: { matchId: string }) {
   const [state, formAction, isPending] = useActionState(createReview, null);
-  console.log({ matchId });
 
   if (state?.success) {
     toast.success(state.message);

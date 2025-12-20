@@ -1,4 +1,6 @@
 /** @format */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 
 import Image from "next/image";
@@ -11,6 +13,9 @@ import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMatchById } from "@/services/match/getMatchById.service";
 import ReviewsSection from "@/components/explorer/review/ReviewsSection";
 import CreateReviewForm from "@/components/explorer/review/CreateReviewForm";
+import { getCookie } from "@/lib/tokenHandeler";
+import { verifyAccessToken } from "@/lib/jwtHandler";
+import { JwtPayload } from "jsonwebtoken";
 
 interface MatchDetailsPageProps {
   params: Promise<{
@@ -21,14 +26,24 @@ interface MatchDetailsPageProps {
 export default async function MatchDetailsPage({
   params,
 }: MatchDetailsPageProps) {
-  const matchId = await params;
+  const { matchId } = await params;
 
-  if (!matchId.matchId) {
+  if (!matchId) {
     return <EmptyTripCard />;
   }
 
+  const accessToken = await getCookie("accessToken");
+  let currentExplorerId: string | null = null;
 
-  const response = await getMatchById(matchId.matchId);
+  if (accessToken) {
+    const verifiedToken = (await verifyAccessToken(
+      accessToken
+    )) as JwtPayload & { payload?: any };
+
+    currentExplorerId = verifiedToken?.payload?.userId ?? null;
+  }
+
+  const response = await getMatchById(matchId);
 
   if (!response?.success) {
     return (
@@ -42,8 +57,22 @@ export default async function MatchDetailsPage({
   }
 
   const match = response.data;
-  console.log({ match });
 
+  /* ---------------- Review Logic ---------------- */
+  const isMatchParticipant =
+    currentExplorerId === match.requesterId ||
+    currentExplorerId === match.recipientId;
+
+  const hasAlreadyReviewed = match.reviews?.some(
+    (review: any) => review.reviewerId === currentExplorerId
+  );
+
+  const canGiveReview =
+    match.status === "COMPLETED" &&
+    isMatchParticipant &&
+    !hasAlreadyReviewed;
+
+  /* ---------------- UI ---------------- */
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10 space-y-8">
       {/* Back */}
@@ -70,7 +99,9 @@ export default async function MatchDetailsPage({
 
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
-            <CardTitle className="text-2xl">{match.trip.title}</CardTitle>
+            <CardTitle className="text-2xl">
+              {match.trip.title}
+            </CardTitle>
 
             <Badge
               variant={
@@ -95,19 +126,18 @@ export default async function MatchDetailsPage({
           {/* Match Dates */}
           <div className="flex items-center gap-3 text-sm">
             <Calendar className="h-4 w-4 text-primary" />
-            Matched on {new Date(match.createdAt).toLocaleDateString()}
+            Matched on{" "}
+            {new Date(match.createdAt).toLocaleDateString()}
           </div>
 
           {/* Users */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Requester */}
             <UserCard
               title="Requester"
               name={match.requester.fullName}
               avatar={match.requester.profilePicture}
             />
 
-            {/* Recipient */}
             <UserCard
               title="Recipient"
               name={match.recipient.fullName}
@@ -116,27 +146,38 @@ export default async function MatchDetailsPage({
           </div>
         </CardContent>
       </Card>
+
       {/* Reviews */}
       <Card>
-        <CardHeader className="flex items-center justify-between">
+        <CardHeader>
           <CardTitle>Reviews</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-6">
           {/* Review Form */}
-          {match.status === "COMPLETED" && (
+          {canGiveReview && (
             <CreateReviewForm matchId={match.id} />
           )}
 
+          {/* Already Reviewed Message */}
+          {isMatchParticipant && hasAlreadyReviewed && (
+            <p className="text-sm text-muted-foreground">
+              You have already submitted your review for this match.
+            </p>
+          )}
+
           {/* Review List */}
-          <ReviewsSection reviews={match?.reviews} matchId={match?.id} />
+          <ReviewsSection
+            reviews={match.reviews}
+            matchId={match.id}
+          />
         </CardContent>
       </Card>
     </div>
   );
 }
 
-/* ---------------- Small Helper Component ---------------- */
+/* ---------------- Helper ---------------- */
 
 function UserCard({
   title,
@@ -150,17 +191,22 @@ function UserCard({
   return (
     <Card className="border">
       <CardHeader>
-        <CardTitle className="text-sm text-muted-foreground">{title}</CardTitle>
+        <CardTitle className="text-sm text-muted-foreground">
+          {title}
+        </CardTitle>
       </CardHeader>
       <CardContent className="flex items-center gap-4">
         <div className="relative h-12 w-12 rounded-full overflow-hidden bg-muted">
           {avatar && (
-            <Image src={avatar} alt={name} fill className="object-cover" />
+            <Image
+              src={avatar}
+              alt={name}
+              fill
+              className="object-cover"
+            />
           )}
         </div>
-        <div>
-          <p className="font-medium">{name}</p>
-        </div>
+        <p className="font-medium">{name}</p>
       </CardContent>
     </Card>
   );

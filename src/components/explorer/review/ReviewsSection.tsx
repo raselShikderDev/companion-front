@@ -5,7 +5,6 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getReviewsByMatchId } from "@/services/review/getReviewByMatchId";
 import { IReview } from "@/types/review.interface";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -17,8 +16,8 @@ export default async function ReviewsSection({
   matchId: string;
   reviews: IReview[];
 }) {
-  const response = await getReviewsByMatchId(matchId);
-  console.log(response);
+  // const response = await getReviewsByMatchId(matchId);
+  console.log({matchId});
   console.log(reviews);
 
   if (reviews.length === 0) {
