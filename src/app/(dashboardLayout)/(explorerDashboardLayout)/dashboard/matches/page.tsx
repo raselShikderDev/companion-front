@@ -4,10 +4,8 @@
 import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
-import { Match } from "@/types/match.interface";
 import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
 import { queryStringFormatter } from "@/lib/allFormattors";
-import Paggination from "@/components/shared/Paggination";
 import Pagination from "@/components/shared/Paggination";
 
 export default async function MyMatchesPage({
@@ -61,7 +59,6 @@ export default async function MyMatchesPage({
           matches={matches}
         />
         <Pagination
-          limit={Number(meta.limit)}
           currentPages={currentpage}
           totalPages={totalPages}
         />

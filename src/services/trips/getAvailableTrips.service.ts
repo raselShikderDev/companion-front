@@ -3,34 +3,10 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 
-export async function getAvailableTrips({
-  page = 1,
-  limit = 10,
-  search = "",
-  filters = {},
-}: {
-  page?: number;
-  limit?: number;
-  search?: string;
-  filters?: Record<string, any>;
-}) {
-  // Build search params dynamically
-  const params = new URLSearchParams();
-
-  params.set("page", String(page));
-  params.set("limit", String(limit));
-
-  if (search) params.set("search", search);
-
-  // Append dynamic filters (your backend supports them)
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      params.set(key, String(value));
-    }
-  });
-  // ?page=${page}&limit=${limit}
+export async function getAvailableTrips(queryString?: string) {
+  
   try {
-    const res = await serverFetch.get(`/trip/available?page=${page}&limit=${limit}`, {
+    const res = await serverFetch.get(`/trip/available${queryString ? `?${queryString}` : ""}`, {
       cache: "no-store",
     });
 

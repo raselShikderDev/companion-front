@@ -26,18 +26,16 @@ export default function DateRangeFilter() {
 
   const [range, setRange] = useState<DateRange | undefined>(undefined);
 
-  // ✅ KEEP CALENDAR STATE IN SYNC WITH URL
-useEffect(() => {
-  // Whenever startDate or endDate in URL changes, update calendar
-  if (startDateParam && endDateParam) {
-    setRange({
-      from: new Date(startDateParam),
-      to: new Date(endDateParam),
-    });
-  } else {
-    setRange(undefined);
-  }
-}, [startDateParam, endDateParam]);
+  useEffect(() => {
+    if (startDateParam && endDateParam) {
+      setRange({
+        from: new Date(startDateParam),
+        to: new Date(endDateParam),
+      });
+    } else {
+      setRange(undefined);
+    }
+  }, [startDateParam, endDateParam]);
 
   const applyFilter = () => {
     const params = new URLSearchParams(searchParams.toString());

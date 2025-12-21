@@ -1,5 +1,5 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-/** biome-ignore-all lint/style/useConst: <explanation> */
+/** biome-ignore-all lint/style/useConst: > */
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 "use client";
 
@@ -18,10 +18,9 @@ import {
 interface TablePaginationProps {
   currentPages: number;
   totalPages: number;
-  limit:number;
 }
 
-const Pagination = ({ currentPages, totalPages, limit }: TablePaginationProps) => {
+const Pagination = ({ currentPages, totalPages }: TablePaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();

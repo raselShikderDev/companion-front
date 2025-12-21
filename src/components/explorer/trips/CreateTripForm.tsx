@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: > */
-/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all assist/source/organizeImports: <explanation> */
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
@@ -12,7 +12,6 @@ import Image from "next/image";
 import { uploadToImageBB } from "@/lib/uploadImage";
 import { createTrip } from "@/services/trips/createTrip.service.";
 
-
 export default function CreateTripForm() {
   const [state, formAction, isPending] = useActionState(createTrip, null);
 
@@ -23,29 +22,37 @@ export default function CreateTripForm() {
   const [languages, setLanguages] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const inputErrorState = state && !state.success ? state : null;
 
-  // Restore previous selections on validation error
+  // Restore previous selections & errors
   useEffect(() => {
     if (state?.wrongData) {
-      setJourneyType(state.wrongData.journeyType || []);
-      setLanguages(state.wrongData.languages || []);
-      setPreviewImage(state.wrongData.image || null);
-      setUploadedUrl(state.wrongData.image || null);
+      // normalize keys
+      const wrongData = state.wrongData;
+      setJourneyType(wrongData.journeyType || wrongData.JourneyType || []);
+      setLanguages(wrongData.languages || wrongData.Languages || []);
+      setPreviewImage(wrongData.image || null);
+      setUploadedUrl(wrongData.image || null);
     }
+
+    // Map errors
+    // if (state && !state.success && state.errors) {
+    //   setInputErrorState({
+    //     success: false,
+    //     errors: state.errors.map((err: any) => ({
+    //       feild: err.feild.toLowerCase(),
+    //       message: err.message,
+    //     })),
+    //   });
+    // }
   }, [state]);
 
-  // Toast notifications
   useEffect(() => {
     if (!state) return;
-    setJourneyType([]);
-    setLanguages([]);
-    setPreviewImage(null);
-    setUploadedUrl(null);
-    if (state.success && state.message) { 
-      toast.success(state.message); 
+    if (state.success && state.message) {
+      toast.success(state.message);
     }
     if (!state.success && state.message) toast.error(state.message);
   }, [state]);
@@ -60,37 +67,22 @@ export default function CreateTripForm() {
       prev.includes(item) ? prev.filter((v) => v !== item) : [...prev, item]
     );
 
-  // Handle file selection
   const handleFileChange = (e: any) => {
     const f = e.target.files?.[0];
     if (!f) return;
-
     setFile(f);
     setPreviewImage(URL.createObjectURL(f));
     setUploadedUrl(null);
   };
 
-  // Upload file with loading
   const handleUpload = async () => {
-    console.log("UPLOAD CLICKED", file);
-
     if (!file) return;
-
     setUploading(true);
-    console.log("enterung try catch to upload");
-
     try {
       const url = await uploadToImageBB(file);
-      console.log("Got from image db:", url);
-
       setUploadedUrl(url);
-      console.log("after setting image:", uploadedUrl);
-      toast.success("Image uploaded successfully!");
-    } catch (err: any) {
-      console.log("failed to upload");
-      console.log(err);
-
-      toast.error(err?.message || "Image upload failed!");
+    } catch (err) {
+      console.error(err);
     } finally {
       setUploading(false);
     }
@@ -102,10 +94,12 @@ export default function CreateTripForm() {
     setFile(null);
   };
 
-  // FINAL FIX: disable when uploading OR server pending OR no image uploaded
-  //   const disableSubmit = isPending || uploading || !uploadedUrl;
-  const disableSubmit = isPending || uploading || !uploadedUrl;
-  console.log({ isPending, uploading, uploadedUrl });
+  const disableSubmit =
+    isPending ||
+    uploading ||
+    !uploadedUrl ||
+    journeyType.length === 0 ||
+    languages.length === 0;
 
   return (
     <div className="bg-card border border-border p-8 rounded-xl shadow-sm max-w-3xl mx-auto">
@@ -119,7 +113,7 @@ export default function CreateTripForm() {
               placeholder="Adventure to Cox's Bazar"
               defaultValue={state?.wrongData?.title}
             />
-            <InputFeildError feild="title" state={state} />
+            <InputFeildError feild="title" state={inputErrorState} />
           </Field>
 
           {/* Destination */}
@@ -130,7 +124,7 @@ export default function CreateTripForm() {
               placeholder="Cox's Bazar"
               defaultValue={state?.wrongData?.destination}
             />
-            <InputFeildError feild="destination" state={state} />
+            <InputFeildError feild="destination" state={inputErrorState} />
           </Field>
 
           {/* Departure */}
@@ -141,7 +135,10 @@ export default function CreateTripForm() {
               placeholder="Dhaka"
               defaultValue={state?.wrongData?.departureLocation}
             />
-            <InputFeildError feild="departureLocation" state={state} />
+            <InputFeildError
+              feild="departureLocation"
+              state={inputErrorState}
+            />
           </Field>
 
           {/* Dates */}
@@ -153,7 +150,7 @@ export default function CreateTripForm() {
                 name="startDate"
                 defaultValue={state?.wrongData?.startDate}
               />
-              <InputFeildError feild="startDate" state={state} />
+              <InputFeildError feild="startDate" state={inputErrorState} />
             </Field>
 
             <Field>
@@ -163,7 +160,7 @@ export default function CreateTripForm() {
                 name="endDate"
                 defaultValue={state?.wrongData?.endDate}
               />
-              <InputFeildError feild="endDate" state={state} />
+              <InputFeildError feild="endDate" state={inputErrorState} />
             </Field>
           </div>
 
@@ -176,7 +173,7 @@ export default function CreateTripForm() {
               rows={4}
               defaultValue={state?.wrongData?.description}
             ></textarea>
-            <InputFeildError feild="description" state={state} />
+            <InputFeildError feild="description" state={inputErrorState} />
           </Field>
 
           {/* Budget */}
@@ -187,7 +184,7 @@ export default function CreateTripForm() {
               placeholder="12"
               defaultValue={state?.wrongData?.budget}
             />
-            <InputFeildError feild="budget" state={state} />
+            <InputFeildError feild="budget" state={inputErrorState} />
           </Field>
 
           {/* Duration */}
@@ -198,7 +195,7 @@ export default function CreateTripForm() {
               placeholder="5 days"
               defaultValue={state?.wrongData?.duration}
             />
-            <InputFeildError feild="duration" state={state} />
+            <InputFeildError feild="duration" state={inputErrorState} />
           </Field>
 
           {/* Journey Type */}
@@ -210,10 +207,11 @@ export default function CreateTripForm() {
                   key={jt}
                   type="button"
                   onClick={() => toggleJourney(jt)}
-                  className={`px-3 py-1 rounded-lg border ${journeyType.includes(jt)
+                  className={`px-3 py-1 rounded-lg border cursor-pointer ${
+                    journeyType.includes(jt)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                    }`}
+                  }`}
                 >
                   {jt}
                 </button>
@@ -223,7 +221,7 @@ export default function CreateTripForm() {
             {journeyType.map((jt) => (
               <input key={jt} type="hidden" name="journeyType" value={jt} />
             ))}
-            <InputFeildError feild="journeyType" state={state} />
+            <InputFeildError feild="journeyType" state={inputErrorState} />
           </Field>
 
           {/* Languages */}
@@ -235,10 +233,11 @@ export default function CreateTripForm() {
                   key={lng}
                   type="button"
                   onClick={() => toggleLanguage(lng)}
-                  className={`px-3 py-1 rounded-lg border ${languages.includes(lng)
+                  className={`px-3 py-1 rounded-lg border cursor-pointer ${
+                    languages.includes(lng)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                    }`}
+                  }`}
                 >
                   {lng}
                 </button>
@@ -248,8 +247,7 @@ export default function CreateTripForm() {
             {languages.map((l) => (
               <input key={l} type="hidden" name="languages" value={l} />
             ))}
-
-            <InputFeildError feild="languages" state={state} />
+            <InputFeildError feild="languages" state={inputErrorState} />
           </Field>
 
           {/* IMAGE UPLOAD */}
@@ -257,12 +255,16 @@ export default function CreateTripForm() {
             <FieldLabel>Trip Image</FieldLabel>
 
             {!previewImage && (
-              <Input type="file" accept="image/*" onChange={handleFileChange} />
+              <Input
+                type="file"
+                accept="image/*"
+                className="cursor-pointer"
+                onChange={handleFileChange}
+              />
             )}
 
             {previewImage && (
               <div className="mt-3 space-y-2">
-                {/* FIXED IMAGE WRAPPER */}
                 <div className="relative w-[400px] h-[250px] rounded overflow-hidden border">
                   <Image
                     src={previewImage}
@@ -270,8 +272,6 @@ export default function CreateTripForm() {
                     fill
                     className="object-cover"
                   />
-
-                  {/* FIXED OVERLAY: now only covers the image */}
                   {uploading && (
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                       <div className="animate-spin h-10 w-10 border-4 border-white border-t-transparent rounded-full"></div>
@@ -279,28 +279,29 @@ export default function CreateTripForm() {
                   )}
                 </div>
 
-                {/* Buttons below image, no overlap */}
-                {!uploadedUrl && !uploading && (
-                  <Button type="button" onClick={handleUpload}>
-                    Upload Image
-                  </Button>
-                )}
+                <div className={`${!uploadedUrl && !uploading && "space-x-3"}`}>
+                  {!uploadedUrl && !uploading && (
+                    <Button type="button" onClick={handleUpload}>
+                      Upload Image
+                    </Button>
+                  )}
 
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={removeImage}
-                >
-                  Remove Image
-                </Button>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={removeImage}
+                    disabled={isPending || uploading}
+                  >
+                    Remove Image
+                  </Button>
+                </div>
               </div>
             )}
 
             {uploadedUrl && (
               <input type="hidden" name="image" value={uploadedUrl} />
             )}
-
-            <InputFeildError feild="image" state={state} />
+            <InputFeildError feild="image" state={inputErrorState} />
           </Field>
 
           {/* SUBMIT */}

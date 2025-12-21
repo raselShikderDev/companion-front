@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: > */
 
 import { FieldDescription } from "@/components/ui/field";
 import getInputFeildError, { IInputErrorState } from "./getInputFeildError";
