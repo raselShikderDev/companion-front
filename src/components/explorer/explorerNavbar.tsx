@@ -20,7 +20,7 @@ const explorerNavItems = [
   { href: "/dashboard/create-trip", label: "Create Trip", icon: MapPin },
   { href: "/dashboard/my-trips", label: "My Trips", icon: Briefcase },
   { href: "/dashboard/matches", label: "My Matches", icon: Users },
-  // { href: "/dashboard/reviews", label: "Reviews", icon: MessageSquare },
+  { href: "/dashboard/reviews", label: "Reviews", icon: MessageSquare },
   { href: "/dashboard/find-trips", label: "Find Trips", icon: Search },
 ];
 

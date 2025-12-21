@@ -1,4 +1,6 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
+import { Star } from "lucide-react";
+
 export default function RatingStars({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-1">
@@ -11,7 +13,7 @@ export default function RatingStars({ rating }: { rating: number }) {
               : "text-muted-foreground"
           }`}
         >
-          ★
+          <Star className="w-4 h-4" />
         </span>
       ))}
     </div>

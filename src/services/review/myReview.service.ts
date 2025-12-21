@@ -3,17 +3,11 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 
-export const getMyReviews = async (
-  params?: { page?: number; limit?: number }
-) => {
+export const getMyReviews = async (queryString?: string) => {
   try {
-    const query = new URLSearchParams();
-
-    if (params?.page) query.set("page", params.page.toString());
-    if (params?.limit) query.set("limit", params.limit.toString());
-
+ 
     const res = await serverFetch.get(
-      `/match/my-matches${query.toString() ? `?${query}` : ""}`
+      `/review/my-review${queryString ? `?${queryString}` : ""}`
     );
 
     const data = await res.json();

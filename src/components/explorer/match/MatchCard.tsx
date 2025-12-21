@@ -41,15 +41,7 @@ export default async function MatchCard({
           validReviews.length
         ).toFixed(1)
       : null;
-  console.log();
-
-  console.log({
-    matchStatus: match.status,
-    tripStatus: match.trip.status,
-    tripName: match.trip.title,
-  });
-  console.log({ currentExplorerId, matchCreator: match?.requesterId });
-
+  
   const isTripCreator = currentExplorerId === match?.trip?.creatorId;
   const isMatchCreator = currentExplorerId === match?.requesterId;
   console.log({ isTripCreator });
