@@ -52,6 +52,9 @@ export default function CreateTripForm() {
   useEffect(() => {
     if (!state) return;
     if (state.success && state.message) {
+      setPreviewImage(null)
+      setJourneyType([])
+      setLanguages([])
       toast.success(state.message);
     }
     if (!state.success && state.message) toast.error(state.message);
