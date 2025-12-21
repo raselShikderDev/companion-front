@@ -2,12 +2,12 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <> */
 /** biome-ignore-all lint/style/useImportType: > */
 
-
 import { Match } from "@/types/match.interface";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import MatchCard from "./MatchCard";
 import SelectFilter from "@/components/shared/SelectFilter";
 import ClearFiltersButton from "@/components/shared/ClearFilter";
+import DateRangeFilter from "@/components/shared/DateRangeFilter";
 
 export function MyMatchesGrid({
   matches,
@@ -36,6 +36,7 @@ export function MyMatchesGrid({
             { label: "COMPLETED", value: "true" },
           ]}
         />
+        <DateRangeFilter />
         <ClearFiltersButton />
       </div>
 

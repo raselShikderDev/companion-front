@@ -1,11 +1,11 @@
 /** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all lint/style/useImportType: > */
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
 import { IReview } from "@/types/review.interface";
 import { getMyReviews } from "@/services/review/myReview.service";
 import {
