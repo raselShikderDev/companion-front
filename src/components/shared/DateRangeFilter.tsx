@@ -1,8 +1,7 @@
-/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -19,17 +18,25 @@ export default function DateRangeFilter() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
+  const [open, setOpen] = useState(false);
+
   const startDateParam = searchParams.get("startDate");
   const endDateParam = searchParams.get("endDate");
 
-  const [range, setRange] = useState<DateRange | undefined>(
-    startDateParam && endDateParam
-      ? {
-          from: new Date(startDateParam),
-          to: new Date(endDateParam),
-        }
-      : undefined
-  );
+  const [range, setRange] = useState<DateRange | undefined>(undefined);
+
+  // ✅ KEEP CALENDAR STATE IN SYNC WITH URL
+useEffect(() => {
+  // Whenever startDate or endDate in URL changes, update calendar
+  if (startDateParam && endDateParam) {
+    setRange({
+      from: new Date(startDateParam),
+      to: new Date(endDateParam),
+    });
+  } else {
+    setRange(undefined);
+  }
+}, [startDateParam, endDateParam]);
 
   const applyFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -42,17 +49,19 @@ export default function DateRangeFilter() {
       params.delete("endDate");
     }
 
+    setOpen(false); // close immediately
+
     startTransition(() => {
       router.push(`?${params.toString()}`);
     });
   };
 
   const clearFilter = () => {
-    setRange(undefined);
-
     const params = new URLSearchParams(searchParams.toString());
     params.delete("startDate");
     params.delete("endDate");
+
+    setOpen(false);
 
     startTransition(() => {
       router.push(`?${params.toString()}`);
@@ -60,7 +69,7 @@ export default function DateRangeFilter() {
   };
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
