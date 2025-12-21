@@ -7,6 +7,8 @@ import { getMyMatches } from "@/services/match/myMatches.service";
 import { Match } from "@/types/match.interface";
 import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
 import { queryStringFormatter } from "@/lib/allFormattors";
+import Paggination from "@/components/shared/Paggination";
+import Pagination from "@/components/shared/Paggination";
 
 export default async function MyMatchesPage({
   searchParams,
@@ -16,7 +18,8 @@ export default async function MyMatchesPage({
   const searchParamsObj = await searchParams;
   const queryString = queryStringFormatter(searchParamsObj);
   const res = await getMyMatches(queryString);
-  let matches: Match[] | [];
+  let matches: any | [];
+
   if (res.success) {
     matches = res.data;
   } else {
@@ -34,8 +37,15 @@ export default async function MyMatchesPage({
     console.error("No explorer id found");
   }
 
-  currentExplorerId = id ;
+  currentExplorerId = id;
   console.log({ matches });
+
+  const meta = matches.meta;
+  if (meta && !meta.total && !meta.limit && !meta.page) {
+    console.log("meta not found");
+  }
+  const totalPages = Math.ceil(meta?.total / meta?.limit) || 1;
+  const currentpage = meta?.page || 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -44,11 +54,18 @@ export default async function MyMatchesPage({
         View accepted, rejected, and pending match requests
       </p>
 
-      {/* <MyMatchesGrid matches={matches} /> */}
-      <MyMatchesGrid
-        currentExplorerId={currentExplorerId as string}
-        matches={matches}
-      />
+      <div className="space-y-3.5">
+        {/* <MyMatchesGrid matches={matches} /> */}
+        <MyMatchesGrid
+          currentExplorerId={currentExplorerId as string}
+          matches={matches}
+        />
+        <Pagination
+          limit={Number(meta.limit)}
+          currentPages={currentpage}
+          totalPages={totalPages}
+        />
+      </div>
     </div>
   );
 }

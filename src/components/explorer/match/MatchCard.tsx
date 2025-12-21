@@ -25,10 +25,8 @@ export default async function MatchCard({
   const hasAlreadyReviewed = match.reviews?.some(
     (review: any) => review.reviewerId === currentExplorerId
   );
-  console.log("Reviews for this match:", match.reviews);
   const canGiveReview =
     match.status === "COMPLETED" && isMatchParticipant && !hasAlreadyReviewed;
-  // console.log({canGiveReview});
 
   const validReviews =
     match.reviews?.filter((review: any) => typeof review.rating === "number") ??
@@ -44,7 +42,6 @@ export default async function MatchCard({
   
   const isTripCreator = currentExplorerId === match?.trip?.creatorId;
   const isMatchCreator = currentExplorerId === match?.requesterId;
-  console.log({ isTripCreator });
 
   const statusStyles: Record<string, string> = {
     ACCEPTED: "bg-emerald-500 hover:bg-emerald-600 text-white border-none",

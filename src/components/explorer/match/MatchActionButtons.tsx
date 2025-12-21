@@ -26,7 +26,6 @@ export default function MatchActionButtons({
   isMatchCreator,
 }: Props) {
   const [loading, setLoading] = useState<null | MatchStatus>(null);
-  console.log({ canGiveReview });
 
   const handleAction = async (nextStatus: MatchStatus) => {
     setLoading(nextStatus);

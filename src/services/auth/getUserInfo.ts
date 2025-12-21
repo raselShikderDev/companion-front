@@ -18,15 +18,10 @@ export const getUserInfo = async (): Promise<IUser | any> => {
     });
 
     const result = await response.json();
-    // console.log({ result });
 
     if (result.success) {
       const accessToken = await getCookie("accessToken");
-      // console.log({
-      //   "In getUserInfo 22 line accessToken ": accessToken,
-      //   "In getUserInfo 22 line JWT acces secret ": process.env
-      //     .JWT_ACCESS_SECRET as string,
-      // });
+ 
 
       if (!accessToken) {
         throw new Error("No access token found");
@@ -53,7 +48,6 @@ export const getUserInfo = async (): Promise<IUser | any> => {
       ...result.data,
     };
 
-    console.log({ userInfo });
     return userInfo;
   } catch (error: any) {
     console.log(error);
