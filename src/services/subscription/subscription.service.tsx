@@ -17,7 +17,8 @@ export async function initiateSubscription(plan: SubscriptionPlan) {
     })
 
     const data = await res.json()
-
+    console.log({data});
+    
     if (!res.ok || !data?.success) {
       return {
         success: false,

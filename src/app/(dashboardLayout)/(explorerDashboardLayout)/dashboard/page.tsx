@@ -1,5 +1,5 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all lint/style/useImportType: > */
 
 import DashboardStats from "@/components/homePage/dashboard/DashboardStats";
@@ -9,8 +9,6 @@ import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import RecentMatchs from "@/components/homePage/dashboard/RecentMatchs";
 import { MatchStatus, TripStatus } from "@/types/enum.interface";
 import { queryStringFormatter } from "@/lib/allFormattors";
-import { Match } from "@/types/match.interface";
-import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 
 export interface IMyMatches {

@@ -1,7 +1,11 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/style/useImportType: > */
 import { Badge } from "@/components/ui/badge"
 import { Check, Sparkles } from "lucide-react"
-import { SubscribeButton } from "@/components/subscribe-button"
 import { getMySubscription } from "@/services/subscription/subscription.service"
+import { SubscribeButton } from "@/components/explorer/subscrptions/SubscribeButton"
+import { SubscriptionPlan } from "@/types/enum.interface"
 
 const plans = [
   {
@@ -145,7 +149,7 @@ export default async function DashboardSubscriptionsPage() {
               </div>
 
               <SubscribeButton
-                plan={plan.plan as "FREE" | "STANDARD" | "PREMIUM"}
+                plan={plan.plan as SubscriptionPlan}
                 isCurrentPlan={isCurrentPlan}
                 isFree={plan.price === 0}
               />
@@ -153,7 +157,7 @@ export default async function DashboardSubscriptionsPage() {
               <ul className="space-y-3 flex-1 mt-6">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-accent" />
                     </div>
                     <span className="text-sm">{feature}</span>
