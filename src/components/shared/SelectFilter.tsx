@@ -63,7 +63,7 @@ function SelectFilter({
       <SelectContent>
         <SelectItem value={defaultValue}>{defaultValue}</SelectItem>
         {options?.map((option) => (
-          <SelectItem key={option?.value} value={option?.label}>
+          <SelectItem key={option?.value} className="cursor-pointer" value={option?.label}>
             {option?.label}
           </SelectItem>
         ))}

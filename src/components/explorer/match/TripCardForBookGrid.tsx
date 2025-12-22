@@ -2,18 +2,16 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 import { IAvailableTrip } from "@/types/trip.interface";
 import TripCardForBook from "./TripCardForBook";
-import SearchFilter from "@/components/shared/SearchFilter";
 import DateRangeFilter from "@/components/shared/DateRangeFilter";
 import ClearFiltersButton from "@/components/shared/ClearFilter";
-import SelectFilter from "@/components/shared/SelectFilter";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 
 const TripCardForBookGrid = ({ trips }: { trips: IAvailableTrip[] }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <SearchFilter paramName="searchTerm" placeholder="Search Trips..." />
-        <SelectFilter
+        {/* <SearchFilter paramName="searchTerm" placeholder="Search Trips..." /> */}
+        {/* <SelectFilter
           paramName="status"
           placheholder="Trip Status"
           defaultValue="All trips"
@@ -22,7 +20,7 @@ const TripCardForBookGrid = ({ trips }: { trips: IAvailableTrip[] }) => {
             { label: "COMPLETED", value: "true" },
             { label: "CANCELLED", value: "true" },
           ]}
-        />
+        /> */}
         <DateRangeFilter />
         <ClearFiltersButton />
       </div>

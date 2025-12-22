@@ -7,8 +7,9 @@ import Link from "next/link";
 import { IAvailableTrip } from "@/types/trip.interface";
 import { cookies } from "next/headers";
 import { verifyAccessToken } from "@/lib/jwtHandler";
-import { Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { formatDateTime } from "@/lib/allFormattors";
 
 export default async function TripCardForBook({
   trip,
@@ -53,7 +54,10 @@ export default async function TripCardForBook({
             {trip.duration} Days
           </div>
         </p>
-
+        <div className="flex items-center gap-1 mb-4">
+          <Calendar className="h-4 w-4 text-primary" />
+         Starting at {formatDateTime(trip.startDate)}
+        </div>
         <div className="flex gap-2 flex-wrap mb-4">
           {trip?.journeyType.map((tag) => (
             <span

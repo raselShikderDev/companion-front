@@ -1,6 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 import TripCardForBookGrid from "@/components/explorer/match/TripCardForBookGrid";
-import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import Pagination from "@/components/shared/Paggination";
 import { queryStringFormatter } from "@/lib/allFormattors";
 import { getAvailableTrips } from "@/services/trips/getAvailableTrips.service";
@@ -21,14 +20,11 @@ export default async function AllAvailableTripsPage({
   }
 
   
-  const meta = trips.meta;
-  if (meta && !meta.total && !meta.limit && !meta.page) {
-    console.log("meta not found");
-  }
-  console.log({meta});
+ const totalPages = Math.ceil(res?.meta?.total / res?.meta?.limit) || 1;
+  const currentpage = res?.meta?.page || 1;
   
-  const totalPages = Math.ceil(meta?.total / meta?.limit) || 1;
-  const currentpage = meta?.page || 1;
+  console.log({ totalpage: Math.ceil(res?.meta?.total / res?.meta?.limit) });
+  console.log({ currentpage: res.meta?.page });
 
   return (
     <div className="container mx-auto px-4 py-8">

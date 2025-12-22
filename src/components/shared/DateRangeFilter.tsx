@@ -73,7 +73,7 @@ export default function DateRangeFilter() {
         <Button
           variant="outline"
           disabled={isPending}
-          className="justify-start text-left font-normal"
+          className="justify-start text-left font-normal cursor-pointer"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {range?.from && range?.to ? (

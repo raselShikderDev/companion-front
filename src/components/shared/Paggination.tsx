@@ -102,7 +102,7 @@ const Pagination = ({ currentPages, totalPages }: TablePaginationProps) => {
           </SelectTrigger>
           <SelectContent>
             {["1", "5", "10", "20", "50", "100"].map((val) => (
-              <SelectItem key={val} value={val}>
+              <SelectItem key={val} className="cursor-pointer" value={val}>
                 {val ? val : currentLimit}
               </SelectItem>
             ))}

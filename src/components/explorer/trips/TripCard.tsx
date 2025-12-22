@@ -17,13 +17,17 @@ import Link from "next/link";
 import CompleteTripButton from "./CompleteTripButton";
 import { formatDateTime } from "@/lib/allFormattors";
 
-export default function ExplorerTripCard({ trip, onEdit, currentExplorerId }: any) {
- console.log({currentExplorerId});
- console.log({creatorId:trip?.creatorId});
+export default function ExplorerTripCard({
+  trip,
+  onEdit,
+  currentExplorerId,
+}: any) {
+  console.log({ currentExplorerId });
+  console.log({ creatorId: trip?.creatorId });
 
- const isCreator = currentExplorerId === trip?.creatorId
- console.log({isCreator});
- 
+  const isCreator = currentExplorerId === trip?.creatorId;
+  console.log({ isCreator });
+
   return (
     <Card className="overflow-hidden hover:shadow-md transition">
       {trip.image && (
@@ -52,10 +56,10 @@ export default function ExplorerTripCard({ trip, onEdit, currentExplorerId }: an
       <CardContent className="space-y-4">
         <p className="text-muted-foreground line-clamp-2">{trip.description}</p>
 
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className=" space-y-3.5 text-sm">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-primary" />
-            {formatDateTime(trip.startDate)}
+            Starting at {formatDateTime(trip.startDate)}
           </div>
 
           <div className="flex items-center gap-1">
@@ -68,16 +72,18 @@ export default function ExplorerTripCard({ trip, onEdit, currentExplorerId }: an
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-1">
-          {trip.journeyType.map((type: string) => (
-            <Badge key={type} variant="outline">
-              {type}
-            </Badge>
+        <div className="flex gap-2 flex-wrap mb-4">
+          {trip?.journeyType.map((tag:string) => (
+            <span
+              key={tag}
+              className="text-xs px-2 py-1 rounded bg-accent/10 text-accent"
+            >
+              {tag}
+            </span>
           ))}
         </div>
-
-        <div className="flex flex-wrap gap-1">
-          {trip.Languages.map((lang: string) => (
+        <div className="flex gap-2 flex-wrap mb-4">
+          {trip?.Languages.map((lang:string) => (
             <Badge key={lang} variant="secondary">
               {lang}
             </Badge>
