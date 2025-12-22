@@ -111,15 +111,6 @@ useEffect(() => {
             {!isPending && "LogIn"}
           </Button>
         </form>
-
-
-            {/* Divider */}
-            <div className="my-6 flex items-center gap-3">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-sm text-muted-foreground">or</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-
           </div>
   )
 }

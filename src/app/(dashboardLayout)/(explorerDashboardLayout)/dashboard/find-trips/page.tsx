@@ -37,7 +37,6 @@ export default async function AllAvailableTripsPage({
         Our smart algorithm matches you with perfect travel companions
       </p>
 
-      {trips.length === 0 && <EmptyTripCard />}
       <div className="space-y-3.5">
 
       <TripCardForBookGrid trips={trips} />
