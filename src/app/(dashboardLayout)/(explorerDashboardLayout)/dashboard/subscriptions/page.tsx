@@ -6,6 +6,7 @@ import { Check, Sparkles } from "lucide-react"
 import { getMySubscription } from "@/services/subscription/subscription.service"
 import { SubscribeButton } from "@/components/explorer/subscrptions/SubscribeButton"
 import { SubscriptionPlan } from "@/types/enum.interface"
+import { getUserInfo } from "@/services/auth/getUserInfo"
 
 const plans = [
   {
@@ -61,6 +62,12 @@ const plans = [
 
 export default async function DashboardSubscriptionsPage() {
   const currentSubscription = await getMySubscription()
+  const user = await getUserInfo()
+  console.log({
+    currentSubscription,
+    user,
+  });
+  
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
