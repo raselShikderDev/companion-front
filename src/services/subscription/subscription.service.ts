@@ -10,7 +10,7 @@ import { redirect } from "next/navigation"
 export async function initiateSubscription(plan: SubscriptionPlan) {
   try {
     const res = await serverFetch.post("/subscription/create", {
-      body: JSON.stringify({ planName: plan }),
+      body: JSON.stringify({ plan: plan }),
       headers: {
         "Content-Type": "application/json",
       },

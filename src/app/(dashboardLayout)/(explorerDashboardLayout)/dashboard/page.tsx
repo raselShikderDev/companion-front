@@ -42,6 +42,7 @@ export default async function ExplorerDashboard() {
   } else {
     matches = [];
   }
+console.log(explorer);
 
   return (
     <div className="container mx-auto px-4 py-12">

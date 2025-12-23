@@ -29,7 +29,7 @@ export function SubscribeButton({ plan, isCurrentPlan, isFree }: SubscribeButton
         toast.error(result.message || "Failed to initiate subscription")
       }
     } catch (error) {
-      console.error("[v0] Subscribe error:", error)
+      console.error("Subscribe error:", error)
       toast.error("An error occurred. Please try again.")
     } finally {
       setLoading(false)

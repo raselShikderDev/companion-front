@@ -183,7 +183,7 @@ console.log({state});
 
               <FieldDescription className="text-center pt-2">
                 Already have an account?{" "}
-                <Link href="/login">Sign in</Link>
+                <Link href="/signin">Sign in</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
