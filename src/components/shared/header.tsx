@@ -64,7 +64,7 @@ export default function Header() {
             Reviews
           </Link>
           <Link
-            href="#"
+            href="/pricing"
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
             Pricing

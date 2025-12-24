@@ -10,7 +10,7 @@ export async function handleExpiredToken(request: Request) {
   await deleteCookie("refreshToken");
 
   // Redirect user back to login
-  const loginUrl = new URL("/login", request.url);
+  const loginUrl = new URL("/signin", request.url);
   loginUrl.searchParams.set("expired", "true");
 
   return NextResponse.redirect(loginUrl);
