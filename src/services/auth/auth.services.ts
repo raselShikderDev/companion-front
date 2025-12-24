@@ -125,7 +125,7 @@ console.log({data});
 }
 
 // Step 3: Reset password with token
-export async function resetPasswor(prevState: any, formData: FormData) {
+export async function resetPassword(prevState: any, formData: FormData) {
   try {
     const input: ResetPasswordInput = {
       token: formData.get("token") as string,
@@ -165,17 +165,7 @@ export async function resetPasswor(prevState: any, formData: FormData) {
     const data = await res.json()
     console.log(data);
 
-    if (!res.ok || !data?.ok) {
-      return {
-        success: false,
-        message: data?.message || "Failed to reset password",
-      }
-    }
-
-    return {
-      success: true,
-      message: "Password reset successfully",
-    }
+   return data
   } catch (error: any) {
     console.error(" Reset password error:", error)
     return {
