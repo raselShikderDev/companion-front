@@ -21,20 +21,18 @@ interface SettingsFormProps {
     bio?: string;
     age?: string;
     gender: string;
-    travelStyleTags: string[];
-    interests: string[];
+    travelStyleTags?: string[];
+    interests?: string[];
   };
-   role: UserRole;
+  role: UserRole;
 }
 
 export function SettingsForm({ profile, role }: SettingsFormProps) {
   const [state, formAction, isPending] = useActionState(updateProfile, null);
-
-
   const [isDirty, setIsDirty] = useState(false);
-
-
   const initialValuesRef = useRef<Record<string, string>>({});
+  const travelStyleTags = profile.travelStyleTags ?? [];
+  const interests = profile.interests ?? [];
 
 
   useEffect(() => {
@@ -44,13 +42,16 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
       age: profile.age || "",
       address: profile.address || "",
       bio: profile.bio || "",
-      travelStyleTags: profile.travelStyleTags.join(", "),
-      interests: profile.interests.join(", "),
+      travelStyleTags: travelStyleTags.join(", "),
+      interests: interests.join(", "),
+
     };
   }, [profile]);
 
-  
+
   const handleFormChange = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(e.currentTarget);
+    
     const formData = new FormData(e.currentTarget);
 
     for (const [key, initialValue] of Object.entries(
@@ -69,19 +70,21 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
   useEffect(() => {
     if (state?.success) {
       console.log("Successfully updated");
-      
+
       toast.success(state.message);
-      setIsDirty(false); 
+      setIsDirty(false);
     } else if (state?.success === false) {
       console.log("Update failed");
       toast.error(state?.message);
     }
   }, [state]);
-
+  console.log({state});
+  
+  const isExplorer = role !== Role.ADMIN && role !== Role.SUPER_ADMIN;
   return (
     <form
       action={formAction}
-      onChange={handleFormChange} 
+      onChange={handleFormChange}
       className="space-y-6"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,18 +125,18 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
         />
       </div>
 
- {
-      role !== Role.ADMIN && role !== Role.SUPER_ADMIN && (
-         <div className="space-y-2">
-        <Label htmlFor="travelStyleTags">Travel Style Tags</Label>
-        <Input
-          id="travelStyleTags"
-          name="travelStyleTags"
-          defaultValue={profile.travelStyleTags.join(", ")}
-        />
-      </div>
-      )
-     }
+      {
+        isExplorer && (
+          <div className="space-y-2">
+            <Label htmlFor="travelStyleTags">Travel Style Tags</Label>
+            <Input
+              id="travelStyleTags"
+              name="travelStyleTags"
+              defaultValue={travelStyleTags.join(", ")}
+            />
+          </div>
+        )
+      }
       {/* <div className="space-y-2">
         <Label htmlFor="travelStyleTags">Travel Style Tags</Label>
         <Input
@@ -142,15 +145,27 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
           defaultValue={profile.travelStyleTags.join(", ")}
         />
       </div> */}
+      {
+        isExplorer && (
+          <div className="space-y-2">
+            <Label htmlFor="interests">Interests</Label>
+            <Input
+              id="interests"
+              name="interests"
+              defaultValue={interests.join(", ")}
+            />
+          </div>
+        )
+      }
 
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="interests">Interests</Label>
         <Input
           id="interests"
           name="interests"
           defaultValue={profile.interests.join(", ")}
         />
-      </div>
+      </div> */}
 
       <div className="flex justify-end gap-4">
         <Button type="button" variant="outline" onClick={() => window.location.reload()}>
