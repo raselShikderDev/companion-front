@@ -49,7 +49,7 @@ export async function updateProfile(_currentState: any, formData: FormData) {
 
 export async function updateProfilePicture(imageUrl: string) {
   try {
-    const res = await serverFetch.patch("/explorer/update-profile", {
+    const res = await serverFetch.patch("/users/profile-picture", {
       body: JSON.stringify({ profilePicture: imageUrl }),
       headers: {
         "Content-Type": "application/json",
@@ -57,6 +57,7 @@ export async function updateProfilePicture(imageUrl: string) {
     })
 
     const data = await res.json()
+console.log(data);
 
     if (!res.ok || !data?.success) {
       return {
@@ -65,13 +66,10 @@ export async function updateProfilePicture(imageUrl: string) {
       }
     }
 
-    revalidatePath("/dashboard/settings")
-    return {
-      success: true,
-      message: "Profile picture updated successfully",
-    }
+    revalidatePath("/settings")
+    return data.data
   } catch (error: any) {
-    console.error("[v0] Update profile picture error:", error)
+    console.error(" Update profile picture error:", error)
     return {
       success: false,
       message: error.message || "Server error",

@@ -6,8 +6,25 @@ import { Separator } from "@/components/ui/separator"
 import { getUserInfo } from "@/services/auth/getUserInfo"
 
 export default async function SettingsPage() {
-  const profile = await getUserInfo()
-console.log(getUserInfo);
+  
+  const user = await getUserInfo();
+  const { explorer, admin } = user;
+
+
+let profile:any | null;
+
+if (explorer) {
+  profile = explorer
+} else if(admin){
+  profile = admin
+} else {
+profile = null
+}
+
+console.log({user});
+console.log(explorer, admin);
+
+
 
   if (!profile) {
     return (
@@ -33,12 +50,12 @@ console.log(getUserInfo);
           <CardDescription>Update your profile picture. Recommended size: 400x400px</CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfilePictureUpload currentImage={profile.profilePicture} />
+          <ProfilePictureUpload profilePicture={profile?.profilePicture} name={profile?.fullName} />
         </CardContent>
       </Card>
 
       {/* Profile Information Section */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
           <CardDescription>Update your personal information and travel preferences</CardDescription>
@@ -46,7 +63,7 @@ console.log(getUserInfo);
         <CardContent>
           <SettingsForm profile={profile} />
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 }
