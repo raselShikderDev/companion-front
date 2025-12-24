@@ -13,6 +13,10 @@ import { serverFetch } from "@/lib/serverFetch";
 
 
 export async function updateMyProfile(_: any, formData: FormData) {
+  console.log("RAW FORM DATA:");
+  for (const [k, v] of formData.entries()) {
+    console.log(k, v);
+  }
   try {
     const data: Record<string, any> = {};
 
@@ -26,11 +30,18 @@ export async function updateMyProfile(_: any, formData: FormData) {
       "phone",
     ];
 
-    fields.forEach((field) => {
-      const value = formData.get(field);
-      if (value !== null && value !== "") {
-        data[field] = value;
-      }
+    // fields.forEach((field) => {
+    //   const value = formData.get(field);
+    //   if (value !== null && value !== "") {
+    //     data[field] = value;
+    //   }
+    // });
+    formData.forEach((value, key) => {
+      if (key === "file") return;
+
+      if (value === null || value === "") return;
+
+      data[key] = value;
     });
 
 
@@ -65,6 +76,7 @@ export async function updateMyProfile(_: any, formData: FormData) {
     });
 
     const result = await res.json();
+    console.log({ result });
 
     if (!res.ok || !result.success) {
       return {

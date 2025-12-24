@@ -33,17 +33,24 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
   const initialValuesRef = useRef<Record<string, string>>({});
   const travelStyleTags = profile.travelStyleTags ?? [];
   const interests = profile.interests ?? [];
+  const isExplorer = role !== Role.ADMIN && role !== Role.SUPER_ADMIN;
 
 
   useEffect(() => {
     initialValuesRef.current = {
       fullName: profile.fullName || "",
       phone: profile.phone || "",
-      age: profile.age || "",
       address: profile.address || "",
       bio: profile.bio || "",
-      travelStyleTags: travelStyleTags.join(", "),
-      interests: interests.join(", "),
+      ...(isExplorer && {
+        age: profile.age || "",
+        travelStyleTags: travelStyleTags.join(", "),
+        interests: interests.join(", "),
+      }),
+      //  age: profile.age || "",
+      // travelStyleTags: travelStyleTags.join(", "),
+      // interests: interests.join(", "),
+
 
     };
   }, [profile]);
@@ -51,8 +58,10 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
 
   const handleFormChange = (e: React.FormEvent<HTMLFormElement>) => {
     console.log(e.currentTarget);
-    
+
     const formData = new FormData(e.currentTarget);
+
+    
 
     for (const [key, initialValue] of Object.entries(
       initialValuesRef.current
@@ -78,13 +87,19 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
       toast.error(state?.message);
     }
   }, [state]);
-  console.log({state});
-  
-  const isExplorer = role !== Role.ADMIN && role !== Role.SUPER_ADMIN;
+  console.log({ state });
+
   return (
     <form
       action={formAction}
       onChange={handleFormChange}
+      onSubmit={(e) => {
+        if (!isExplorer) {
+          const form = e.currentTarget;
+          form.querySelector<HTMLInputElement>('input[name="travelStyleTags"]')?.remove();
+          form.querySelector<HTMLInputElement>('input[name="interests"]')?.remove();
+        }
+      }}
       className="space-y-6"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -97,17 +112,25 @@ export function SettingsForm({ profile, role }: SettingsFormProps) {
           <Label htmlFor="phone">Phone Number *</Label>
           <Input id="phone" name="phone" type="tel" defaultValue={profile.phone} required />
         </div>
+        {
+          isExplorer && (
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input id="age" name="age" type="number" defaultValue={profile.age} />
+            </div>
+          )
+        }
 
-        <div className="space-y-2">
-          <Label htmlFor="age">Age</Label>
-          <Input id="age" name="age" type="number" defaultValue={profile.age} />
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="gender">Gender</Label>
-          <Input id="gender" name="gender" defaultValue={profile.gender} disabled className="bg-muted" />
-          <p className="text-xs text-muted-foreground">Gender cannot be changed</p>
-        </div>
+        {
+          isExplorer && (
+            <div className="space-y-2">
+              <Label htmlFor="gender">Gender</Label>
+              <Input id="gender" name="gender" defaultValue={profile.gender} disabled className="bg-muted" />
+              <p className="text-xs text-muted-foreground">Gender cannot be changed</p>
+            </div>
+          )
+        }
       </div>
 
       <div className="space-y-2">
