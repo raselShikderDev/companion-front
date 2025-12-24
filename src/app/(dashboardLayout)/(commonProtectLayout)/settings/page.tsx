@@ -1,6 +1,6 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-import { ProfilePictureUpload } from "@/components/auth/ProfilePictureUpload";
-import { SettingsForm } from "@/components/auth/SettingsForm";
+import { ProfilePictureUpload } from "@/components/settingsPage/ProfilePictureUpload";
+import { SettingsForm } from "@/components/settingsPage/SettingsForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getUserInfo } from "@/services/auth/getUserInfo";
@@ -10,7 +10,6 @@ export default async function SettingsPage() {
   const { explorer, admin } = user;
   const role = user.role;
 
-  // ✅ NORMALIZED PROFILE (FIX)
   let profile: any | null = null;
 
   if (explorer) {

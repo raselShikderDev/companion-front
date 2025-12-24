@@ -10,140 +10,188 @@ import { revalidateTag } from "next/cache";
 import { deleteCookie, getCookie, setCookie } from "@/lib/tokenHandeler";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { serverFetch } from "@/lib/serverFetch";
+import { zodValidator } from "@/lib/zodValidator";
+import { ForgotPasswordInput, forgotPasswordSchema, ResetPasswordInput, resetPasswordSchema, VerifyOtpInput, verifyOtpSchema } from "@/zodSchemas/auth.zodValidation";
 
-
-export async function updateMyProfile(_: any, formData: FormData) {
-  console.log("RAW FORM DATA:");
-  for (const [k, v] of formData.entries()) {
-    console.log(k, v);
-  }
+// Step 1: Request OTP for password reset
+export async function forgotPassword(prevState: any, formData: FormData) {
   try {
-    const data: Record<string, any> = {};
+    const input: ForgotPasswordInput = {
+      email: formData.get("email") as string,
+    }
+    console.log({ input });
 
-
-    const fields = [
-      "fullName",
-      "gender",
-      "age",
-      "address",
-      "bio",
-      "phone",
-    ];
-
-    // fields.forEach((field) => {
-    //   const value = formData.get(field);
-    //   if (value !== null && value !== "") {
-    //     data[field] = value;
+    // Validate input
+    // const validation = zodValidator(input, forgotPasswordSchema)
+    // if (!validation.success) {
+    //   return {
+    //     success: false,
+    //     message: "Invalid email address",
+    //     errors: validation.errors,
     //   }
-    // });
-    formData.forEach((value, key) => {
-      if (key === "file") return;
+    // }
 
-      if (value === null || value === "") return;
-
-      data[key] = value;
-    });
-
-
-    const travelStyleTags = formData.get("travelStyleTags");
-    if (travelStyleTags) {
-      data.travelStyleTags = String(travelStyleTags)
-        .split(",")
-        .map(v => v.trim())
-        .filter(Boolean);
+    if (zodValidator(input, forgotPasswordSchema).success === false) {
+      return zodValidator(input, forgotPasswordSchema);
     }
 
-    const interests = formData.get("interests");
-    if (interests) {
-      data.interests = String(interests)
-        .split(",")
-        .map(v => v.trim())
-        .filter(Boolean);
-    }
+    const validatedData: any = zodValidator(
+      input,
+      forgotPasswordSchema
+    ).data;
+     console.log({validatedData});
 
-    // ❗ No email / password / role sent (correct)
+  
+    console.log({ email:validatedData.email});
 
-    const uploadFormData = new FormData();
-    uploadFormData.append("data", JSON.stringify(data));
+    const res = await serverFetch.post("/auth/forgot-password", {
+      body: JSON.stringify({ email:validatedData.email}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
-    const file = formData.get("file");
-    if (file instanceof File && file.size > 0) {
-      uploadFormData.append("file", file);
-    }
+    const data = await res.json()
+    console.log(data);
 
-    const res = await serverFetch.patch("/user/update-my-profile", {
-      body: uploadFormData,
-    });
-
-    const result = await res.json();
-    console.log({ result });
-
-    if (!res.ok || !result.success) {
+    if (!res.ok || !data?.ok) {
       return {
         success: false,
-        message: result.message || "Update failed",
-      };
+        message: data?.message || "Failed to send OTP",
+      }
     }
 
-    revalidateTag("/setting", { expire: 0 });
-    return {
-      success: true,
-      message: "Profile updated successfully",
-    };
+    return data
   } catch (error: any) {
+    console.error(" Forgot password error:", error)
     return {
       success: false,
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Something went wrong",
-    };
+      message: error.message || "Server error",
+    }
   }
 }
 
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// export async function updateMyProfile(formData: FormData) {
-//   try {
-//     // Create a new FormData with the data property
-//     const uploadFormData = new FormData();
+// Step 2: Verify OTP and get reset token
+export async function verifyOtp(prevState: any, formData: FormData) {
+  try {
+    const input: VerifyOtpInput = {
+      email: formData.get("email") as string,
+      otp: formData.get("otp") as string,
+    }
 
-//     // Get all form fields except the file
-//     const data: any = {};
-//     formData.forEach((value, key) => {
-//       if (key !== "file" && value) {
-//         data[key] = value;
-//       }
-//     });
+    // Validate input
+    // const validation = zodValidator(input, verifyOtpSchema)
+    // if (!validation.success) {
+    //   return {
+    //     success: false,
+    //     message: "Invalid input",
+    //     errors: validation.errors,
+    //   }
+    // }
 
-//     // Add the data as JSON string
-//     uploadFormData.append("data", JSON.stringify(data));
+    if (zodValidator(input, verifyOtpSchema).success === false) {
+      return zodValidator(input, verifyOtpSchema);
+    }
 
-//     // Add the file if it exists
-//     const file = formData.get("file");
-//     if (file && file instanceof File && file.size > 0) {
-//       uploadFormData.append("file", file);
-//     }
+    const validatedData: any = zodValidator(
+      input,
+      verifyOtpSchema
+    ).data;
+    console.log(validatedData);
 
-//     const response = await serverFetch.patch(`/user/update-my-profile`, {
-//       body: uploadFormData,
-//     });
 
-//     const result = await response.json();
+    const res = await serverFetch.post("/auth/verify-otp", {
+      body: JSON.stringify(validatedData.data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
-//     revalidateTag("user-info");
-//     return result;
-//   } catch (error: any) {
-//     console.log(error);
-//     return {
-//       success: false,
-//       message: `${
-//         process.env.NODE_ENV === "development"
-//           ? error.message
-//           : "Something went wrong"
-//       }`,
-//     };
-//   }
-// }
+    const data = await res.json()
+
+    if (!res.ok || !data?.ok) {
+      return {
+        success: false,
+        message: data?.message || "Invalid OTP",
+      }
+    }
+
+    return {
+      success: true,
+      message: "OTP verified successfully",
+      resetToken: data.resetToken,
+      email: validatedData.data.email,
+    }
+  } catch (error: any) {
+    console.error(" Verify OTP error:", error)
+    return {
+      success: false,
+      message: error.message || "Server error",
+    }
+  }
+}
+
+// Step 3: Reset password with token
+export async function resetPasswor(prevState: any, formData: FormData) {
+  try {
+    const input: ResetPasswordInput = {
+      token: formData.get("token") as string,
+      newPassword: formData.get("newPassword") as string,
+    }
+
+    console.log({ input });
+
+
+    // Validate input
+    // const validation = zodValidator(input, resetPasswordSchema)
+    // if (!validation.success) {
+    //   return {
+    //     success: false,
+    //     message: "Invalid input",
+    //     errors: validation.errors,
+    //   }
+    // }
+
+    if (zodValidator(input, resetPasswordSchema).success === false) {
+      return zodValidator(input, resetPasswordSchema);
+    }
+
+    const validatedData: any = zodValidator(
+      input,
+      resetPasswordSchema
+    ).data;
+    console.log(validatedData);
+
+    const res = await serverFetch.post("/auth/reset-password", {
+      body: JSON.stringify(validatedData.data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const data = await res.json()
+    console.log(data);
+
+    if (!res.ok || !data?.ok) {
+      return {
+        success: false,
+        message: data?.message || "Failed to reset password",
+      }
+    }
+
+    return {
+      success: true,
+      message: "Password reset successfully",
+    }
+  } catch (error: any) {
+    console.error(" Reset password error:", error)
+    return {
+      success: false,
+      message: error.message || "Server error",
+    }
+  }
+}
+
 
 
 export async function getNewAccessToken() {
@@ -256,3 +304,96 @@ export async function getNewAccessToken() {
     };
   }
 }
+
+
+
+// export async function updateMyProfile(_: any, formData: FormData) {
+//   console.log("RAW FORM DATA:");
+//   for (const [k, v] of formData.entries()) {
+//     console.log(k, v);
+//   }
+//   try {
+//     const data: Record<string, any> = {};
+
+
+//     const fields = [
+//       "fullName",
+//       "gender",
+//       "age",
+//       "address",
+//       "bio",
+//       "phone",
+//     ];
+
+//     // fields.forEach((field) => {
+//     //   const value = formData.get(field);
+//     //   if (value !== null && value !== "") {
+//     //     data[field] = value;
+//     //   }
+//     // });
+//     formData.forEach((value, key) => {
+//       if (key === "file") return;
+
+//       if (value === null || value === "") return;
+
+//       data[key] = value;
+//     });
+
+
+//     const travelStyleTags = formData.get("travelStyleTags");
+//     if (travelStyleTags) {
+//       data.travelStyleTags = String(travelStyleTags)
+//         .split(",")
+//         .map(v => v.trim())
+//         .filter(Boolean);
+//     }
+
+//     const interests = formData.get("interests");
+//     if (interests) {
+//       data.interests = String(interests)
+//         .split(",")
+//         .map(v => v.trim())
+//         .filter(Boolean);
+//     }
+
+//     // ❗ No email / password / role sent (correct)
+
+//     const uploadFormData = new FormData();
+//     uploadFormData.append("data", JSON.stringify(data));
+
+//     const file = formData.get("file");
+//     if (file instanceof File && file.size > 0) {
+//       uploadFormData.append("file", file);
+//     }
+
+//     const res = await serverFetch.patch("/user/update-my-profile", {
+//       body: uploadFormData,
+//     });
+
+//     const result = await res.json();
+//     console.log({ result });
+
+//     if (!res.ok || !result.success) {
+//       return {
+//         success: false,
+//         message: result.message || "Update failed",
+//       };
+//     }
+
+//     revalidateTag("/setting", { expire: 0 });
+//     return {
+//       success: true,
+//       message: "Profile updated successfully",
+//     };
+//   } catch (error: any) {
+//     return {
+//       success: false,
+//       message:
+//         process.env.NODE_ENV === "development"
+//           ? error.message
+//           : "Something went wrong",
+//     };
+//   }
+// }
+
+

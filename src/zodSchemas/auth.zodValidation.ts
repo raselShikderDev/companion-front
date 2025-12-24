@@ -27,9 +27,28 @@ export const createExplorerZodSchema = z
     path: ["confirmPassword"],
   })
 
+  export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+})
 
+export const verifyOtpSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().min(4, "OTP must be at least 4 characters").max(8, "OTP must be at most 8 characters"),
+})
 
+export const resetPasswordSchema = z.object({
+  token: z.string().min(10, "Invalid reset token"),
+  newPassword: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain an uppercase letter")
+    .regex(/[a-z]/, "Password must contain a lowercase letter")
+    .regex(/[0-9]/, "Password must contain a digit")
+    .regex(/[^A-Za-z0-9]/, "Password must contain a special character"),
+})
 
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+export type VerifyOtpInput = z.infer<typeof verifyOtpSchema>
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
 export type SignupFormValues = z.infer<typeof createExplorerZodSchema>
-
 export type LoginFormValues = z.infer<typeof loginSchema>

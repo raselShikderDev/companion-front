@@ -61,7 +61,7 @@ export async function getMySubscription() {
 
     return data.data
   } catch (error) {
-    console.error("[v0] Get subscription error:", error)
+    console.error(" Get subscription error:", error)
     return null
   }
 }
