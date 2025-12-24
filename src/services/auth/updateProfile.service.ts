@@ -16,8 +16,9 @@ export async function updateProfile(_currentState: any, formData: FormData) {
       travelStyleTags: formData.getAll("travelStyleTags").filter(Boolean),
       interests: formData.getAll("interests").filter(Boolean),
     }
+console.log({payload});
 
-    const res = await serverFetch.patch("/explorer/update-profile", {
+    const res = await serverFetch.patch("/users/update-profile", {
       body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
@@ -25,6 +26,7 @@ export async function updateProfile(_currentState: any, formData: FormData) {
     })
 
     const data = await res.json()
+console.log(data);
 
     if (!res.ok || !data?.success) {
       return {
@@ -33,11 +35,8 @@ export async function updateProfile(_currentState: any, formData: FormData) {
       }
     }
 
-    revalidatePath("/dashboard/settings")
-    return {
-      success: true,
-      message: "Profile updated successfully",
-    }
+    revalidatePath("/settings")
+    return data
   } catch (error: any) {
     console.error("[v0] Update profile error:", error)
     return {
@@ -67,7 +66,7 @@ console.log(data);
     }
 
     revalidatePath("/settings")
-    return data.data
+    return data
   } catch (error: any) {
     console.error(" Update profile picture error:", error)
     return {

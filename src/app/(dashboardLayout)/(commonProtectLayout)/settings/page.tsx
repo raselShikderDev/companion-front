@@ -55,7 +55,7 @@ console.log(explorer, admin);
       </Card>
 
       {/* Profile Information Section */}
-      {/* <Card>
+      <Card>
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
           <CardDescription>Update your personal information and travel preferences</CardDescription>
@@ -63,7 +63,7 @@ console.log(explorer, admin);
         <CardContent>
           <SettingsForm profile={profile} />
         </CardContent>
-      </Card> */}
+      </Card>
     </div>
   )
 }
