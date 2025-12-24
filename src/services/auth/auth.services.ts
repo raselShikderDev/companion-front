@@ -79,6 +79,9 @@ export async function verifyOtp(prevState: any, formData: FormData) {
       otp: formData.get("otp") as string,
     }
 
+    console.log({input});
+    
+
     // Validate input
     // const validation = zodValidator(input, verifyOtpSchema)
     // if (!validation.success) {
@@ -108,20 +111,10 @@ export async function verifyOtp(prevState: any, formData: FormData) {
     })
 
     const data = await res.json()
+console.log({data});
 
-    if (!res.ok || !data?.ok) {
-      return {
-        success: false,
-        message: data?.message || "Invalid OTP",
-      }
-    }
 
-    return {
-      success: true,
-      message: "OTP verified successfully",
-      resetToken: data.resetToken,
-      email: validatedData.data.email,
-    }
+    return data
   } catch (error: any) {
     console.error(" Verify OTP error:", error)
     return {

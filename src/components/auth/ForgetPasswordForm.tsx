@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { forgotPassword } from "@/services/auth/auth.services"
 import { Loader2, Mail } from "lucide-react"
 import InputFeildError from "@/lib/inputFeildError"
+import { Alert, AlertDescription } from "../ui/alert"
 
 const ForgetPasswordForm = () => {
       const router = useRouter()
@@ -47,11 +48,11 @@ console.log({message:state?.message});
               {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
             </div>
 
-            {/* {state?.success === false && !state?.errors && (
+            {state?.success === false && !state?.errors && (
               <Alert variant="destructive">
                 <AlertDescription>{state.message}</AlertDescription>
               </Alert>
-            )} */}
+            )}
 
             <Button
               type="submit"
