@@ -5,14 +5,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Users, MapPin, Share2, BarChart3 } from "lucide-react"
+import { Users, MapPin, Share2, BarChart3, Settings } from "lucide-react"
 import LogoutButton from "./LogOutButton"
+import Logo from "../shared/Logo"
 
 const adminNavItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
   { href: "/admin/dashboard/explorers", label: "Manage Explorers", icon: Users },
   { href: "/admin/dashboard/trips", label: "Manage Trips", icon: MapPin },
   { href: "/admin/dashboard/matches", label: "Manage Matches", icon: Share2 },
+  { href: "/settings", label: "Settings", icon: Settings },
 ]
 
 export function AdminSidebar() {
@@ -21,7 +23,12 @@ export function AdminSidebar() {
   return (
     <aside className="w-64 min-h-screen bg-sidebar border-r border-sidebar-border">
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-sidebar-primary">Travel Match</h1>
+        <Link href="/" className="font-bold text-xl text-primary shrink-0">
+          <div className="flex text-xl md:text-2xl gap-2 items-center">
+            <Logo />
+            <p className="hidden xs:block">Companion</p>
+          </div>
+        </Link>
         <p className="text-sm text-sidebar-foreground/60">Admin Portal</p>
       </div>
 
@@ -48,7 +55,7 @@ export function AdminSidebar() {
 
       <div className="absolute bottom-6 left-4 right-4">
         <Link href="/">
-          <LogoutButton/>
+          <LogoutButton />
         </Link>
       </div>
     </aside>

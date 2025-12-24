@@ -11,49 +11,127 @@ import { deleteCookie, getCookie, setCookie } from "@/lib/tokenHandeler";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { serverFetch } from "@/lib/serverFetch";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export async function updateMyProfile(formData: FormData) {
-  try {
-    // Create a new FormData with the data property
-    const uploadFormData = new FormData();
 
-    // Get all form fields except the file
-    const data: any = {};
-    formData.forEach((value, key) => {
-      if (key !== "file" && value) {
-        data[key] = value;
+export async function updateMyProfile(_: any, formData: FormData) {
+  try {
+    const data: Record<string, any> = {};
+
+
+    const fields = [
+      "fullName",
+      "gender",
+      "age",
+      "address",
+      "bio",
+      "phone",
+    ];
+
+    fields.forEach((field) => {
+      const value = formData.get(field);
+      if (value !== null && value !== "") {
+        data[field] = value;
       }
     });
 
-    // Add the data as JSON string
+
+    const travelStyleTags = formData.get("travelStyleTags");
+    if (travelStyleTags) {
+      data.travelStyleTags = String(travelStyleTags)
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean);
+    }
+
+    const interests = formData.get("interests");
+    if (interests) {
+      data.interests = String(interests)
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean);
+    }
+
+    // ❗ No email / password / role sent (correct)
+
+    const uploadFormData = new FormData();
     uploadFormData.append("data", JSON.stringify(data));
 
-    // Add the file if it exists
     const file = formData.get("file");
-    if (file && file instanceof File && file.size > 0) {
+    if (file instanceof File && file.size > 0) {
       uploadFormData.append("file", file);
     }
 
-    const response = await serverFetch.patch(`/user/update-my-profile`, {
+    const res = await serverFetch.patch("/user/update-my-profile", {
       body: uploadFormData,
     });
 
-    const result = await response.json();
+    const result = await res.json();
 
-    revalidateTag("user-info", { expire: 0 });
-    return result;
+    if (!res.ok || !result.success) {
+      return {
+        success: false,
+        message: result.message || "Update failed",
+      };
+    }
+
+    revalidateTag("/setting", { expire: 0 });
+    return {
+      success: true,
+      message: "Profile updated successfully",
+    };
   } catch (error: any) {
-    console.log(error);
     return {
       success: false,
-      message: `${
+      message:
         process.env.NODE_ENV === "development"
           ? error.message
-          : "Something went wrong"
-      }`,
+          : "Something went wrong",
     };
   }
 }
+
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// export async function updateMyProfile(formData: FormData) {
+//   try {
+//     // Create a new FormData with the data property
+//     const uploadFormData = new FormData();
+
+//     // Get all form fields except the file
+//     const data: any = {};
+//     formData.forEach((value, key) => {
+//       if (key !== "file" && value) {
+//         data[key] = value;
+//       }
+//     });
+
+//     // Add the data as JSON string
+//     uploadFormData.append("data", JSON.stringify(data));
+
+//     // Add the file if it exists
+//     const file = formData.get("file");
+//     if (file && file instanceof File && file.size > 0) {
+//       uploadFormData.append("file", file);
+//     }
+
+//     const response = await serverFetch.patch(`/user/update-my-profile`, {
+//       body: uploadFormData,
+//     });
+
+//     const result = await response.json();
+
+//     revalidateTag("user-info");
+//     return result;
+//   } catch (error: any) {
+//     console.log(error);
+//     return {
+//       success: false,
+//       message: `${
+//         process.env.NODE_ENV === "development"
+//           ? error.message
+//           : "Something went wrong"
+//       }`,
+//     };
+//   }
+// }
 
 
 export async function getNewAccessToken() {

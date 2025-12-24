@@ -10,6 +10,8 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { updateProfile } from "@/services/auth/updateProfile.service";
+import { UserRole } from "@/lib/authUtils";
+import { Role } from "@/types/enum.interface";
 
 interface SettingsFormProps {
   profile: {
@@ -22,9 +24,10 @@ interface SettingsFormProps {
     travelStyleTags: string[];
     interests: string[];
   };
+   role: UserRole;
 }
 
-export function SettingsForm({ profile }: SettingsFormProps) {
+export function SettingsForm({ profile, role }: SettingsFormProps) {
   const [state, formAction, isPending] = useActionState(updateProfile, null);
 
 
@@ -78,7 +81,7 @@ export function SettingsForm({ profile }: SettingsFormProps) {
   return (
     <form
       action={formAction}
-      onChange={handleFormChange} // ✅ ADDED
+      onChange={handleFormChange} 
       className="space-y-6"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -119,7 +122,9 @@ export function SettingsForm({ profile }: SettingsFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
+ {
+      role !== Role.ADMIN && role !== Role.SUPER_ADMIN && (
+         <div className="space-y-2">
         <Label htmlFor="travelStyleTags">Travel Style Tags</Label>
         <Input
           id="travelStyleTags"
@@ -127,6 +132,16 @@ export function SettingsForm({ profile }: SettingsFormProps) {
           defaultValue={profile.travelStyleTags.join(", ")}
         />
       </div>
+      )
+     }
+      {/* <div className="space-y-2">
+        <Label htmlFor="travelStyleTags">Travel Style Tags</Label>
+        <Input
+          id="travelStyleTags"
+          name="travelStyleTags"
+          defaultValue={profile.travelStyleTags.join(", ")}
+        />
+      </div> */}
 
       <div className="space-y-2">
         <Label htmlFor="interests">Interests</Label>

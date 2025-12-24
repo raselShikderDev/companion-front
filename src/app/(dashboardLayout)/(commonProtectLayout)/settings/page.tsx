@@ -1,69 +1,74 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-import { ProfilePictureUpload } from "@/components/auth/ProfilePictureUpload"
-import { SettingsForm } from "@/components/auth/SettingsForm"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { getUserInfo } from "@/services/auth/getUserInfo"
+import { ProfilePictureUpload } from "@/components/auth/ProfilePictureUpload";
+import { SettingsForm } from "@/components/auth/SettingsForm";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { getUserInfo } from "@/services/auth/getUserInfo";
 
 export default async function SettingsPage() {
-  
   const user = await getUserInfo();
   const { explorer, admin } = user;
+  const role = user.role;
 
+  // ✅ NORMALIZED PROFILE (FIX)
+  let profile: any | null = null;
 
-let profile:any | null;
+  if (explorer) {
+    profile = {
+      role: "EXPLORER",
+      fullName: explorer.fullName,
+      phone: explorer.phone,
+      gender: explorer.gender,
+      age: explorer.age,
+      address: explorer.address,
+      bio: explorer.bio,
+      travelStyleTags: explorer.travelStyleTags,
+      interests: explorer.interests,
+      profilePicture: explorer.profilePicture,
+    };
+  }
 
-if (explorer) {
-  profile = explorer
-} else if(admin){
-  profile = admin
-} else {
-profile = null
-}
-
-console.log({user});
-console.log(explorer, admin);
-
-
+  if (admin) {
+    profile = {
+      role: "ADMIN",
+      fullName: admin.fullName,
+      phone: admin.phone,
+      address: admin.address,
+      bio: admin.bio,
+      profilePicture: admin.profilePicture,
+    };
+  }
 
   if (!profile) {
-    return (
-      <div className="p-6">
-        <p className="text-destructive">Failed to load profile. Please try again.</p>
-      </div>
-    )
+    return <p className="text-destructive">Failed to load profile</p>;
   }
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2">Manage your account settings and profile information</p>
-      </div>
-
+      <h1 className="text-3xl font-bold">Settings</h1>
       <Separator />
 
-      {/* Profile Picture Section */}
       <Card>
         <CardHeader>
           <CardTitle>Profile Picture</CardTitle>
-          <CardDescription>Update your profile picture. Recommended size: 400x400px</CardDescription>
+          <CardDescription>Upload a square image</CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfilePictureUpload profilePicture={profile?.profilePicture} name={profile?.fullName} />
+          <ProfilePictureUpload
+            profilePicture={profile.profilePicture}
+            name={profile.fullName}
+          />
         </CardContent>
       </Card>
 
-      {/* Profile Information Section */}
       <Card>
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
-          <CardDescription>Update your personal information and travel preferences</CardDescription>
         </CardHeader>
         <CardContent>
-          <SettingsForm profile={profile} />
+          <SettingsForm profile={profile} role={role} />
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
