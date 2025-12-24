@@ -1,16 +1,49 @@
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
+import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
+import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
+import { queryStringFormatter } from "@/lib/allFormattors";
+import Pagination from "@/components/shared/Paggination";
 
-export default async function MyMatchesPage() {
-  const res = await getMyMatches({ page: 1, limit: 20 });
+export default async function MyMatchesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParamsObj = await searchParams;
+  const queryString = queryStringFormatter(searchParamsObj);
+  const res = await getMyMatches(queryString);
+  let matches: any | [];
+
+  if (res.success) {
+    matches = res.data;
+  } else {
+    matches = [];
+  }
 
   if (!res?.success) {
-    return (
-      <div className="container mx-auto p-8 text-center text-red-500">
-        Failed to load matches
-      </div>
-    );
+    return <EmptyTripCard />;
   }
+
+  const { id } = await getUserVerifiedDetails();
+  let currentExplorerId: string | null = null;
+
+  if (!id) {
+    console.error("No explorer id found");
+  }
+
+  currentExplorerId = id;
+  console.log({ matches });
+
+  const meta = matches.meta;
+  if (meta && !meta.total && !meta.limit && !meta.page) {
+    console.log("meta not found");
+  }
+  const totalPages = Math.ceil(meta?.total / meta?.limit) || 1;
+  const currentpage = meta?.page || 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -19,7 +52,17 @@ export default async function MyMatchesPage() {
         View accepted, rejected, and pending match requests
       </p>
 
-      <MyMatchesGrid matches={res.data} />
+      <div className="space-y-3.5">
+        {/* <MyMatchesGrid matches={matches} /> */}
+        <MyMatchesGrid
+          currentExplorerId={currentExplorerId as string}
+          matches={matches}
+        />
+        <Pagination
+          currentPages={currentpage}
+          totalPages={totalPages}
+        />
+      </div>
     </div>
   );
 }

@@ -5,8 +5,9 @@ import { useState } from "react";
 import TExplorerTripCard from "./TripCard";
 import UpdateTripDialog from "./UpdateTripDialog";
 
-export default function TripsGrid({ trips }: { trips: any[] }) {
+export default function TripsGrid({ trips, currentExplorerId }: { trips: any[], currentExplorerId:string }) {
   const [editingTrip, setEditingTrip] = useState<any | null>(null);
+
 
   if (!trips || trips.length === 0) {
     return (
@@ -24,6 +25,7 @@ export default function TripsGrid({ trips }: { trips: any[] }) {
             key={trip.id}
             trip={trip}
             onEdit={() => setEditingTrip(trip)}
+            currentExplorerId={currentExplorerId as string}
           />
         ))}
       </div>

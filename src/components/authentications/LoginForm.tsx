@@ -1,3 +1,6 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all lint/correctness/noUnusedImports: > */
 "use client";
 
 import { Button } from "@/components/ui/button"
@@ -10,11 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
 import { useActionState, useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { LoginFormValues, loginSchema } from "@/zodSchemas/auth.zodValidation"
 import Link from "next/link"
 import { logInUser } from "@/services/auth/login";
 import { toast } from "react-toastify";
@@ -112,15 +111,6 @@ useEffect(() => {
             {!isPending && "LogIn"}
           </Button>
         </form>
-
-
-            {/* Divider */}
-            <div className="my-6 flex items-center gap-3">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-sm text-muted-foreground">or</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-
           </div>
   )
 }

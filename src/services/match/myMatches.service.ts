@@ -3,17 +3,11 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 
-export const getMyMatches = async (
-  params?: { page?: number; limit?: number }
-): Promise<any> => {
+export const getMyMatches = async (queryString?: string) => {
   try {
-    const query = new URLSearchParams();
-
-    if (params?.page) query.set("page", params.page.toString());
-    if (params?.limit) query.set("limit", params.limit.toString());
-
+   
     const res = await serverFetch.get(
-      `/match/my-matches${query.toString() ? `?${query}` : ""}`
+      `/match/my-matches${queryString ? `?${queryString}` : ""}`
     );
 
     const data = await res.json();

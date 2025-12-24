@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/style/noNonNullAssertion: > */
 "use server";
 
 import jwt from "jsonwebtoken";

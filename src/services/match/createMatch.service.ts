@@ -1,7 +1,9 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
+import { revalidatePath } from "next/cache";
 
 export const createMatch = async (
   _state: any,
@@ -35,7 +37,7 @@ export const createMatch = async (
         wrongData: payload,
       };
     }
-
+    revalidatePath("dashboard/matches");
     return {
       success: true,
       message: "Match request sent successfully",
@@ -48,11 +50,6 @@ export const createMatch = async (
     };
   }
 };
-
-
-
-
-
 
 // /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 // "use server";

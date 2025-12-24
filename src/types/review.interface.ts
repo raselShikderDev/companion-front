@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: > */
 import { ReviewStatus } from "./enum.interface";
 import { IExplorer } from "./explorer.interface";
 import { IMatch } from "./match.interface";

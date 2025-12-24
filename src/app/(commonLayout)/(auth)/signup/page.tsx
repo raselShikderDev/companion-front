@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 import SignUpForm from "@/components/authentications/SignUpForm";
 import Link from "next/link";
 

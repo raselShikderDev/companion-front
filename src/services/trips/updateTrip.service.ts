@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
@@ -58,12 +59,12 @@ export const updateTrip = async (
         wrongData: payload,
       };
     }
-revalidatePath("dashboard/my-trips")
+    revalidatePath("dashboard/my-trips");
+    revalidatePath("dashboard/find-trips");
     return {
       success: true,
       message: "Trip updated successfully!",
     };
-
   } catch (error: any) {
     console.error("Trip Update Error:", error.message);
 

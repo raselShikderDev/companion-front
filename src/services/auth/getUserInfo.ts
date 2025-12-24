@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
@@ -9,21 +12,16 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 export const getUserInfo = async (): Promise<IUser | any> => {
   let userInfo: IUser | any;
   try {
-    const response = await serverFetch.get("/auth/me", {
+    const response = await serverFetch.get("/users/me", {
       cache: "force-cache",
       next: { tags: ["user-info"] },
     });
 
     const result = await response.json();
-    // console.log({ result });
 
     if (result.success) {
       const accessToken = await getCookie("accessToken");
-      // console.log({
-      //   "In getUserInfo 22 line accessToken ": accessToken,
-      //   "In getUserInfo 22 line JWT acces secret ": process.env
-      //     .JWT_ACCESS_SECRET as string,
-      // });
+ 
 
       if (!accessToken) {
         throw new Error("No access token found");
@@ -50,7 +48,6 @@ export const getUserInfo = async (): Promise<IUser | any> => {
       ...result.data,
     };
 
-    // console.log({ userInfo });
     return userInfo;
   } catch (error: any) {
     console.log(error);

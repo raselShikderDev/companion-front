@@ -1,3 +1,5 @@
+
+
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 "use server";
 
@@ -5,11 +7,23 @@ import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { createTripZodSchema } from "@/zodSchemas/trip.zodValidation";
 
-export const createTrip = async (_state: any, formData: FormData): Promise<any> => {
+export const createTrip = async (
+  _state: any,
+  formData: FormData
+): Promise<any> => {
   try {
-    const journeyType = formData.getAll("journeyType");
-    const languages = formData.getAll("languages");
 
+    // FIX: remove empty strings coming from form
+const journeyType = formData
+  .getAll("journeyType")
+  .filter(Boolean) as string[];
+
+const Languages = formData
+  .getAll("languages")
+  .filter(Boolean) as string[];
+
+
+    // Build payload exactly as backend expects
     const payload = {
       title: formData.get("title"),
       destination: formData.get("destination"),
@@ -19,26 +33,32 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
       description: formData.get("description"),
       budget: formData.get("budget"),
       duration: formData.get("duration"),
-      image: formData.get("image"), // NOW ALWAYS URL
+      image: formData.get("image"),
       journeyType,
-      languages,
+      Languages,
     };
 
+    // Zod validation
     const validated = zodValidator(payload, createTripZodSchema);
 
-    if (!validated.success) return validated;
+    if (!validated.success) {
+      return validated; // contains errors + wrongData
+    }
 
-    const res = await serverFetch.post(`/trip/create-trip`, {
+    // API call
+    const res = await serverFetch.post("/trip/create-trip", {
       body: JSON.stringify(validated.data),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     const data = await res.json();
 
-    if (!data.success) {
+    if (!res.ok || !data?.success) {
       return {
         success: false,
-        message: data.message || "Trip creation failed",
+        message: data?.message || "Trip creation failed",
         wrongData: payload,
       };
     }
@@ -47,13 +67,15 @@ export const createTrip = async (_state: any, formData: FormData): Promise<any> 
       success: true,
       message: "Trip created successfully!",
     };
-
   } catch (error: any) {
-    console.error("Trip Create Error:", error.message);
+    console.error("Create Trip Error:", error);
 
     return {
       success: false,
-      message: "Server error while creating trip",
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Server error while creating trip",
     };
   }
 };

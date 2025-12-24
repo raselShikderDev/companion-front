@@ -27,7 +27,7 @@ export interface Match {
   requesterId: string;
   recipientId: string;
   tripId: string;
-  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  status: MatchStatus;
   createdAt: string;
 
   requester: {
