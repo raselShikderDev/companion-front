@@ -60,7 +60,7 @@ export async function forgotPassword(prevState: any, formData: FormData) {
 // Step 2: Verify OTP and get reset token
 export async function verifyOtp(prevState: any, formData: FormData) {
   console.log("in server action");
-  
+
   try {
     const input: VerifyOtpInput = {
       email: formData.get("email") as string,
@@ -78,12 +78,12 @@ export async function verifyOtp(prevState: any, formData: FormData) {
       input,
       verifyOtpSchema
     ).data;
-    console.log({validatedData});
-    console.log({otp: validatedData.otp});
-    console.log({email: validatedData.email});
+    console.log({ validatedData });
+    console.log({ otp: validatedData.otp });
+    console.log({ email: validatedData.email });
 
     const jsonData = JSON.stringify({ email: validatedData.email, otp: validatedData.otp })
-console.log({jsonData});
+    console.log({ jsonData });
 
     const res = await serverFetch.post("/auth/verify-otp", {
       body: jsonData,
@@ -91,7 +91,7 @@ console.log({jsonData});
         "Content-Type": "application/json",
       },
     })
- 
+
 
     const data = await res.json()
 
@@ -127,10 +127,10 @@ export async function resetPassword(prevState: any, formData: FormData) {
       resetPasswordSchema
     ).data;
     console.log(validatedData);
-    
-    const jsonData ={
-      token:validatedData.token,
-      newPassword:validatedData.newPassword,
+
+    const jsonData = {
+      token: validatedData.token,
+      newPassword: validatedData.newPassword,
     }
 
     const res = await serverFetch.post("/auth/reset-password", {
@@ -145,7 +145,7 @@ export async function resetPassword(prevState: any, formData: FormData) {
 
     return data
   } catch (error: any) {
-    
+
   }
 }
 
@@ -184,6 +184,7 @@ export async function changePassword(
     });
 
     const data = await res.json();
+    console.log(data);
 
     if (!res.ok || !data?.success) {
       return {
@@ -192,7 +193,7 @@ export async function changePassword(
       };
     }
 
-    
+
 
     return {
       success: true,
