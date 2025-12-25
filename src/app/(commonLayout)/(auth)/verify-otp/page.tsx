@@ -1,14 +1,7 @@
-"use client"
 
-
-import { useActionState, useEffect, Suspense } from "react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { Loader2, ShieldCheck, ArrowLeft } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { toast } from "sonner"
-import { forgotPassword } from "@/services/auth/auth.services"
+import { ShieldCheck, ArrowLeft } from "lucide-react"
 import VerifyOtpForm from "@/components/auth/VerifyOtpForm"
 import ResendOtpAction from "@/components/auth/ResendOtpAction"
 
@@ -39,7 +32,7 @@ export default function VerifyOtpContent({ searchParams }: PageProps) {
             
             <ResendOtpAction/>
             <Link
-              href="/auth/forgot-password"
+              href="/forgot-password"
               className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />

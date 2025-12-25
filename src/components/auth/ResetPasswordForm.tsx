@@ -29,7 +29,7 @@ const ResetPasswordForm = () => {
       toast.success(state.message)
       // Redirect to login page after 2 seconds
       setTimeout(() => {
-        router.push("/auth/login")
+        router.push("/signin")
       }, 2000)
     } else if (state?.success === false) {
       toast.error(state.message)

@@ -31,9 +31,10 @@ export const createExplorerZodSchema = z
   email: z.string().email("Invalid email address"),
 })
 
+
 export const verifyOtpSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  otp: z.string().min(4, "OTP must be at least 4 characters").max(8, "OTP must be at most 8 characters"),
+  email: z.email("Invalid email address"),
+  otp: z.string().min(6, "OTP must be at least 6 characters").max(6, "OTP must be at most 6 characters"),
 })
 
 export const resetPasswordSchema = z.object({

@@ -25,11 +25,12 @@ const VerifyOtpForm = () => {
         if (state?.success) {
             toast.success(state.message)
             // Redirect to reset password page with token
-            router.push(`/auth/reset-password?token=${state.resetToken}&email=${encodeURIComponent(state.email)}`)
+            router.push(`/reset-password?token=${state.resetToken}&email=${encodeURIComponent(state.email)}`)
         } else if (state?.success === false) {
             toast.error(state.message)
         }
     }, [state, router])
+console.log({state});
 
     const handleChange = (index: number, value: string) => {
         if (value.length > 1) {

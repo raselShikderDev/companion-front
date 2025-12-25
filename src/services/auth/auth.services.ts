@@ -5,13 +5,13 @@
 "use server";
 
 import { parse } from "cookie";
-import { revalidateTag } from "next/cache";
 // import { resetPasswordSchema } from "@/zod/auth.validation";
 import { deleteCookie, getCookie, setCookie } from "@/lib/tokenHandeler";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { ForgotPasswordInput, forgotPasswordSchema, ResetPasswordInput, resetPasswordSchema, VerifyOtpInput, verifyOtpSchema } from "@/zodSchemas/auth.zodValidation";
+
 
 // Step 1: Request OTP for password reset
 export async function forgotPassword(prevState: any, formData: FormData) {
@@ -20,16 +20,6 @@ export async function forgotPassword(prevState: any, formData: FormData) {
       email: formData.get("email") as string,
     }
     console.log({ input });
-
-    // Validate input
-    // const validation = zodValidator(input, forgotPasswordSchema)
-    // if (!validation.success) {
-    //   return {
-    //     success: false,
-    //     message: "Invalid email address",
-    //     errors: validation.errors,
-    //   }
-    // }
 
     if (zodValidator(input, forgotPasswordSchema).success === false) {
       return zodValidator(input, forgotPasswordSchema);
@@ -50,18 +40,18 @@ export async function forgotPassword(prevState: any, formData: FormData) {
         "Content-Type": "application/json",
       },
     })
+console.log({res});
 
     const data = await res.json()
-    console.log(data);
+    console.log({data});
 
-    if (!res.ok || !data?.ok) {
-      return {
-        success: false,
-        message: data?.message || "Failed to send OTP",
+
+    return {
+      ...data,
+      data:{
+        email:validatedData.email,
       }
     }
-
-    return data
   } catch (error: any) {
     console.error(" Forgot password error:", error)
     return {
@@ -80,17 +70,7 @@ export async function verifyOtp(prevState: any, formData: FormData) {
     }
 
     console.log({input});
-    
 
-    // Validate input
-    // const validation = zodValidator(input, verifyOtpSchema)
-    // if (!validation.success) {
-    //   return {
-    //     success: false,
-    //     message: "Invalid input",
-    //     errors: validation.errors,
-    //   }
-    // }
 
     if (zodValidator(input, verifyOtpSchema).success === false) {
       return zodValidator(input, verifyOtpSchema);
@@ -104,11 +84,12 @@ export async function verifyOtp(prevState: any, formData: FormData) {
 
 
     const res = await serverFetch.post("/auth/verify-otp", {
-      body: JSON.stringify(validatedData.data),
+      body: JSON.stringify({email:validatedData.data.email, otp:validatedData.data.otp}),
       headers: {
         "Content-Type": "application/json",
       },
     })
+console.log({res});
 
     const data = await res.json()
 console.log({data});
@@ -174,8 +155,6 @@ export async function resetPassword(prevState: any, formData: FormData) {
     }
   }
 }
-
-
 
 export async function getNewAccessToken() {
   try {
@@ -288,95 +267,5 @@ export async function getNewAccessToken() {
   }
 }
 
-
-
-// export async function updateMyProfile(_: any, formData: FormData) {
-//   console.log("RAW FORM DATA:");
-//   for (const [k, v] of formData.entries()) {
-//     console.log(k, v);
-//   }
-//   try {
-//     const data: Record<string, any> = {};
-
-
-//     const fields = [
-//       "fullName",
-//       "gender",
-//       "age",
-//       "address",
-//       "bio",
-//       "phone",
-//     ];
-
-//     // fields.forEach((field) => {
-//     //   const value = formData.get(field);
-//     //   if (value !== null && value !== "") {
-//     //     data[field] = value;
-//     //   }
-//     // });
-//     formData.forEach((value, key) => {
-//       if (key === "file") return;
-
-//       if (value === null || value === "") return;
-
-//       data[key] = value;
-//     });
-
-
-//     const travelStyleTags = formData.get("travelStyleTags");
-//     if (travelStyleTags) {
-//       data.travelStyleTags = String(travelStyleTags)
-//         .split(",")
-//         .map(v => v.trim())
-//         .filter(Boolean);
-//     }
-
-//     const interests = formData.get("interests");
-//     if (interests) {
-//       data.interests = String(interests)
-//         .split(",")
-//         .map(v => v.trim())
-//         .filter(Boolean);
-//     }
-
-//     // ❗ No email / password / role sent (correct)
-
-//     const uploadFormData = new FormData();
-//     uploadFormData.append("data", JSON.stringify(data));
-
-//     const file = formData.get("file");
-//     if (file instanceof File && file.size > 0) {
-//       uploadFormData.append("file", file);
-//     }
-
-//     const res = await serverFetch.patch("/user/update-my-profile", {
-//       body: uploadFormData,
-//     });
-
-//     const result = await res.json();
-//     console.log({ result });
-
-//     if (!res.ok || !result.success) {
-//       return {
-//         success: false,
-//         message: result.message || "Update failed",
-//       };
-//     }
-
-//     revalidateTag("/setting", { expire: 0 });
-//     return {
-//       success: true,
-//       message: "Profile updated successfully",
-//     };
-//   } catch (error: any) {
-//     return {
-//       success: false,
-//       message:
-//         process.env.NODE_ENV === "development"
-//           ? error.message
-//           : "Something went wrong",
-//     };
-//   }
-// }
 
 

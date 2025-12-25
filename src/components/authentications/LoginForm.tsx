@@ -92,7 +92,7 @@ useEffect(() => {
 
           {/* Remember me & forgot password */}
           <div className="flex items-center justify-between text-sm">
-            <Link href="#" className="text-blue-600 hover:underline">
+            <Link href="/forget-password" className="text-blue-600 hover:underline">
               Forgot password?
             </Link>
           </div>
