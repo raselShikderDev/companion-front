@@ -19,7 +19,6 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     const input: ForgotPasswordInput = {
       email: formData.get("email") as string,
     }
-    console.log({ input });
 
     if (zodValidator(input, forgotPasswordSchema).success === false) {
       return zodValidator(input, forgotPasswordSchema);
@@ -29,10 +28,8 @@ export async function forgotPassword(prevState: any, formData: FormData) {
       input,
       forgotPasswordSchema
     ).data;
-    console.log({ validatedData });
 
 
-    console.log({ email: validatedData.email });
 
     const res = await serverFetch.post("/auth/forgot-password", {
       body: JSON.stringify({ email: validatedData.email }),
@@ -43,7 +40,6 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     console.log({ res });
 
     const data = await res.json()
-    console.log({ data });
 
 
     return {
@@ -95,10 +91,9 @@ console.log({jsonData});
         "Content-Type": "application/json",
       },
     })
-    console.log({ res });
+ 
 
     const data = await res.json()
-    console.log({ data });
 
 
     return data
@@ -123,16 +118,6 @@ export async function resetPassword(prevState: any, formData: FormData) {
     console.log({ input });
 
 
-    // Validate input
-    // const validation = zodValidator(input, resetPasswordSchema)
-    // if (!validation.success) {
-    //   return {
-    //     success: false,
-    //     message: "Invalid input",
-    //     errors: validation.errors,
-    //   }
-    // }
-
     if (zodValidator(input, resetPasswordSchema).success === false) {
       return zodValidator(input, resetPasswordSchema);
     }
@@ -142,9 +127,14 @@ export async function resetPassword(prevState: any, formData: FormData) {
       resetPasswordSchema
     ).data;
     console.log(validatedData);
+    
+    const jsonData ={
+      token:validatedData.token,
+      newPassword:validatedData.newPassword,
+    }
 
     const res = await serverFetch.post("/auth/reset-password", {
-      body: JSON.stringify(validatedData.data),
+      body: JSON.stringify(jsonData),
       headers: {
         "Content-Type": "application/json",
       },
@@ -155,11 +145,7 @@ export async function resetPassword(prevState: any, formData: FormData) {
 
     return data
   } catch (error: any) {
-    console.error(" Reset password error:", error)
-    return {
-      success: false,
-      message: error.message || "Server error",
-    }
+    
   }
 }
 

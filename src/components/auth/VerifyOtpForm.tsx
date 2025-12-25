@@ -8,22 +8,41 @@ import { toast } from "react-toastify"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "../ui/button"
 import { Loader2, ShieldCheck } from "lucide-react"
+import { error } from "console"
+import { Alert, AlertDescription } from "../ui/alert"
 
 const VerifyOtpForm = () => {
     const [state, formAction, isPending] = useActionState(verifyOtp, null)
     const [otp, setOtp] = useState(["", "", "", "", "", ""])
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
     const router = useRouter()
+    const [resetToken, setResetToken] = useState<string>("")
     const searchParams = useSearchParams()
     const email = searchParams.get("email") || ""
 
     console.log({ email });
 
+    //     {
+    //     "state": {
+    //         "success": true,
+    //         "message": "OTP verified successfully",
+    //         "data": {
+    //             "resetToken": "2e51b53800985844e38cadee3dbf3d5102f3b1a094af0c1a05cd5dc7fe4b8442a53ee94a",
+    //             "expiresIn": 3600
+    //         }
+    //     }
+    // }
+
     useEffect(() => {
-        if (state?.success) {
+        if (state?.success && state?.data?.resetToken) {
+            setResetToken(state?.data?.resetToken)
             toast.success(state.message)
+            console.log({ resetToken });
             // Redirect to reset password page with token
-            router.push(`/reset-password?token=${state.resetToken}&email=${encodeURIComponent(email)}`)
+            if (!resetToken) {
+                console.error("Reset token not found")
+            }
+            router.push(`/reset-password?token=${state?.data?.rtesetToken}&email=${encodeURIComponent(email)}`)
         } else if (state?.success === false) {
             console.log(state);
 
@@ -31,6 +50,7 @@ const VerifyOtpForm = () => {
         }
     }, [state, router])
     console.log({ state });
+
 
     const handleChange = (index: number, value: string) => {
         if (value.length > 1) {
