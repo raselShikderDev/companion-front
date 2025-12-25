@@ -149,6 +149,66 @@ export async function resetPassword(prevState: any, formData: FormData) {
   }
 }
 
+// Logged in user chnages password
+export async function changePassword(
+  _prevState: any,
+  formData: FormData
+) {
+  try {
+    const currentPassword = formData.get("currentPassword");
+    const newPassword = formData.get("newPassword");
+    const confirmPassword = formData.get("confirmPassword");
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return {
+        success: false,
+        message: "All fields are required",
+      };
+    }
+
+    if (newPassword !== confirmPassword) {
+      return {
+        success: false,
+        message: "Passwords do not match",
+      };
+    }
+
+    const res = await serverFetch.patch("/auth/change-password", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        currentPassword,
+        newPassword,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data?.success) {
+      return {
+        success: false,
+        message: data?.message || "Password change failed",
+      };
+    }
+
+    
+
+    return {
+      success: true,
+      message: "Password updated successfully",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Something went wrong",
+    };
+  }
+}
+
 export async function getNewAccessToken() {
   try {
     const accessToken = await getCookie("accessToken");
