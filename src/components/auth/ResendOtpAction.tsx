@@ -13,7 +13,10 @@ const ResendOtpAction = () => {
     const email = searchParams.get("email") || ""
     const [resendState, resendAction, isResending] = useActionState(forgotPassword, null)
 
-
+    console.log({ email });
+    if (!email) {
+        return null
+    }
 
     useEffect(() => {
         if (resendState?.success) {
@@ -22,27 +25,28 @@ const ResendOtpAction = () => {
             toast.error(resendState.message)
         }
     }, [resendState])
+    console.log({ resendState });
 
     return (
-            <form action={resendAction} className="flex justify-center">
-                <input type="hidden" name="email" value={email} />
-                <Button
-                    type="submit"
-                    variant="ghost"
-                    size="sm"
-                    disabled={isResending}
-                    className="text-sm text-muted-foreground hover:text-primary"
-                >
-                    {isResending ? (
-                        <>
-                            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                            Resending...
-                        </>
-                    ) : (
-                        "Didn't receive code? Resend"
-                    )}
-                </Button>
-            </form>
+        <form action={resendAction} className="flex justify-center">
+            <input type="hidden" name="email" value={email} />
+            <Button
+                type="submit"
+                variant="ghost"
+                size="sm"
+                disabled={isResending}
+                className="text-sm text-muted-foreground hover:text-primary"
+            >
+                {isResending ? (
+                    <>
+                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                        Resending...
+                    </>
+                ) : (
+                    "Didn't receive code? Resend"
+                )}
+            </Button>
+        </form>
     )
 }
 

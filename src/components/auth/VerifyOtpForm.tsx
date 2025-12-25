@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useActionState, useEffect, useRef, useState } from "react"
 import { verifyOtp } from "@/services/auth/auth.services"
 import { toast } from "react-toastify"
@@ -18,19 +17,20 @@ const VerifyOtpForm = () => {
     const searchParams = useSearchParams()
     const email = searchParams.get("email") || ""
 
+    console.log({ email });
 
     useEffect(() => {
-
-
         if (state?.success) {
             toast.success(state.message)
             // Redirect to reset password page with token
-            router.push(`/reset-password?token=${state.resetToken}&email=${encodeURIComponent(state.email)}`)
+            router.push(`/reset-password?token=${state.resetToken}&email=${encodeURIComponent(email)}`)
         } else if (state?.success === false) {
+            console.log(state);
+
             toast.error(state.message)
         }
     }, [state, router])
-console.log({state});
+    console.log({ state });
 
     const handleChange = (index: number, value: string) => {
         if (value.length > 1) {
@@ -41,6 +41,8 @@ console.log({state});
 
         const newOtp = [...otp]
         newOtp[index] = value
+        console.log({ newOtp });
+
         setOtp(newOtp)
 
         // Auto-focus next input
@@ -66,6 +68,10 @@ console.log({state});
         const nextEmptyIndex = Math.min(pastedData.length, 5)
         inputRefs.current[nextEmptyIndex]?.focus()
     }
+
+    console.log({ formAction });
+
+
     return (
         <form action={formAction} className="space-y-5">
             <input type="hidden" name="email" value={email} />
@@ -94,16 +100,16 @@ console.log({state});
                 {state?.errors?.otp && <p className="text-sm text-destructive text-center">{state.errors.otp[0]}</p>}
             </div>
 
-            {state?.success === false && !state?.errors && (
+            {/* {state?.success === false && !state?.errors && (
                 <Alert variant="destructive">
                     <AlertDescription>{state.message}</AlertDescription>
                 </Alert>
-            )}
+            )} */}
 
             <Button
                 type="submit"
                 className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-                disabled={isPending || otp.join("").length < 4}
+                disabled={isPending || otp.join("").length < 6}
             >
                 {isPending ? (
                     <>

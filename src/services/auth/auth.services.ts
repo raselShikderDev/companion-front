@@ -29,27 +29,27 @@ export async function forgotPassword(prevState: any, formData: FormData) {
       input,
       forgotPasswordSchema
     ).data;
-     console.log({validatedData});
+    console.log({ validatedData });
 
-  
-    console.log({ email:validatedData.email});
+
+    console.log({ email: validatedData.email });
 
     const res = await serverFetch.post("/auth/forgot-password", {
-      body: JSON.stringify({ email:validatedData.email}),
+      body: JSON.stringify({ email: validatedData.email }),
       headers: {
         "Content-Type": "application/json",
       },
     })
-console.log({res});
+    console.log({ res });
 
     const data = await res.json()
-    console.log({data});
+    console.log({ data });
 
 
     return {
       ...data,
-      data:{
-        email:validatedData.email,
+      data: {
+        email: validatedData.email,
       }
     }
   } catch (error: any) {
@@ -63,13 +63,15 @@ console.log({res});
 
 // Step 2: Verify OTP and get reset token
 export async function verifyOtp(prevState: any, formData: FormData) {
+  console.log("in server action");
+  
   try {
     const input: VerifyOtpInput = {
       email: formData.get("email") as string,
       otp: formData.get("otp") as string,
     }
 
-    console.log({input});
+    console.log({ input });
 
 
     if (zodValidator(input, verifyOtpSchema).success === false) {
@@ -80,23 +82,28 @@ export async function verifyOtp(prevState: any, formData: FormData) {
       input,
       verifyOtpSchema
     ).data;
-    console.log(validatedData);
+    console.log({validatedData});
+    console.log({otp: validatedData.otp});
+    console.log({email: validatedData.email});
 
+    const jsonData = JSON.stringify({ email: validatedData.email, otp: validatedData.otp })
+console.log({jsonData});
 
     const res = await serverFetch.post("/auth/verify-otp", {
-      body: JSON.stringify({email:validatedData.data.email, otp:validatedData.data.otp}),
+      body: jsonData,
       headers: {
         "Content-Type": "application/json",
       },
     })
-console.log({res});
+    console.log({ res });
 
     const data = await res.json()
-console.log({data});
+    console.log({ data });
 
 
     return data
   } catch (error: any) {
+    console.log(error);
     console.error(" Verify OTP error:", error)
     return {
       success: false,
@@ -146,7 +153,7 @@ export async function resetPassword(prevState: any, formData: FormData) {
     const data = await res.json()
     console.log(data);
 
-   return data
+    return data
   } catch (error: any) {
     console.error(" Reset password error:", error)
     return {
