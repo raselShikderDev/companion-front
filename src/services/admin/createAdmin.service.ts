@@ -17,7 +17,6 @@ export async function createAdmin(
             admin: {
                 fullName: formData.get("fullName"),
                 phone: formData.get("phone"),
-                profilePicture: formData.get("profilePicture") || undefined,
             },
         };
         console.log({ input });
@@ -48,13 +47,12 @@ export async function createAdmin(
             admin: {
                 fullName: validatedData.admin.fullName,
                 phone: validatedData.admin.phone,
-                profilePicture: validatedData.admin.profilePicture,
             },
         };
 
         console.log({ jsonData });
 
-        const res = await serverFetch.post("/users/create-explorer", {
+        const res = await serverFetch.post("/users/create-admin", {
             headers: {
                 "Content-Type": "application/json",
             },

@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { createAdmin } from "@/services/admin/createAdmin.service";
 import InputFeildError from "@/lib/inputFeildError";
 import { IInputErrorState } from "@/lib/getInputFeildError";
+import { createAdmin } from "@/services/admin/createAdmin.service";
 
 export function CreateAdminModal() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
