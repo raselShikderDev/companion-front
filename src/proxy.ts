@@ -16,9 +16,8 @@ import { deleteCookie } from "./lib/tokenHandeler";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  
   // HANDLE TOKEN REFRESH CALLBACK
-  
+
   const hasTokenRefreshedParams =
     request.nextUrl.searchParams.has("tokenRefreshed");
 
@@ -36,16 +35,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  
   // READ ACCESS TOKEN
-  
+
   const accessToken = request.cookies.get("accessToken")?.value || null;
 
   let userRole: UserRole | null = null;
 
-  
   // VERIFY JWT SAFELY (Handles expired token)
-  
+
   if (accessToken) {
     try {
       const verifiedToken: JwtPayload | any = jwt.verify(
@@ -64,7 +61,7 @@ export async function proxy(request: NextRequest) {
     } catch (err: any) {
       // TOKEN EXPIRED OR INVALID
       console.log(err);
-      
+
       await deleteCookie("accessToken");
       await deleteCookie("refreshToken");
 
@@ -75,41 +72,32 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  
   // DETERMINE ROUTE OWNER
-  
+
   const routeOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoute(pathname);
 
-  
   // IF LOGGED IN BUT VISITING AUTH ROUTES → REDIRECT TO DASHBOARD
-  
+
   if (accessToken && isAuth) {
     return NextResponse.redirect(
       new URL(getDefaultDashboard(userRole as UserRole), request.url)
     );
   }
 
-  
   // PUBLIC ROUTES → ALWAYS ALLOW
-  
+
   if (routeOwner === null) {
     return NextResponse.next();
   }
 
-  
   // NOT LOGGED IN → FORCE LOGIN
-  
+
   if (!accessToken) {
     const loginUrl = new URL("/signin", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
-
-  
-  
-
-  
 
   if (pathname === "/reset-password") {
     return NextResponse.redirect(
@@ -117,24 +105,39 @@ export async function proxy(request: NextRequest) {
     );
   }
 
-  
   // COMMON PROTECTED ROUTES
-  
+
   if (routeOwner === "COMMON") {
     return NextResponse.next();
   }
 
-  
   //  ROLE-BASED ROUTE PROTECTION
-  
-  if (routeOwner === "ADMIN" || routeOwner === "EXPLORER") {
-    if (userRole !== routeOwner) {
+  if (routeOwner === "ADMIN") {
+    if (userRole !== "ADMIN" && userRole !== "SUPER_ADMIN") {
       return NextResponse.redirect(
         new URL(getDefaultDashboard(userRole as UserRole), request.url)
       );
     }
     return NextResponse.next();
   }
+
+  if (routeOwner === "EXPLORER") {
+    if (userRole !== "EXPLORER") {
+      return NextResponse.redirect(
+        new URL(getDefaultDashboard(userRole as UserRole), request.url)
+      );
+    }
+    return NextResponse.next();
+  }
+
+  // if (routeOwner === "ADMIN" || routeOwner === "EXPLORER" || routeOwner === Role.SUPER_ADMIN) {
+  //   if (userRole !== routeOwner) {
+  //     return NextResponse.redirect(
+  //       new URL(getDefaultDashboard(userRole as UserRole), request.url)
+  //     );
+  //   }
+  //   return NextResponse.next();
+  // }
 
   return NextResponse.next();
 }

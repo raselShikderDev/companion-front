@@ -42,10 +42,10 @@ export const logInUser = async (_currentState: any, formData: any) => {
                 "Content-Type": "application/json",
             },
         });
-        console.log("RAW HEADERS:", res.headers);
-        console.log(res.headers);
-        console.log(res.headers.get("set-cookie"));
-        console.log(res.headers.getSetCookie?.());
+        // console.log("RAW HEADERS:", res.headers);
+        // console.log(res.headers);
+        // console.log(res.headers.get("set-cookie"));
+        // console.log(res.headers.getSetCookie?.());
         const data = await res.json();
         console.log({ data });
 

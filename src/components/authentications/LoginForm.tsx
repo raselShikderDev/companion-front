@@ -100,7 +100,7 @@ useEffect(() => {
           {/* Login button */}
           <Button
             type="submit"
-            className="w-full cursor-pointer py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+            className="w-full cursor-pointer py-2 px-4  font-semibold rounded-lg shadow focus:outline-none focus:ring-2 bg-accent focus:ring-offset-1"
             disabled={isPending}
           >
             {isPending ? (
