@@ -9,8 +9,8 @@ export interface IInputErrorState{
 const getInputFeildError = (feildName:string, state:IInputErrorState) => {
 
   // biome-ignore lint/complexity/useOptionalChain: >
-  if (state && state.errors) {
-    const error = state.errors.find((err)=> err.feild === feildName)
+  if (state && state?.errors) {
+    const error = state?.errors?.find((err)=> err.feild === feildName)
     return error ? error.message : null
   } else{
     return null

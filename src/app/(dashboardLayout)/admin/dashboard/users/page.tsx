@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Trash2, Edit, Eye } from "lucide-react"
+import { CreateAdminModal } from "@/components/admin/CreateAdminModal"
 
 export default function ManageExplorers() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -40,7 +41,7 @@ export default function ManageExplorers() {
                 className="pl-10"
               />
             </div>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Add Explorer</Button>
+            <CreateAdminModal />
           </div>
 
           <div className="overflow-x-auto">
