@@ -24,5 +24,4 @@ NEXT_PUBLIC_SSL_SECRET_KEY=rasel68814ac47cc88@ssl
 # SSL_FAIL_FRONTEND_URL=https://tough-tour.vercel.app/payment/failed
 # SSL_CANCEL_FRONTEND_URL=https://tough-tour.vercel.app/payment/cancel
 
-{"success":false,"message":"API NOT FOUND!","error":{"path":"/api/v1/payment/fail","message":"Your requested path is not found!"}}
-http://localhost:5000/api/v1/payment/fail
+এমন অভিশাপ দেও যাতে তোমার পরে কোন দোয়া কাজে না লাগে
