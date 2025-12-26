@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 import { Gender } from "@/types/enum.interface"
 import z from "zod"
 
@@ -48,6 +49,22 @@ export const resetPasswordSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "Password must contain a special character"),
 })
 
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Current password is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmNewPassword: z.string().min(1, "Confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "New password and confirm password must match",
+    path: ["confirmNewPassword"],
+  })
+  .refine((data) => data.oldPassword !== data.newPassword, {
+    message: "New password must be different from current password",
+    path: ["newPassword"],
+  });
+
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
 export type VerifyOtpInput = z.infer<typeof verifyOtpSchema>
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>

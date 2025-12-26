@@ -1,6 +1,4 @@
-"use client"
-
-
+/** biome-ignore-all assist/source/organizeImports: > */
 import ForgetPasswordForm from "@/components/auth/ForgetPasswordForm"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Mail, ArrowLeft } from "lucide-react"

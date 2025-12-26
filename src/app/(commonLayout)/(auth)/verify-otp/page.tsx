@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
@@ -6,13 +7,7 @@ import VerifyOtpForm from "@/components/auth/VerifyOtpForm"
 import ResendOtpAction from "@/components/auth/ResendOtpAction"
 
 
-// interface PageProps {
-//   searchParams: {
-//     email?: string
-//   }
-// }
 export default function VerifyOtpContent() {
-  // const email = searchParams.email ?? ""
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-background to-primary/5 p-4">
       <Card className="w-full max-w-md shadow-xl border-primary/10">
@@ -23,7 +18,7 @@ export default function VerifyOtpContent() {
           <CardTitle className="text-3xl font-bold">Verify OTP</CardTitle>
           <CardDescription className="text-base">
             We've sent a verification code 
-            {/* <span className="font-semibold text-foreground">{"your email"}</span> */}
+            <span className="font-semibold text-foreground">{"your email"}</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
