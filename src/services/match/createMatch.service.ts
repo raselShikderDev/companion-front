@@ -37,7 +37,10 @@ export const createMatch = async (
         wrongData: payload,
       };
     }
-    revalidatePath("dashboard/matches");
+     revalidatePath("/dashboard");
+    revalidatePath("/dashboard/matches");
+    revalidatePath("/dashboard/trips");
+    revalidatePath("/dashboard/find-trips");
     return {
       success: true,
       message: "Match request sent successfully",

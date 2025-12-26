@@ -59,6 +59,7 @@ export const updateTrip = async (
         wrongData: payload,
       };
     }
+    revalidatePath("/dashboard");
     revalidatePath("dashboard/my-trips");
     revalidatePath("dashboard/find-trips");
     return {

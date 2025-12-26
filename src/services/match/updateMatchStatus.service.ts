@@ -19,6 +19,9 @@ export async function updateMatchStatus({
       "Content-Type": "application/json",
     },
   });
-  revalidatePath("dashboard/matches");
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/matches");
+  revalidatePath("/dashboard/trips");
+  revalidatePath("/dashboard/find-trips");
   return res.json();
 }

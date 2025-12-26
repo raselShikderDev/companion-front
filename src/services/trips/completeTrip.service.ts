@@ -29,7 +29,9 @@ export async function completeTrip(
 
   const data = await res.json();
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/matches");
-
+  revalidatePath("/dashboard/trips");
+  revalidatePath("/dashboard/find-trips");
   return data;
 }
