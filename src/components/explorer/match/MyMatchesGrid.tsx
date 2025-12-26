@@ -27,7 +27,7 @@ export function MyMatchesGrid({
       <div className="flex items-center gap-3">
         <SelectFilter
           paramName="status"
-          placheholder="Tr Status"
+          placheholder="Match Status"
           defaultValue="All Matches"
           options={[
             { label: "PENDING", value: "false" },
