@@ -36,7 +36,7 @@ const SearchUser = () => {
           </div>
         </div>
       </div>
-      {/* <CreateAdminModal /> */}
+      <CreateAdminModal />
     </div>
   );
 };
