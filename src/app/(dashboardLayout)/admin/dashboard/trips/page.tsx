@@ -42,7 +42,7 @@ export default async function ManageTrips({
       <Card>
         <CardHeader>
           <CardTitle>All Trips</CardTitle>
-          <CardDescription>Total: {trips.length} trips available</CardDescription>
+          <CardDescription>Total: {res.meta?.total} trips available</CardDescription>
         </CardHeader>
 
         <CardContent>

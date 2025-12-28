@@ -3,8 +3,8 @@
 import { serverFetch } from "@/lib/serverFetch";
 import { revalidatePath } from "next/cache";
 
-export async function deleteUser(userId: string) {
-  const res = await serverFetch.delete(`/users/${userId}`);
+export async function deleteTrip(tripId: string) {
+  const res = await serverFetch.delete(`/trip/${tripId}`);
 
   const data = await res.json();
 
@@ -12,7 +12,8 @@ export async function deleteUser(userId: string) {
     return { success: false, message: data.message };
   }
 
-  revalidatePath("admin/dashboard/users");
-
+   revalidatePath("dashboard");
+    revalidatePath("dashboard/my-trips");
+    revalidatePath("dashboard/find-trips");
   return { success: true };
 }

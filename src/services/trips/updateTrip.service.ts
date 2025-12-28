@@ -4,6 +4,7 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
+import { TripStatus } from "@/types/enum.interface";
 import { updateTripZodSchema } from "@/zodSchemas/trip.zodValidation";
 import { revalidatePath } from "next/cache";
 
@@ -75,3 +76,18 @@ export const updateTrip = async (
     };
   }
 };
+
+ 
+ export async function updateTripStatus( tripId: string, status: TripStatus) {
+   const res = await serverFetch.patch(`/trip/status/${tripId}`, {
+     body: JSON.stringify({ status }),
+     headers: {
+       "Content-Type": "application/json",
+     },
+   });
+    revalidatePath("dashboard");
+    revalidatePath("dashboard/my-trips");
+    revalidatePath("dashboard/find-trips");
+   return res.json();
+ }
+ 

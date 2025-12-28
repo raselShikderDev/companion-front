@@ -46,7 +46,7 @@ export default async function ManageMatches({
       <Card>
         <CardHeader>
           <CardTitle>Explorer Matches</CardTitle>
-          <CardDescription>Total: {matches.length} matches</CardDescription>
+          <CardDescription>Total: {res.meta?.total} matches</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-6">

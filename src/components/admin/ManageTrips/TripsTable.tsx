@@ -4,6 +4,7 @@ import { Trash2, Edit, Eye } from "lucide-react"
 import { ITrip } from "@/types/trip.interface"
 import { TripStatus } from "@/types/enum.interface"
 import { formatDateOnly, formatDateTime } from "@/lib/allFormattors"
+import TripRowActions from "./TripRowActions"
 
 
 const TripsTable = ({ trips }: { trips: any }) => {
@@ -42,17 +43,7 @@ const TripsTable = ({ trips }: { trips: any }) => {
               </td>
               <td className="py-4 px-4 text-muted-foreground"> {formatDateOnly(formatDateTime(trip.startDate as Date))}</td>
               <td className="py-4 px-4 text-right">
-                <div className="flex gap-2 justify-end">
-                  <Button size="sm" variant="ghost" className="hover:text-accent">
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="ghost" className="hover:text-primary">
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="ghost" className="hover:text-destructive">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+                <TripRowActions trip={trip}/>
               </td>
             </tr>
           ))}
