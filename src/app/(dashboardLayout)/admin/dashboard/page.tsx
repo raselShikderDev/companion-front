@@ -70,204 +70,15 @@ export default function AdminDashboard() {
         })}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Growth Trends */}
-        <Card className="border-2 border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-accent" />
-              Growth Trends
-            </CardTitle>
-            <CardDescription>Last 6 months performance</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                explorers: { label: "Explorers", color: "hsl(var(--chart-1))" },
-                trips: { label: "Trips", color: "hsl(var(--chart-2))" },
-                matches: { label: "Matches", color: "hsl(var(--chart-3))" },
-              }}
-              className="h-80"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={trendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  <Line type="monotone" dataKey="explorers" stroke="var(--color-explorers)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="trips" stroke="var(--color-trips)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="matches" stroke="var(--color-matches)" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-
-        {/* Revenue Breakdown */}
-        <Card className="border-2 border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-accent" />
-              Revenue by Plan
-            </CardTitle>
-            <CardDescription>Subscription plan contributions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                basic: { label: "Basic", color: "hsl(var(--chart-1))" },
-                premium: { label: "Premium", color: "hsl(var(--chart-2))" },
-                vip: { label: "VIP", color: "hsl(var(--chart-3))" },
-              }}
-              className="h-80"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  <Bar dataKey="basic" stackId="a" fill="var(--color-basic)" />
-                  <Bar dataKey="premium" stackId="a" fill="var(--color-premium)" />
-                  <Bar dataKey="vip" stackId="a" fill="var(--color-vip)" />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <Card className="border-2 border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-accent" />
-              Recent Activity
-            </CardTitle>
-            <CardDescription>Latest platform activities</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {[
-              {
-                action: "New explorer registered",
-                user: "sarah.d@example.com",
-                time: "2 hours ago",
-                icon: CheckCircle,
-                color: "text-green-500",
-              },
-              {
-                action: "Trip match confirmed",
-                user: "Trip #1234",
-                time: "3 hours ago",
-                icon: CheckCircle,
-                color: "text-green-500",
-              },
-              {
-                action: "Payment received",
-                amount: "$99.99",
-                time: "5 hours ago",
-                icon: TrendingUp,
-                color: "text-accent",
-              },
-              {
-                action: "Review submitted",
-                trip: "Paris Adventure",
-                time: "1 day ago",
-                icon: CheckCircle,
-                color: "text-green-500",
-              },
-              {
-                action: "Support ticket created",
-                issue: "Login issue",
-                time: "1 day ago",
-                icon: AlertCircle,
-                color: "text-yellow-500",
-              },
-            ].map((item, idx) => {
-              const Icon = item.icon
-              return (
-                <div key={idx} className="flex items-start gap-3 pb-3 border-b border-border last:border-0 last:pb-0">
-                  <Icon className={`w-5 h-5 mt-0.5 ${item.color} flex-shrink-0`} />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{item.action}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {("user" in item && item.user) ||
-                        ("amount" in item && item.amount) ||
-                        ("trip" in item && item.trip) ||
-                        ("issue" in item && item.issue)}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
-                </div>
-              )
-            })}
-          </CardContent>
-        </Card>
-
-        {/* System Health */}
-        <Card className="border-2 border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-accent" />
-              System Health
-            </CardTitle>
-            <CardDescription>Platform performance metrics</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">Server Status</span>
-                <span className="text-sm font-semibold text-green-500 flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" />
-                  Healthy
-                </span>
-              </div>
-              <div className="w-full bg-border rounded-full h-2.5">
-                <div className="bg-green-500 h-full rounded-full" style={{ width: "98%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">API Response Time</span>
-                <span className="text-sm font-semibold text-accent">Fast (45ms)</span>
-              </div>
-              <div className="w-full bg-border rounded-full h-2.5">
-                <div className="bg-accent h-full rounded-full" style={{ width: "92%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">Database Performance</span>
-                <span className="text-sm font-semibold text-accent">Optimal</span>
-              </div>
-              <div className="w-full bg-border rounded-full h-2.5">
-                <div className="bg-accent h-full rounded-full" style={{ width: "96%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">Uptime (30 days)</span>
-                <span className="text-sm font-semibold text-green-500">99.99%</span>
-              </div>
-              <div className="w-full bg-border rounded-full h-2.5">
-                <div className="bg-green-500 h-full rounded-full" style={{ width: "99.99%" }}></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
+      
+   
       <div className="grid md:grid-cols-3 gap-4">
         <Card className="border-2 border-accent/30 hover:border-accent transition-colors cursor-pointer bg-accent/5">
           <CardContent className="pt-6">
-            <h3 className="font-semibold text-foreground mb-2">Manage Explorers</h3>
-            <p className="text-sm text-muted-foreground mb-4">View and manage explorer accounts</p>
+            <h3 className="font-semibold text-foreground mb-2">Manage Users</h3>
+            <p className="text-sm text-muted-foreground mb-4">View and manage users accounts</p>
             <Button variant="outline" size="sm" className="w-full bg-transparent">
-              Go to Explorers
+              Go to Users
             </Button>
           </CardContent>
         </Card>
@@ -283,7 +94,7 @@ export default function AdminDashboard() {
         <Card className="border-2 border-accent/30 hover:border-accent transition-colors cursor-pointer bg-accent/5">
           <CardContent className="pt-6">
             <h3 className="font-semibold text-foreground mb-2">Manage Matches</h3>
-            <p className="text-sm text-muted-foreground mb-4">Review and approve matches</p>
+            <p className="text-sm text-muted-foreground mb-4">Review all matches</p>
             <Button variant="outline" size="sm" className="w-full bg-transparent">
               Go to Matches
             </Button>

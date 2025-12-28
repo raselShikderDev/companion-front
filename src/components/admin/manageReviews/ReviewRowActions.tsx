@@ -3,7 +3,8 @@
 "use client";
 
 import { useState } from "react";
-import { TripStatus, UserStatus } from "@/types/enum.interface";
+import { ReviewStatus, TripStatus } from "@/types/enum.interface";
+
 
 import {
   AlertDialog,
@@ -27,20 +28,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
-import { ITrip } from "@/types/trip.interface";
-import { updateTripStatus } from "@/services/trips/updateTrip.service";
 import { deleteTrip } from "@/services/trips/deleteTrip.service";
+import { IReview } from "@/types/review.interface";
+import { updateReviewStatus } from "@/services/review/updateReviews.services";
 
-export default function TripRowActions({ trip }: { trip: ITrip }) {
+export default function ReviewRowActions({ reveiw }: { reveiw: IReview }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const handleStatusChange = async (status: TripStatus) => {
-    if (status === trip.status) return;
+  const handleStatusChange = async (status: ReviewStatus) => {
+    if (status === reveiw.status) return;
 
     setIsUpdating(true);
-    const res = await updateTripStatus(trip.id, status);
+    const res = await updateReviewStatus(reveiw.id, status);
     setIsUpdating(false);
     if (!res.success) {
       toast.error(res.message);
@@ -50,30 +51,30 @@ export default function TripRowActions({ trip }: { trip: ITrip }) {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const res = await deleteTrip(trip.id);
+    const res = await deleteTrip(reveiw.id);
     setIsDeleting(false);
     setOpenDelete(false);
 
     if (!res.success) {
       toast.error(res.message);
     }
-    toast.success(res.message || "User deleted successfully");
+    toast.success(res.message || "review status successfully updated");
   };
 
   return (
     <div className="flex items-center justify-end gap-2">
       {/* Status Select */}
       <Select
-        defaultValue={trip.status}
+        defaultValue={reveiw.status}
         disabled={isUpdating || isDeleting}
-        onValueChange={(value) => handleStatusChange(value as TripStatus)}
+        onValueChange={(value) => handleStatusChange(value as ReviewStatus)}
       >
         <SelectTrigger className="h-8 w-[130px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {
-            ...Object.values(TripStatus).map((status) => {
+            ...Object.values(ReviewStatus).map((status) => {
               return <SelectItem key={status} className="cursor-pointer" value={status}>
                 {status}
               </SelectItem>
@@ -102,7 +103,7 @@ export default function TripRowActions({ trip }: { trip: ITrip }) {
       <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this user?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure about the delation?</AlertDialogTitle>
             <AlertDialogDescription>
               This action is permanent and cannot be undone.
             </AlertDialogDescription>

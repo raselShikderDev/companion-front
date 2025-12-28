@@ -12,6 +12,7 @@ import {
   Settings,
   Menu,
   X,
+  MessageCircle,
 } from "lucide-react";
 import { useState } from "react";
 import LogoutButton from "./LogOutButton";
@@ -19,8 +20,9 @@ import Logo from "../shared/Logo";
 
 const adminNavItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
-  { href: "/admin/dashboard/users", label: "Manage Users", icon: Users },
+  { href: "/admin/dashboard/users", label: "All Users", icon: Users },
   { href: "/admin/dashboard/trips", label: "Manage Trips", icon: MapPin },
+  { href: "/admin/dashboard/reviews", label: "Monitor Reviews", icon: MessageCircle },
   { href: "/admin/dashboard/matches", label: "Manage Matches", icon: Share2 },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
