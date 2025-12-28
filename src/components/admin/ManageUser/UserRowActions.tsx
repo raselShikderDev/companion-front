@@ -50,10 +50,10 @@ export default function UserRowActions({ user }: { user: IUser }) {
     setIsUpdating(true);
     const res = await updateUserStatus(user.id, status);
     setIsUpdating(false);
-
-    res.success
-      ? toast.success("User status updated")
-      : toast.error(res.message);
+    if (!res.success) {
+      toast.error(res.message);
+    }
+    toast.success(res.message);
   };
 
   const handleDelete = async () => {

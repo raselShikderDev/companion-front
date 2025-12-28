@@ -30,7 +30,7 @@ export default function MatchActionButtons({
   const handleAction = async (nextStatus: MatchStatus) => {
     setLoading(nextStatus);
     try {
-      const res = await updateMatchStatus({ matchId, status: nextStatus });
+      const res = await updateMatchStatus( matchId, status);
 
       if (!res.success) {
         toast.error(res.message || "Failed to update match");

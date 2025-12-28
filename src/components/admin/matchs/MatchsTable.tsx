@@ -1,9 +1,7 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all lint/style/useImportType: > */
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle } from "lucide-react";
 import { IMatch } from "@/types/match.interface";
 import { formatDateOnly, formatDateTime } from "@/lib/allFormattors";
 import AdminMatchRowActions from "./AdminMatchRowActions";
@@ -83,7 +81,7 @@ const MatchsTable = ({ matches }: { matches: any }) => {
                 {formatDateOnly(formatDateTime(match.createdAt as Date))}
                </td>
               <td className="py-4 px-4 text-right">
-               <AdminMatchRowActions match={}/>
+               <AdminMatchRowActions match={match}/>
               </td>
             </tr>
           ))}

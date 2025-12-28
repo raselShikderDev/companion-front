@@ -87,18 +87,24 @@ export default function AdminMatchRowActions({ match }: { match: IMatch }) {
                 className="cursor-pointer"
                 value={status}
               >
-                Active
+                {status}
               </SelectItem>
             );
           })}
-          {/* <SelectItem className="cursor-pointer" value={UserStatus.ACTIVE}>
+          {/* <SelectItem className="cursor-pointer" value={MatchStatus.ACCEPTED}>
             Active
           </SelectItem>
-          <SelectItem className="cursor-pointer" value={UserStatus.BLOCKED}>
-            Blocked
+          <SelectItem className="cursor-pointer" value={MatchStatus.BLOCKED}>
+            Active
           </SelectItem>
-          <SelectItem className="cursor-pointer" value={UserStatus.SUSPENDED}>
-            Suspended
+          <SelectItem className="cursor-pointer" value={MatchStatus.COMPLETED}>
+            Active
+          </SelectItem>
+          <SelectItem className="cursor-pointer" value={MatchStatus.PENDING}>
+            Active
+          </SelectItem>
+          <SelectItem className="cursor-pointer" value={MatchStatus.REJECTED}>
+            Active
           </SelectItem> */}
         </SelectContent>
       </Select>
