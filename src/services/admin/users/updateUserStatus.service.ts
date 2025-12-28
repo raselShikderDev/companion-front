@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
@@ -8,7 +10,7 @@ export async function updateUserStatus(
   userId: string,
   status: UserStatus
 ) {
-  const res = await serverFetch.patch(`/users/${userId}/status`, {
+  const res = await serverFetch.patch(`/users/status/${userId}`, {
     body: JSON.stringify({ status }),
     headers: { "Content-Type": "application/json" },
   });

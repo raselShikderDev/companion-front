@@ -7,17 +7,11 @@ export default async function getAllMatches(queryString?: string) {
   try {
 
     const res = await serverFetch.get(
-      `/match${queryString ? `?${queryString}` : ""}`
+      `/match/all${queryString ? `?${queryString}` : ""}`
     );
 
     const data = await res.json();
 
-    if (!data.success) {
-      return {
-        success: false,
-        message: data.message || "Failed to fetch matches",
-      };
-    }
 
     return data;
   } catch (error: any) {
