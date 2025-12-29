@@ -3,19 +3,14 @@
 /** biome-ignore-all lint/style/useImportType: > */
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IReview } from "@/types/review.interface";
+
 import { getMyReviews } from "@/services/review/myReview.service";
 import {
-  formatDateTime,
-  getInitials,
   queryStringFormatter,
 } from "@/lib/allFormattors";
-import Link from "next/link";
-import RatingStars from "@/components/shared/StarRating";
 import ReviewSearchFilter from "@/components/admin/manageReviews/ReviewSearchFilter";
+import ExplorerRevewsTable from "@/components/explorer/review/ExplorerRevewsTable";
+import Pagination from "@/components/shared/Paggination";
 
 export default async function Reviews({
   searchParams,
@@ -36,16 +31,9 @@ export default async function Reviews({
 
 
   console.log("Reviews fetched:", reviews);
-  const validReviews =
-    reviews?.filter((review: any) => typeof review.rating === "number") ?? [];
+    const totalPages = Math.ceil(res?.meta?.total / res?.meta?.limit) || 1;
+  const currentpage = res?.meta?.page || 1;
 
-  const averageRating =
-    validReviews.length > 0
-      ? (
-        validReviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
-        validReviews.length
-      ).toFixed(1)
-      : null;
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
       <div className="mb-8">
@@ -55,65 +43,8 @@ export default async function Reviews({
         </p>
       </div>
       <ReviewSearchFilter />
-      <div className="space-y-4">
-        {reviews?.map((review: IReview) => (
-          <Link key={review.id} href={`/dashboard/matches/${review.matchId}`}>
-            <Card key={review.id}>
-              <CardContent className="pt-6">
-                <div className="flex gap-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={review?.reviewer?.profilePicture || ""}
-                      alt={review?.reviewer?.fullName}
-                    />
-                    <AvatarFallback className="text-sm">
-                      {getInitials(review?.reviewer?.fullName as string)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-semibold">
-                          {review.match?.trip?.title}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {review.match?.trip?.destination}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex gap-1 justify-end mb-1">
-                          <div className="flex flex-col items-center gap-2">
-                            <RatingStars rating={Number(averageRating)} />
-                            <span className="text-xs text-muted-foreground">
-                              ({averageRating}/5 · {validReviews.length}{" "}
-                              reviews)
-                            </span>
-                          </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          {formatDateTime(review.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-sm mt-3">{review.comment}</p>
-                    <div className="flex items-center gap-4 mt-4">
-                      <Link href={`/dashboard/matches/${review.matchId}`}>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="bg-transparent"
-                        >
-                          View Match
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      <ExplorerRevewsTable reviews={reviews} />
+      <Pagination currentPages={currentpage} totalPages={totalPages} />
     </div>
   );
 }
