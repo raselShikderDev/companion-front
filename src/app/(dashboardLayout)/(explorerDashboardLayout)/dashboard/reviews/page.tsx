@@ -15,6 +15,7 @@ import {
 } from "@/lib/allFormattors";
 import Link from "next/link";
 import RatingStars from "@/components/shared/StarRating";
+import ReviewSearchFilter from "@/components/admin/manageReviews/ReviewSearchFilter";
 
 export default async function Reviews({
   searchParams,
@@ -33,38 +34,6 @@ export default async function Reviews({
     reviews = [];
   }
 
-  // const reviews = [
-  //   {
-  //     id: 1,
-  //     author: "John Smith",
-  //     trip: "European Summer Adventure",
-  //     rating: 5,
-  //     date: "Jan 15, 2024",
-  //     text: "Amazing trip! Had the best time exploring Europe with wonderful travel companions. Everything was perfectly organized.",
-  //     avatar: "JS",
-  //     helpful: 24,
-  //   },
-  //   {
-  //     id: 2,
-  //     author: "Sarah Johnson",
-  //     trip: "Asian Adventure",
-  //     rating: 4,
-  //     date: "Jan 10, 2024",
-  //     text: "Great experience overall. The itinerary was well-planned and the group was really fun. Would definitely go again!",
-  //     avatar: "SJ",
-  //     helpful: 18,
-  //   },
-  //   {
-  //     id: 3,
-  //     author: "Mike Davis",
-  //     trip: "Caribbean Island Hopping",
-  //     rating: 5,
-  //     date: "Jan 5, 2024",
-  //     text: "Perfect vacation! The beaches were stunning and the matched travelers were awesome to hang out with.",
-  //     avatar: "MD",
-  //     helpful: 32,
-  //   },
-  // ]
 
   console.log("Reviews fetched:", reviews);
   const validReviews =
@@ -73,9 +42,9 @@ export default async function Reviews({
   const averageRating =
     validReviews.length > 0
       ? (
-          validReviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
-          validReviews.length
-        ).toFixed(1)
+        validReviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
+        validReviews.length
+      ).toFixed(1)
       : null;
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
@@ -85,7 +54,7 @@ export default async function Reviews({
           Read and share real-time reviews from fellow travelers
         </p>
       </div>
-
+      <ReviewSearchFilter />
       <div className="space-y-4">
         {reviews?.map((review: IReview) => (
           <Link key={review.id} href={`/dashboard/matches/${review.matchId}`}>
