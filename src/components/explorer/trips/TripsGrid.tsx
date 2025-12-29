@@ -4,21 +4,14 @@
 import { useState } from "react";
 import TExplorerTripCard from "./TripCard";
 import UpdateTripDialog from "./UpdateTripDialog";
+import EmptyTripCard from "@/components/shared/EmptyTripCard";
 
-export default function TripsGrid({ trips, currentExplorerId }: { trips: any[], currentExplorerId:string }) {
+export default function TripsGrid({ trips, currentExplorerId }: { trips: any[], currentExplorerId: string }) {
   const [editingTrip, setEditingTrip] = useState<any | null>(null);
 
-
-  if (!trips || trips.length === 0) {
-    return (
-      <p className="text-muted-foreground text-center py-10">
-        No trips found.
-      </p>
-    );
-  }
-
   return (
-    <>
+    <div>
+      {trips.length === 0 && <EmptyTripCard />}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {trips.map((trip) => (
           <TExplorerTripCard
@@ -35,6 +28,6 @@ export default function TripsGrid({ trips, currentExplorerId }: { trips: any[], 
         onClose={() => setEditingTrip(null)}
         trip={editingTrip}
       />
-    </>
+    </div>
   );
 }

@@ -8,6 +8,7 @@ import MatchCard from "./MatchCard";
 import SelectFilter from "@/components/shared/SelectFilter";
 import ClearFiltersButton from "@/components/shared/ClearFilter";
 import DateRangeFilter from "@/components/shared/DateRangeFilter";
+import SearchFilterMatches from "@/components/admin/matchs/SearchFilterMatches";
 
 export function MyMatchesGrid({
   matches,
@@ -24,22 +25,7 @@ export function MyMatchesGrid({
 
   return (
     <div className="space-y-3.5">
-      <div className="flex items-center gap-3">
-        <SelectFilter
-          paramName="status"
-          placheholder="Match Status"
-          defaultValue="All Matches"
-          options={[
-            { label: "PENDING", value: "false" },
-            { label: "ACCEPTED", value: "true" },
-            { label: "REJECTED", value: "true" },
-            { label: "COMPLETED", value: "true" },
-          ]}
-        />
-        <DateRangeFilter />
-        <ClearFiltersButton />
-      </div>
-
+      <SearchFilterMatches />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {matches?.data?.map((match: Match) => (
           <MatchCard
