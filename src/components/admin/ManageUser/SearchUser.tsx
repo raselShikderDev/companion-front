@@ -5,6 +5,7 @@ import SelectFilter from "@/components/shared/SelectFilter";
 import ClearFiltersButton from "@/components/shared/ClearFilter";
 import DateRangeFilter from "@/components/shared/DateRangeFilter";
 import { Role, UserStatus } from "@/types/enum.interface";
+import SearchFilter from "@/components/shared/SearchFilter";
 
 const SearchUser = () => {
   return (
@@ -12,6 +13,7 @@ const SearchUser = () => {
       <div>
         <div className="flex-1 relative w-full">
           <div className="flex items-center gap-3">
+            <SearchFilter/>
             <SelectFilter
               paramName="role"
               placheholder="Role"

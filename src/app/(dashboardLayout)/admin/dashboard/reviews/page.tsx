@@ -11,6 +11,7 @@ import { queryStringFormatter } from "@/lib/allFormattors"
 import { getAllTrips } from "@/services/trips/allTrips.service"
 import { getAllReviews } from "@/services/review/getAllReviews.services"
 import ReviewsTable from "@/components/admin/manageReviews/ReviewsTable"
+import { IReview } from "@/types/review.interface"
 
 export default async function ManageTrips({
   searchParams,
@@ -20,16 +21,22 @@ export default async function ManageTrips({
   const searchParamsObj = await searchParams;
   const queryString = queryStringFormatter(searchParamsObj);
   const res = await getAllReviews(queryString);
-  console.log({ res });
+let reviews: IReview[] | [];
+console.log({success:res.success});
+if (res.success) {
+  reviews = res.data.data
+} else {
+  reviews = []
+}
 
-  const reviews = res.success ? res.data : [];
+  
   console.log({ reviews });
 
-  const totalPages = Math.ceil(res?.meta?.total / res?.meta?.limit) || 1;
+  const totalPages = Math.ceil(res?.data?.meta?.total / res?.data?.meta?.limit) || 1;
   const currentpage = res?.meta?.page || 1;
 
-  console.log({ totalpage: Math.ceil(res?.meta?.total / res?.meta?.limit) });
-  console.log({ currentpage: res.meta?.page });
+  // console.log({ totalpage: Math.ceil(res?.data?.meta?.total / res?.data?.meta?.limit) });
+  // console.log({ currentpage: res?.data?.meta?.page });
 
 
   return (
@@ -62,7 +69,7 @@ export default async function ManageTrips({
       </div>
           </div>
           <div className="space-y-3.5">
-            <ReviewsTable reviews={reviews?.data}/>
+            <ReviewsTable reviews={reviews}/>
             <Pagination currentPages={currentpage} totalPages={totalPages} />
           </div>
         </CardContent>
