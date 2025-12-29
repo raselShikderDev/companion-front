@@ -1,17 +1,12 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-import RefreshButton from "@/components/shared/RefreshButton"
-import { Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import TripsTable from "@/components/admin/ManageTrips/TripsTable"
 import Pagination from "@/components/shared/Paggination"
-import ClearFiltersButton from "@/components/shared/ClearFilter"
-import DateRangeFilter from "@/components/shared/DateRangeFilter"
-import SelectFilter from "@/components/shared/SelectFilter"
-import { TripStatus } from "@/types/enum.interface"
+
 import { queryStringFormatter } from "@/lib/allFormattors"
 import { getAllTrips } from "@/services/trips/allTrips.service"
+import SearchFilterTrips from "@/components/admin/ManageTrips/SearchFilterTrips"
 
 export default async function ManageTrips({
   searchParams,
@@ -46,24 +41,9 @@ export default async function ManageTrips({
         </CardHeader>
 
         <CardContent>
-          <div className="mb-6">
-              <div className="flex items-center gap-3">
-        <SelectFilter
-          paramName="status"
-          placheholder="Trip Status"
-          defaultValue="All Trips"
-          options={[
-            { label: TripStatus.COMPLETED, value: "false" },
-            { label: TripStatus.PLANNED, value: "false" },
-            { label: TripStatus.CANCELLED, value: "false" },
-          ]}
-        />
-        <DateRangeFilter />
-        <ClearFiltersButton />
-      </div>
-          </div>
+         <SearchFilterTrips/>
           <div className="space-y-3.5">
-            <TripsTable trips={trips}/>
+            <TripsTable trips={trips} />
             <Pagination currentPages={currentpage} totalPages={totalPages} />
           </div>
         </CardContent>
