@@ -36,17 +36,6 @@ export default function CreateTripForm() {
       setPreviewImage(wrongData.image || null);
       setUploadedUrl(wrongData.image || null);
     }
-
-    // Map errors
-    // if (state && !state.success && state.errors) {
-    //   setInputErrorState({
-    //     success: false,
-    //     errors: state.errors.map((err: any) => ({
-    //       feild: err.feild.toLowerCase(),
-    //       message: err.message,
-    //     })),
-    //   });
-    // }
   }, [state]);
 
   useEffect(() => {
@@ -79,6 +68,8 @@ export default function CreateTripForm() {
   };
 
   const handleUpload = async () => {
+    console.log("In handle upload");
+    
     if (!file) return;
     setUploading(true);
     try {

@@ -18,10 +18,3 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
 # These are used for displaying payment info, actual processing happens on backend
 NEXT_PUBLIC_SSL_STORE_ID=rasel68814ac47cc88
 NEXT_PUBLIC_SSL_SECRET_KEY=rasel68814ac47cc88@ssl
-
-# Frontend URLs for SSLCommerz redirects (already configured in your backend)
-# SSL_SUCCESS_FRONTEND_URL=https://tough-tour.vercel.app/payment/success
-# SSL_FAIL_FRONTEND_URL=https://tough-tour.vercel.app/payment/failed
-# SSL_CANCEL_FRONTEND_URL=https://tough-tour.vercel.app/payment/cancel
-
-এমন অভিশাপ দেও যাতে তোমার পরে zeno onno কোন দোয়া কাজে না লাগে
