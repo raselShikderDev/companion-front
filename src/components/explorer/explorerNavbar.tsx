@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import Link from "next/link";
@@ -5,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  MapPin,
   Users,
   MessageSquare,
   Home,
@@ -28,7 +28,7 @@ import Logo from "../shared/Logo";
 
 const explorerNavItems = [
   { href: "/dashboard", label: "Home", icon: Home },
-  { href: "/dashboard/create-trip", label: "Create Trip", icon: MapPin },
+  // { href: "/dashboard/create-trip", label: "Create Trip", icon: MapPin },
   { href: "/dashboard/my-trips", label: "My Trips", icon: Briefcase },
   { href: "/dashboard/matches", label: "My Matches", icon: Users },
   { href: "/dashboard/reviews", label: "Reviews", icon: MessageSquare },
@@ -42,10 +42,9 @@ export function ExplorerNavbar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
-          
           {/* LEFT: Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Logo />
@@ -71,9 +70,7 @@ export function ExplorerNavbar() {
                     )}
                   >
                     <Icon className="h-4 w-4" />
-                    <span className="whitespace-nowrap">
-                      {item.label}
-                    </span>
+                    <span className="whitespace-nowrap">{item.label}</span>
                   </Button>
                 </Link>
               );
@@ -97,10 +94,7 @@ export function ExplorerNavbar() {
                   </Button>
                 </SheetTrigger>
 
-                <SheetContent
-                  side="right"
-                  className="w-[300px] sm:w-[360px]"
-                >
+                <SheetContent side="right" className="w-[300px] sm:w-[360px]">
                   <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
                       <Logo />
@@ -119,8 +113,7 @@ export function ExplorerNavbar() {
                             variant={isActive ? "default" : "ghost"}
                             className={cn(
                               "w-full justify-start gap-3 h-11",
-                              isActive &&
-                                "bg-primary text-primary-foreground"
+                              isActive && "bg-primary text-primary-foreground"
                             )}
                           >
                             <Icon className="h-5 w-5" />
@@ -144,7 +137,6 @@ export function ExplorerNavbar() {
     </header>
   );
 }
-
 
 // /** biome-ignore-all assist/source/organizeImports: > */
 // "use client";
@@ -171,7 +163,7 @@ export function ExplorerNavbar() {
 //   SheetHeader,
 //   SheetTitle,
 //   SheetTrigger,
-// } from "@/components/ui/sheet"; 
+// } from "@/components/ui/sheet";
 // import ExplorerLogoutButton from "./ExplorerLogoutButton";
 // import Logo from "../shared/Logo";
 
@@ -194,7 +186,7 @@ export function ExplorerNavbar() {
 //     <nav className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
 //       <div className="container mx-auto px-4 py-3">
 //         <div className="flex items-center justify-between">
-          
+
 //           {/* LEFT: Logo */}
 //           <Link href="/" className="font-bold text-xl text-primary shrink-0">
 //             <div className="flex text-xl md:text-2xl gap-2 items-center">

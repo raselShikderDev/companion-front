@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-/** biome-ignore-all assist/source/organizeImports: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
