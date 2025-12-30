@@ -16,6 +16,7 @@ import CreateReviewForm from "@/components/explorer/review/CreateReviewForm";
 import { getCookie } from "@/lib/tokenHandeler";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { JwtPayload } from "jsonwebtoken";
+import { UserCardWithProfileModal } from "@/components/shared/UserCardWithProfileModal";
 
 interface MatchDetailsPageProps {
   params: Promise<{
@@ -110,8 +111,8 @@ export default async function MatchDetailsPage({
                 match.status === "COMPLETED"
                   ? "default"
                   : match.status === "ACCEPTED"
-                  ? "secondary"
-                  : "outline"
+                    ? "secondary"
+                    : "outline"
               }
             >
               {match.status}
@@ -134,17 +135,24 @@ export default async function MatchDetailsPage({
 
           {/* Users */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <UserCard
+            {/* <UserCard
               title="Requester"
               name={match.requester.fullName}
               avatar={match.requester.profilePicture}
+            /> */}
+            <UserCardWithProfileModal
+              title="Requester"
+              explorer={match.requester}
             />
-
-            <UserCard
+            <UserCardWithProfileModal
+              title="Recipient"
+              explorer={match.recipient}
+            />
+            {/* <UserCard
               title="Recipient"
               name={match.recipient.fullName}
               avatar={match.recipient.profilePicture}
-            />
+            /> */}
           </div>
         </CardContent>
       </Card>
@@ -170,46 +178,11 @@ export default async function MatchDetailsPage({
 
           {/* Review List */}
           <ReviewsSection
-            
+
             match={match}
           />
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-/* ---------------- Helper ---------------- */
-
-function UserCard({
-  title,
-  name,
-  avatar,
-}: {
-  title: string;
-  name: string;
-  avatar?: string;
-}) {
-  return (
-    <Card className="border">
-      <CardHeader>
-        <CardTitle className="text-sm text-muted-foreground">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex items-center gap-4">
-        <div className="relative h-12 w-12 rounded-full overflow-hidden bg-muted">
-          {avatar && (
-            <Image
-              src={avatar}
-              alt={name}
-              fill
-              className="object-cover"
-            />
-          )}
-        </div>
-        <p className="font-medium">{name}</p>
-      </CardContent>
-    </Card>
   );
 }
