@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import InputFeildError from "@/lib/inputFeildError";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 import { IInputErrorState } from "@/lib/getInputFeildError";
+import { Alert, AlertDescription } from "../ui/alert";
 
 
 export default function ({ redirect }: { redirect?: string }) {
@@ -25,6 +26,8 @@ export default function ({ redirect }: { redirect?: string }) {
       toast.error(state.message === "fetch failed" ? "Unexpected Error occured! Try again" : state.message);
     }
   }, [state]);
+  console.log({state});
+  
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
       <form action={formActoin} className="space-y-4">
@@ -85,7 +88,11 @@ export default function ({ redirect }: { redirect?: string }) {
             Forgot password?
           </Link>
         </div>
-
+   {state?.success === false && !state?.errors && (
+        <Alert variant="destructive">
+          <AlertDescription>{state?.message}</AlertDescription>
+        </Alert>
+      )}
         {/* Login button */}
         <Button
           type="submit"

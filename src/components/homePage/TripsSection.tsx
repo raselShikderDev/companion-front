@@ -2,6 +2,7 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import PublicTripCard from "../shared/PublicTripCard";
+import Link from "next/link";
 
 const TripsSection = () => {
   return (
@@ -89,13 +90,15 @@ const TripsSection = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-accent text-accent hover:bg-accent hover:text-accent-foreground bg-transparent"
-          >
-            View All Trips <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
+          <Link href={"/dashboard/find-trips"}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground bg-transparent"
+            >
+              View All Trips <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
