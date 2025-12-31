@@ -14,6 +14,7 @@ export const createTrip = async (
   formData: FormData
 ): Promise<any> => {
   try {
+
     // FIX: remove empty strings coming from form
     const journeyType = formData
       .getAll("journeyType")
