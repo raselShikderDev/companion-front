@@ -1,12 +1,17 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-import ForgetPasswordForm from "@/components/auth/ForgetPasswordForm"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, ArrowLeft } from "lucide-react"
-import Link from "next/link"
-
+import ForgetPasswordForm from "@/components/auth/ForgetPasswordForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Mail, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 
 export default function ForgotPasswordPage() {
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-background to-primary/5 p-4">
       <Card className="w-full max-w-md shadow-xl border-primary/10">
@@ -16,12 +21,14 @@ export default function ForgotPasswordPage() {
           </div>
           <CardTitle className="text-3xl font-bold">Forgot Password?</CardTitle>
           <CardDescription className="text-base">
-            No worries! Enter your email and we'll send you a verification code to reset your password.
+            No worries! Enter your email and we'll send you a verification code
+            to reset your password.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-         <ForgetPasswordForm/>
-
+          <Suspense fallback={<ForgotPasswordFallback />}>
+            <ForgetPasswordForm />
+          </Suspense>
           <div className="pt-4 border-t">
             <Link
               href="/signin"
@@ -34,5 +41,15 @@ export default function ForgotPasswordPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
+}
+
+function ForgotPasswordFallback() {
+  return (
+    <div className="space-y-4">
+      <div className="h-11 w-full bg-muted animate-pulse rounded" />
+      <div className="h-11 w-full bg-muted animate-pulse rounded" />
+      <div className="h-11 w-full bg-muted animate-pulse rounded" />
+    </div>
+  );
 }

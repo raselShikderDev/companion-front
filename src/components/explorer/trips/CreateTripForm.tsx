@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-/** biome-ignore-all assist/source/organizeImports: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
@@ -36,17 +36,6 @@ export default function CreateTripForm() {
       setPreviewImage(wrongData.image || null);
       setUploadedUrl(wrongData.image || null);
     }
-
-    // Map errors
-    // if (state && !state.success && state.errors) {
-    //   setInputErrorState({
-    //     success: false,
-    //     errors: state.errors.map((err: any) => ({
-    //       feild: err.feild.toLowerCase(),
-    //       message: err.message,
-    //     })),
-    //   });
-    // }
   }, [state]);
 
   useEffect(() => {
@@ -79,6 +68,8 @@ export default function CreateTripForm() {
   };
 
   const handleUpload = async () => {
+    console.log("In handle upload");
+
     if (!file) return;
     setUploading(true);
     try {
@@ -152,6 +143,7 @@ export default function CreateTripForm() {
                 type="date"
                 name="startDate"
                 defaultValue={state?.wrongData?.startDate}
+                className="cursor-pointer"
               />
               <InputFeildError feild="startDate" state={inputErrorState} />
             </Field>
@@ -162,6 +154,7 @@ export default function CreateTripForm() {
                 type="date"
                 name="endDate"
                 defaultValue={state?.wrongData?.endDate}
+                className="cursor-pointer"
               />
               <InputFeildError feild="endDate" state={inputErrorState} />
             </Field>
@@ -210,11 +203,10 @@ export default function CreateTripForm() {
                   key={jt}
                   type="button"
                   onClick={() => toggleJourney(jt)}
-                  className={`px-3 py-1 rounded-lg border cursor-pointer ${
-                    journeyType.includes(jt)
+                  className={`px-3 py-1 rounded-lg border cursor-pointer ${journeyType.includes(jt)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                  }`}
+                    }`}
                 >
                   {jt}
                 </button>
@@ -236,11 +228,10 @@ export default function CreateTripForm() {
                   key={lng}
                   type="button"
                   onClick={() => toggleLanguage(lng)}
-                  className={`px-3 py-1 rounded-lg border cursor-pointer ${
-                    languages.includes(lng)
+                  className={`px-3 py-1 rounded-lg border cursor-pointer ${languages.includes(lng)
                       ? "bg-accent text-accent-foreground"
                       : "bg-background text-foreground"
-                  }`}
+                    }`}
                 >
                   {lng}
                 </button>

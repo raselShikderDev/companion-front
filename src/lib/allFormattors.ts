@@ -1,24 +1,33 @@
 export function getInitials(name: string) {
-      if (!name) return "";
+    if (!name) return "";
 
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+    return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
 }
-
 
 export function formatDateTime(date: string | Date): string {
-return new Date(date).toLocaleString("en-US", {
-year: "numeric",
-month: "short",
-day: "numeric",
-hour: "2-digit",
-minute: "2-digit",
-});
+    return new Date(date).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
 }
+
+export function formatDateOnly (value: string) {
+  const date = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  }).format(new Date(value));
+  return date
+};
+
 
 export function queryStringFormatter(searchParamsObj: { [key: string]: string | string[] | undefined }): string {
     let queryString = "";

@@ -2,12 +2,10 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -32,8 +30,7 @@ const SignUpForm = () => {
 
   // Initialize gender from wrongData OR fallback default
   const initialGender =
-    state?.wrongData?.gender === "MALE" ||
-    state?.wrongData?.gender === "FEMALE"
+    state?.wrongData?.gender === "MALE" || state?.wrongData?.gender === "FEMALE"
       ? state.wrongData.gender
       : "MALE";
 
@@ -47,13 +44,12 @@ const SignUpForm = () => {
       toast.success(state.message || "Account successfully created");
     }
   }, [state]);
-console.log({state});
+  console.log({ state });
 
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
       <form action={formAction} className="space-y-5">
         <FieldGroup className="space-y-4">
-
           {/* Full Name */}
           <Field>
             <FieldLabel htmlFor="fullName">Full Name</FieldLabel>
@@ -102,9 +98,7 @@ console.log({state});
 
             <Select
               value={gender}
-              onValueChange={(value) =>
-                setGender(value as "MALE" | "FEMALE")
-              }
+              onValueChange={(value) => setGender(value as "MALE" | "FEMALE")}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select gender" />
@@ -159,9 +153,7 @@ console.log({state});
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() =>
-                  setConfirmShowPassword((prev) => !prev)
-                }
+                onClick={() => setConfirmShowPassword((prev) => !prev)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
                 {confirmShowPassword ? <EyeOff /> : <Eye />}
@@ -173,29 +165,13 @@ console.log({state});
           {/* Submit */}
           <FieldGroup>
             <Field>
-              <Button
-                disabled={isPending}
-                type="submit"
-                className="w-full"
-              >
+              <Button disabled={isPending} type="submit" className="w-full bg-accent">
                 Create Account
               </Button>
-
-              <FieldDescription className="text-center pt-2">
-                Already have an account?{" "}
-                <Link href="/signin">Sign in</Link>
-              </FieldDescription>
             </Field>
           </FieldGroup>
         </FieldGroup>
       </form>
-
-      {/* Divider */}
-      <div className="my-6 flex items-center gap-3">
-        <div className="flex-1 h-px bg-border" />
-        <span className="text-sm text-muted-foreground">or</span>
-        <div className="flex-1 h-px bg-border" />
-      </div>
     </div>
   );
 };

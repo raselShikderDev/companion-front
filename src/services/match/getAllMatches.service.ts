@@ -3,27 +3,15 @@
 
 import { serverFetch } from "@/lib/serverFetch";
 
-export const getAllMatches = async (
-  params?: { page?: number; limit?: number }
-): Promise<any> => {
+export default async function getAllMatches(queryString?: string) {
   try {
-    const query = new URLSearchParams();
-
-    if (params?.page) query.set("page", params.page.toString());
-    if (params?.limit) query.set("limit", params.limit.toString());
 
     const res = await serverFetch.get(
-      `/match${query.toString() ? `?${query}` : ""}`
+      `/match/all${queryString ? `?${queryString}` : ""}`
     );
 
     const data = await res.json();
 
-    if (!data.success) {
-      return {
-        success: false,
-        message: data.message || "Failed to fetch matches",
-      };
-    }
 
     return data;
   } catch (error: any) {

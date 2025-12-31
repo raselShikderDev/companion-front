@@ -1,68 +1,67 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
-"use client"
-import { useActionState, useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { resetPassword } from "@/services/auth/auth.services"
-import { toast } from "react-toastify"
-
+"use client";
+import { useActionState, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { resetPassword } from "@/services/auth/auth.services";
+import { toast } from "react-toastify";
 
 const ResetPasswordForm = () => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const rawToken = searchParams.get("token")
-const rawEmail = searchParams.get("email")
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawToken = searchParams.get("token");
+  const rawEmail = searchParams.get("email");
 
-const token =
-  rawToken && rawToken !== "undefined" && rawToken !== "null"
-    ? rawToken
-    : null
+  const token =
+    rawToken && rawToken !== "undefined" && rawToken !== "null"
+      ? rawToken
+      : null;
 
-const email =
-  rawEmail && rawEmail !== "undefined" && rawEmail !== "null"
-    ? rawEmail
-    : null
+  const email =
+    rawEmail && rawEmail !== "undefined" && rawEmail !== "null"
+      ? rawEmail
+      : null;
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [passwordMatch, setPasswordMatch] = useState(true)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
-  const [state, formAction, isPending] = useActionState(resetPassword, null)
+  const [state, formAction, isPending] = useActionState(resetPassword, null);
 
- useEffect(() => {
-  if (!token) {
-    const redirectUrl = email
-      ? `/forget-password?token=false&email=${encodeURIComponent(email)}`
-      : "/forget-password"
+  useEffect(() => {
+    if (!token) {
+      const redirectUrl = email
+        ? `/forget-password?token=false&email=${encodeURIComponent(email)}`
+        : "/forget-password";
 
-    router.replace(redirectUrl)
-  }
-}, [token, email, router])
+      router.replace(redirectUrl);
+    }
+  }, [token, email, router]);
 
   useEffect(() => {
     if (state?.success) {
-      toast.success(state.message)
+      toast.success(state.message);
       // Redirect to login page after 2 seconds
       setTimeout(() => {
-        router.push("/signin")
-      }, 2000)
+        router.push("/signin");
+      }, 2000);
     } else if (state?.success === false) {
-      toast.error(state.message)
+      toast.error(state.message);
     }
-  }, [state, router])
+  }, [state, router]);
 
   useEffect(() => {
     if (confirmPassword) {
-      setPasswordMatch(password === confirmPassword)
+      setPasswordMatch(password === confirmPassword);
     }
-  }, [password, confirmPassword])
+  }, [password, confirmPassword]);
 
   const passwordRequirements = [
     { label: "At least 8 characters", met: password.length >= 8 },
@@ -70,19 +69,19 @@ const email =
     { label: "One lowercase letter", met: /[a-z]/.test(password) },
     { label: "One number", met: /[0-9]/.test(password) },
     { label: "One special character", met: /[^A-Za-z0-9]/.test(password) },
-  ]
+  ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (password !== confirmPassword) {
-      e.preventDefault()
-      toast.error("Passwords do not match")
-      setPasswordMatch(false)
-      return
+      e.preventDefault();
+      toast.error("Passwords do not match");
+      setPasswordMatch(false);
+      return;
     }
-  }
-  console.log({passwordMatch});
-  console.log({password});
-  
+  };
+  console.log({ passwordMatch });
+  console.log({ password });
+
   return (
     <form action={formAction} onSubmit={handleSubmit} className="space-y-5">
       <input type="hidden" name="token" value={token as string} />
@@ -109,20 +108,40 @@ const email =
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
-            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {showPassword ? (
+              <EyeOff className="w-4 h-4" />
+            ) : (
+              <Eye className="w-4 h-4" />
+            )}
           </button>
         </div>
-        {state?.errors?.newPassword && <p className="text-sm text-destructive">{state.errors.newPassword[0]}</p>}
+        {state?.errors?.newPassword && (
+          <p className="text-sm text-destructive">
+            {state.errors.newPassword[0]}
+          </p>
+        )}
       </div>
 
       {password && (
         <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
-          <p className="text-xs font-medium text-muted-foreground">Password Requirements:</p>
+          <p className="text-xs font-medium text-muted-foreground">
+            Password Requirements:
+          </p>
           <ul className="space-y-1">
             {passwordRequirements.map((req, index) => (
               <li key={index} className="flex items-center gap-2 text-xs">
-                <CheckCircle2 className={`w-3 h-3 ${req.met ? "text-green-500" : "text-muted-foreground/50"}`} />
-                <span className={req.met ? "text-foreground" : "text-muted-foreground"}>{req.label}</span>
+                <CheckCircle2
+                  className={`w-3 h-3 ${
+                    req.met ? "text-green-500" : "text-muted-foreground/50"
+                  }`}
+                />
+                <span
+                  className={
+                    req.met ? "text-foreground" : "text-muted-foreground"
+                  }
+                >
+                  {req.label}
+                </span>
               </li>
             ))}
           </ul>
@@ -143,7 +162,9 @@ const email =
             disabled={isPending}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className={`h-11 pr-10 border-primary/20 focus:border-primary ${!passwordMatch && confirmPassword ? "border-destructive" : ""}`}
+            className={`h-11 pr-10 border-primary/20 focus:border-primary ${
+              !passwordMatch && confirmPassword ? "border-destructive" : ""
+            }`}
           />
           <button
             type="button"
@@ -151,10 +172,16 @@ const email =
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
-            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {showConfirmPassword ? (
+              <EyeOff className="w-4 h-4" />
+            ) : (
+              <Eye className="w-4 h-4" />
+            )}
           </button>
         </div>
-        {!passwordMatch && confirmPassword && <p className="text-sm text-destructive">Passwords do not match</p>}
+        {!passwordMatch && confirmPassword && (
+          <p className="text-sm text-destructive">Passwords do not match</p>
+        )}
       </div>
 
       {state?.success === false && !state?.errors && (
@@ -165,7 +192,9 @@ const email =
 
       {state?.success && (
         <Alert className="bg-green-500/10 border-green-500/20 text-green-700 dark:text-green-400">
-          <AlertDescription>Password reset successful! Redirecting to login...</AlertDescription>
+          <AlertDescription>
+            Password reset successful! Redirecting to login...
+          </AlertDescription>
         </Alert>
       )}
 
@@ -187,7 +216,7 @@ const email =
         )}
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default ResetPasswordForm
+export default ResetPasswordForm;

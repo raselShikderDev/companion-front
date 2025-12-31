@@ -1,3 +1,5 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
 "use client"
 
 import { Input } from "@/components/ui/input"
@@ -8,8 +10,6 @@ import { toast } from "react-toastify"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "../ui/button"
 import { Loader2, ShieldCheck } from "lucide-react"
-import { error } from "console"
-import { Alert, AlertDescription } from "../ui/alert"
 
 const VerifyOtpForm = () => {
     const [state, formAction, isPending] = useActionState(verifyOtp, null)
@@ -22,17 +22,8 @@ const VerifyOtpForm = () => {
 
     console.log({ email });
 
-    //     {
-    //     "state": {
-    //         "success": true,
-    //         "message": "OTP verified successfully",
-    //         "data": {
-    //             "resetToken": "2e51b53800985844e38cadee3dbf3d5102f3b1a094af0c1a05cd5dc7fe4b8442a53ee94a",
-    //             "expiresIn": 3600
-    //         }
-    //     }
-    // }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (state?.success && state?.data?.resetToken) {
             setResetToken(state?.data?.resetToken)

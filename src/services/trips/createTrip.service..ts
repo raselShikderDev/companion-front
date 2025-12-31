@@ -1,11 +1,13 @@
 
 
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { serverFetch } from "@/lib/serverFetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { createTripZodSchema } from "@/zodSchemas/trip.zodValidation";
+import { revalidatePath } from "next/cache";
 
 export const createTrip = async (
   _state: any,
@@ -14,13 +16,13 @@ export const createTrip = async (
   try {
 
     // FIX: remove empty strings coming from form
-const journeyType = formData
-  .getAll("journeyType")
-  .filter(Boolean) as string[];
+    const journeyType = formData
+      .getAll("journeyType")
+      .filter(Boolean) as string[];
 
-const Languages = formData
-  .getAll("languages")
-  .filter(Boolean) as string[];
+    const Languages = formData
+      .getAll("languages")
+      .filter(Boolean) as string[];
 
 
     // Build payload exactly as backend expects
@@ -42,7 +44,7 @@ const Languages = formData
     const validated = zodValidator(payload, createTripZodSchema);
 
     if (!validated.success) {
-      return validated; // contains errors + wrongData
+      return validated;
     }
 
     // API call
@@ -62,7 +64,9 @@ const Languages = formData
         wrongData: payload,
       };
     }
-
+    revalidatePath("/dashboard");
+    revalidatePath("dashboard/my-trips");
+    revalidatePath("dashboard/find-trips");
     return {
       success: true,
       message: "Trip created successfully!",

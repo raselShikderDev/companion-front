@@ -72,9 +72,13 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center py-1.5 gap-3">
-          {!user?.id && <Link href={"/signin"}>
-          <Button className="bg-transparent text-black hover:text-white">Sign In</Button>
-          </Link>}
+          {!user?.id && (
+            <Link href={"/signin"}>
+              <Button className="bg-transparent text-black hover:text-white">
+                Sign In
+              </Button>
+            </Link>
+          )}
 
           <Link
             href={getSignupRedirect()}
@@ -85,6 +89,7 @@ export default function Header() {
         </div>
 
         <Button
+          variant={"ghost"}
           className="md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"

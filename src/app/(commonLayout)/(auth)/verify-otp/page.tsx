@@ -5,9 +5,10 @@ import Link from "next/link"
 import { ShieldCheck, ArrowLeft } from "lucide-react"
 import VerifyOtpForm from "@/components/auth/VerifyOtpForm"
 import ResendOtpAction from "@/components/auth/ResendOtpAction"
+import { Suspense } from "react"
 
 
-export default function VerifyOtpContent() {
+ function VerifyOtpContent() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-background to-primary/5 p-4">
       <Card className="w-full max-w-md shadow-xl border-primary/10">
@@ -40,10 +41,10 @@ export default function VerifyOtpContent() {
   )
 }
 
-// export default function VerifyOtpPage() {
-//   return (
-//     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-//       <VerifyOtpContent />
-//     </Suspense>
-//   )
-// }
+export default function VerifyOtpPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <VerifyOtpContent />
+    </Suspense>
+  )
+}
