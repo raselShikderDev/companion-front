@@ -38,7 +38,7 @@ console.log(data);
     revalidatePath("/settings")
     return data
   } catch (error: any) {
-    console.error("[v0] Update profile error:", error)
+    console.error(" Update profile error:", error)
     return {
       success: false,
       message: error.message || "Server error",
@@ -76,18 +76,4 @@ console.log(data);
   }
 }
 
-export async function getExplorerProfile() {
-  try {
-    const res = await serverFetch.get("/explorer/me")
-    const data = await res.json()
 
-    if (!res.ok || !data?.success) {
-      return null
-    }
-
-    return data.data
-  } catch (error) {
-    console.error("[v0] Get explorer profile error:", error)
-    return null
-  }
-}

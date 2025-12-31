@@ -1,60 +1,199 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/style/useImportType: > */
 /** biome-ignore-all lint/correctness/useParseIntRadix: > */
 /** biome-ignore-all lint/complexity/useLiteralKeys: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 "use server";
 
 import { parse } from "cookie";
-import { revalidateTag } from "next/cache";
 // import { resetPasswordSchema } from "@/zod/auth.validation";
 import { deleteCookie, getCookie, setCookie } from "@/lib/tokenHandeler";
 import { verifyAccessToken } from "@/lib/jwtHandler";
 import { serverFetch } from "@/lib/serverFetch";
+import { zodValidator } from "@/lib/zodValidator";
+import {
+  changePasswordSchema,
+  ForgotPasswordInput,
+  forgotPasswordSchema,
+  ResetPasswordInput,
+  resetPasswordSchema,
+  VerifyOtpInput,
+  verifyOtpSchema,
+} from "@/zodSchemas/auth.zodValidation";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export async function updateMyProfile(formData: FormData) {
+// Step 1: Request OTP for password reset
+export async function forgotPassword(__prevState: any, formData: FormData) {
   try {
-    // Create a new FormData with the data property
-    const uploadFormData = new FormData();
+    const input: ForgotPasswordInput = {
+      email: formData.get("email") as string,
+    };
 
-    // Get all form fields except the file
-    const data: any = {};
-    formData.forEach((value, key) => {
-      if (key !== "file" && value) {
-        data[key] = value;
-      }
-    });
-
-    // Add the data as JSON string
-    uploadFormData.append("data", JSON.stringify(data));
-
-    // Add the file if it exists
-    const file = formData.get("file");
-    if (file && file instanceof File && file.size > 0) {
-      uploadFormData.append("file", file);
+    if (zodValidator(input, forgotPasswordSchema).success === false) {
+      return zodValidator(input, forgotPasswordSchema);
     }
 
-    const response = await serverFetch.patch(`/user/update-my-profile`, {
-      body: uploadFormData,
+    const validatedData: any = zodValidator(input, forgotPasswordSchema).data;
+
+    const res = await serverFetch.post("/auth/forgot-password", {
+      body: JSON.stringify({ email: validatedData.email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    console.log({ res });
 
-    const result = await response.json();
+    const data = await res.json();
 
-    revalidateTag("user-info", { expire: 0 });
-    return result;
+    return {
+      ...data,
+      data: {
+        email: validatedData.email,
+      },
+    };
   } catch (error: any) {
-    console.log(error);
+    console.error(" Forgot password error:", error);
     return {
       success: false,
-      message: `${
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Something went wrong"
-      }`,
+      message: error.message || "Server error",
     };
   }
 }
 
+// Step 2: Verify OTP and get reset token
+export async function verifyOtp(_prevState: any, formData: FormData) {
+  console.log("in server action");
+
+  try {
+    const input: VerifyOtpInput = {
+      email: formData.get("email") as string,
+      otp: formData.get("otp") as string,
+    };
+
+    console.log({ input });
+
+    if (zodValidator(input, verifyOtpSchema).success === false) {
+      return zodValidator(input, verifyOtpSchema);
+    }
+
+    const validatedData: any = zodValidator(input, verifyOtpSchema).data;
+    console.log({ validatedData });
+    console.log({ otp: validatedData.otp });
+    console.log({ email: validatedData.email });
+
+    const jsonData = JSON.stringify({
+      email: validatedData.email,
+      otp: validatedData.otp,
+    });
+    console.log({ jsonData });
+
+    const res = await serverFetch.post("/auth/verify-otp", {
+      body: jsonData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    console.error(" Verify OTP error:", error);
+    return {
+      success: false,
+      message: error.message || "Server error",
+    };
+  }
+}
+
+// Step 3: Reset password with token
+export async function resetPassword(_prevState: any, formData: FormData) {
+  try {
+    const input: ResetPasswordInput = {
+      token: formData.get("token") as string,
+      newPassword: formData.get("newPassword") as string,
+    };
+
+    console.log({ input });
+
+    if (zodValidator(input, resetPasswordSchema).success === false) {
+      return zodValidator(input, resetPasswordSchema);
+    }
+
+    const validatedData: any = zodValidator(input, resetPasswordSchema).data;
+    console.log(validatedData);
+
+    const jsonData = {
+      token: validatedData.token,
+      newPassword: validatedData.newPassword,
+    };
+
+    const res = await serverFetch.post("/auth/reset-password", {
+      body: JSON.stringify(jsonData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    return data;
+  } catch (error: any) {
+    console.log(error);
+  }
+}
+
+// Logged in user chnages password
+export async function changePassword(__prevState: any, formData: FormData) {
+  try {
+    const oldPassword = formData.get("oldPassword");
+    const newPassword = formData.get("newPassword");
+    const confirmPassword = formData.get("confirmNewPassword");
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      console.error("All feilds are required");
+    }
+
+    const input = {
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    };
+    console.log(input);
+
+    if (zodValidator(input, changePasswordSchema).success === false) {
+      return zodValidator(input, changePasswordSchema);
+    }
+
+    const validatedData: any = zodValidator(input, changePasswordSchema).data;
+
+    const jsonData = {
+      oldPassword: validatedData.oldPassword,
+      newPassword: validatedData.newPassword,
+    };
+    console.log(jsonData);
+
+    const res = await serverFetch.patch("/auth/change-password", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jsonData),
+    });
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Something went wrong",
+    };
+  }
+}
 
 export async function getNewAccessToken() {
   try {

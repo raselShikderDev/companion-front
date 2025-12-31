@@ -1,21 +1,25 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { AdminSidebar } from "@/components/admin/adminSidebar"
+import type React from "react";
+import type { Metadata } from "next";
+import { AdminSidebar } from "@/components/admin/adminSidebar";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard - Travel Match",
-  description: "Manage explorers, trips, and matches",
-}
+  title: "Admin Dashboard",
+};
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="flex">
+    <div className="h-screen flex overflow-hidden">
+      {/* Sidebar */}
       <AdminSidebar />
-      <main className="flex-1 overflow-auto">{children}</main>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto bg-background">
+        {children}
+      </main>
     </div>
-  )
+  );
 }

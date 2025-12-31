@@ -15,6 +15,7 @@ import {
   Menu,
   CreditCard,
   Settings,
+  LockIcon,
 } from "lucide-react";
 import {
   Sheet,
@@ -35,6 +36,7 @@ const explorerNavItems = [
   { href: "/dashboard/find-trips", label: "Find Trips", icon: Search },
   { href: "/dashboard/subscriptions", label: "Plans", icon: CreditCard },
   { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/change-password", label: "Chnage Password", icon: LockIcon },
 ];
 
 export function ExplorerNavbar() {
