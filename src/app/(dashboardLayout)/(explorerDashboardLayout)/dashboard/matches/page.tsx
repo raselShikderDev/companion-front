@@ -2,11 +2,12 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 import { MyMatchesGrid } from "@/components/explorer/match/MyMatchesGrid";
-import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { getMyMatches } from "@/services/match/myMatches.service";
 import getUserVerifiedDetails from "@/lib/getUserVerifiedDetails";
 import { queryStringFormatter } from "@/lib/allFormattors";
 import Pagination from "@/components/shared/Paggination";
+import { Suspense } from "react";
+import MatchesGridSkeleton from "@/components/explorer/match/MatchesGridSkeleton";
 
 export default async function MyMatchesPage({
   searchParams,
@@ -24,9 +25,7 @@ export default async function MyMatchesPage({
     matches = [];
   }
 
-  if (!res?.success) {
-    return <EmptyTripCard />;
-  }
+
 
   const { id } = await getUserVerifiedDetails();
   let currentExplorerId: string | null = null;
@@ -53,11 +52,13 @@ export default async function MyMatchesPage({
       </p>
 
       <div className="space-y-3.5">
-        {/* <MyMatchesGrid matches={matches} /> */}
-        <MyMatchesGrid
-          currentExplorerId={currentExplorerId as string}
-          matches={matches}
-        />
+        <Suspense fallback={<MatchesGridSkeleton />}>
+          <MyMatchesGrid
+            currentExplorerId={currentExplorerId as string}
+            matches={matches}
+          />
+        </Suspense>
+
         <Pagination
           currentPages={currentpage}
           totalPages={totalPages}

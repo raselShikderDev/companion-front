@@ -3,58 +3,9 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Check } from "lucide-react"
+import { plans } from "@/components/shared/constraints"
 
-const plans = [
-  {
-    name: "Free",
-    plan: "FREE",
-    price: 0,
-    currency: "BDT",
-    description: "For casual travelers",
-    allowedMatches: 3,
-    features: [
-      "Browse curated trips",
-      "Basic matching algorithm",
-      "3 matches per year",
-      "Community support",
-      "Read reviews",
-    ],
-  },
-  {
-    name: "Standard",
-    plan: "STANDARD",
-    price: 499,
-    currency: "BDT",
-    description: "For active explorers",
-    allowedMatches: 12,
-    popular: true,
-    features: [
-      "Everything in Free",
-      "Advanced matching algorithm",
-      "12 matches per year",
-      "Priority support",
-      "Create unlimited trips",
-      "Write reviews",
-    ],
-  },
-  {
-    name: "Premium",
-    plan: "PREMIUM",
-    price: 799,
-    currency: "BDT",
-    description: "For serious adventurers",
-    allowedMatches: 25,
-    features: [
-      "Everything in Standard",
-      "Premium matching algorithm",
-      "25 matches per year",
-      "VIP support 24/7",
-      "Featured trip listings",
-      "Analytics dashboard",
-      "Early access to features",
-    ],
-  },
-]
+
 
 export default function SubscriptionsPage() {
   return (

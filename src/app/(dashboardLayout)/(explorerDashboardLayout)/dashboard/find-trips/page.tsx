@@ -1,8 +1,10 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+import MatchesGridSkeleton from "@/components/explorer/match/MatchesGridSkeleton";
 import TripCardForBookGrid from "@/components/explorer/match/TripCardForBookGrid";
 import Pagination from "@/components/shared/Paggination";
 import { queryStringFormatter } from "@/lib/allFormattors";
 import { getAvailableTrips } from "@/services/trips/getAvailableTrips.service";
+import { Suspense } from "react";
 
 export default async function AllAvailableTripsPage({
   searchParams,
@@ -19,10 +21,10 @@ export default async function AllAvailableTripsPage({
     trips = [];
   }
 
-  
- const totalPages = Math.ceil(res?.meta?.total / res?.meta?.limit) || 1;
+
+  const totalPages = Math.ceil(res?.meta?.total / res?.meta?.limit) || 1;
   const currentpage = res?.meta?.page || 1;
-  
+
   console.log({ totalpage: Math.ceil(res?.meta?.total / res?.meta?.limit) });
   console.log({ currentpage: res.meta?.page });
 
@@ -34,9 +36,11 @@ export default async function AllAvailableTripsPage({
       </p>
 
       <div className="space-y-3.5">
+        <Suspense fallback={<MatchesGridSkeleton />}>
+          <TripCardForBookGrid trips={trips} />
+        </Suspense>
 
-      <TripCardForBookGrid trips={trips} />
-       <Pagination
+        <Pagination
           currentPages={currentpage}
           totalPages={totalPages}
         />

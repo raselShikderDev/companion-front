@@ -9,6 +9,8 @@ import ClearFiltersButton from "@/components/shared/ClearFilter";
 import Pagination from "@/components/shared/Paggination";
 import { queryStringFormatter } from "@/lib/allFormattors";
 import SearchFilterTrips from "@/components/admin/ManageTrips/SearchFilterTrips";
+import { Suspense } from "react";
+import MatchesGridSkeleton from "@/components/explorer/match/MatchesGridSkeleton";
 
 export default async function MyTripsPage({
   searchParams,
@@ -42,10 +44,13 @@ export default async function MyTripsPage({
       <p className="text-muted-foreground">Manage & update your active trips</p>
       <SearchFilterTrips />
       <div className="space-y-3.5">
-        <TripsGrid
-          trips={trips}
-          currentExplorerId={currentExplorerId as string}
-        />
+        <Suspense fallback={<MatchesGridSkeleton />}>
+          <TripsGrid
+            trips={trips}
+            currentExplorerId={currentExplorerId as string}
+          />
+        </Suspense>
+
         <Pagination currentPages={currentpage} totalPages={totalPages} />
       </div>
     </div>

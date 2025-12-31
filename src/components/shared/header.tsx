@@ -46,16 +46,16 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-8">
           <Link
-            href="#"
+            href="trips"
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
             Trips
           </Link>
           <Link
-            href="#"
+            href="/contact"
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
-            How It Works
+            Contact
           </Link>
           <Link
             href="#"
@@ -68,6 +68,12 @@ export default function Header() {
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
             Pricing
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm text-foreground hover:text-accent transition-colors"
+          >
+            About
           </Link>
         </nav>
 
