@@ -156,16 +156,17 @@ export async function changePassword(__prevState: any, formData: FormData) {
     }
 
     const input = {
-      oldPassword,
-      newPassword,
-      confirmPassword,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+      confirmNewPassword: confirmPassword,
     };
-    console.log(input);
+    console.log({ input });
 
     if (zodValidator(input, changePasswordSchema).success === false) {
       return zodValidator(input, changePasswordSchema);
     }
-
+    // thunder client - http://localhost:5000/api/v1/auth/change-password - working
+    // Browser - http://localhost:5000/api/v1/auth/change-password - not working 
     const validatedData: any = zodValidator(input, changePasswordSchema).data;
 
     const jsonData = {

@@ -1,20 +1,22 @@
+"use client";
+
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
-"use client";
 
 import { useActionState, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { changePassword } from "@/services/auth/auth.services";
 import { Button } from "../ui/button";
+import { IInputErrorState } from "@/lib/getInputFeildError";
+import InputFeildError from "@/lib/inputFeildError";
 
 const ChangePasswordForm = () => {
-  const [showOld, setShowOld] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -33,8 +35,8 @@ const ChangePasswordForm = () => {
   }, [oldPassword, newPassword, confirmNewPassword]);
 
   useEffect(() => {
-    if (state?.success) toast.success(state.message || "Password successfully changed");
-    if (state?.success === false) toast.error(state.message || "Unsuccessfull Password change ");
+    if (state?.success) toast.success(state.message);
+    if (state?.success === false) toast.error(state.message);
   }, [state]);
 
   const passwordRequirements = [
@@ -51,133 +53,97 @@ const ChangePasswordForm = () => {
       toast.error("New password must be different from old password");
       return;
     }
+
     if (!passwordMatch) {
       e.preventDefault();
       toast.error("Passwords do not match");
+      return;
     }
   };
-console.log({state, oldPassword, newPassword, confirmNewPassword});
+console.log({
+  oldPassword,
+  newPassword, 
+  confirmNewPassword
+});
 
   return (
     <form action={formAction} onSubmit={handleSubmit} className="space-y-5">
-      {/* Old Password */}
-      <div className="space-y-2">
-        <Label>Current Password</Label>
+
+      {/* OLD PASSWORD */}
+      <div>
+        <label className="block text-sm font-medium">Current Password</label>
         <div className="relative">
           <Input
+            type={showPassword ? "text" : "password"}
             name="oldPassword"
-            type={showOld ? "text" : "password"}
-            required
-            disabled={isPending}
             value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            className="h-11 pr-10"
+            onChange={(e) => setOldPassword(e.target.value)} // ✅ FIX
+            className="pr-10"
           />
-          <Button
-            variant={"ghost"}
-            onClick={() => setShowOld(!showOld)}
-            className="eye-btn"
-          >
-            {showOld ? <EyeOff /> : <Eye />}
+          <Button type="button" variant="ghost" onClick={() => setShowPassword(!showPassword)} className="absolute right-0 top-0">
+            {showPassword ? <EyeOff /> : <Eye />}
           </Button>
         </div>
+        <InputFeildError feild="oldPassword" state={state as IInputErrorState} />
       </div>
 
-      {/* New Password */}
-      <div className="space-y-2">
-        <Label>New Password</Label>
+      {/* NEW PASSWORD */}
+      <div>
+        <label className="block text-sm font-medium">New Password</label>
         <div className="relative">
           <Input
+            type={showNewPassword ? "text" : "password"} // ✅ FIX
             name="newPassword"
-            type={showNew ? "text" : "password"}
-            required
-            disabled={isPending}
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className={`h-11 pr-10 ${sameAsOld ? "border-destructive" : ""}`}
+            onChange={(e) => setNewPassword(e.target.value)} // ✅ FIX
+            className="pr-10"
           />
-          <Button
-            variant={"ghost"}
-            onClick={() => setShowNew(!showNew)}
-            className="eye-btn"
-          >
-            {showNew ? <EyeOff /> : <Eye />}
+          <Button type="button" variant="ghost" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-0 top-0">
+            {showNewPassword ? <EyeOff /> : <Eye />}
           </Button>
         </div>
-        {sameAsOld && (
-          <p className="text-sm text-destructive">
-            New password cannot be same as current password
-          </p>
-        )}
+        <InputFeildError feild="newPassword" state={state as IInputErrorState} />
       </div>
 
-      {/* Password rules */}
+      {/* PASSWORD RULES */}
       {newPassword && (
         <div className="p-3 bg-muted/50 rounded-lg space-y-1">
           {passwordRequirements.map((req, i) => (
             <div key={i} className="flex items-center gap-2 text-xs">
-              <CheckCircle2
-                className={`w-3 h-3 ${
-                  req.met ? "text-green-500" : "text-muted-foreground/50"
-                }`}
-              />
-              <span>{req.label}</span>
+              <CheckCircle2 className={req.met ? "text-green-500" : "text-muted-foreground"} />
+              {req.label}
             </div>
           ))}
         </div>
       )}
 
-      {/* Confirm Password */}
-      <div className="space-y-2">
-        <Label>Confirm New Password</Label>
+      {/* CONFIRM PASSWORD */}
+      <div>
+        <label className="block text-sm font-medium">Confirm Password</label>
         <div className="relative">
           <Input
+            type={showConfirmNewPassword ? "text" : "password"} // ✅ FIX
             name="confirmNewPassword"
-            type={showConfirm ? "text" : "password"}
-            required
-            disabled={isPending}
             value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            className={`h-11 pr-10 ${
-              !passwordMatch ? "border-destructive" : ""
-            }`}
+            onChange={(e) => setConfirmNewPassword(e.target.value)} // ✅ FIX
+            className="pr-10"
           />
-          <Button
-            variant={"ghost"}
-            onClick={() => setShowConfirm(!showConfirm)}
-            className="eye-btn"
-          >
-            {showConfirm ? <EyeOff /> : <Eye />}
+          <Button type="button" variant="ghost" onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)} className="absolute right-0 top-0">
+            {showConfirmNewPassword ? <EyeOff /> : <Eye />}
           </Button>
         </div>
-        {!passwordMatch && (
-          <p className="text-sm text-destructive">Passwords do not match</p>
-        )}
+        <InputFeildError feild="confirmNewPassword" state={state as IInputErrorState} />
       </div>
 
-      {/* Server error */}
       {state?.success === false && !state?.errors && (
         <Alert variant="destructive">
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
       )}
 
-      <Button
-        type="submit"
-        disabled={isPending || !passwordMatch || sameAsOld}
-        className="w-full h-11"
-      >
-        {isPending ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Updating...
-          </>
-        ) : (
-          <>
-            <Lock className="mr-2 h-4 w-4" />
-            Change Password
-          </>
-        )}
+      <Button type="submit" disabled={isPending || !passwordMatch || sameAsOld} className="w-full">
+        {isPending ? <Loader2 className="animate-spin" /> : <Lock />}
+        Change Password
       </Button>
     </form>
   );
