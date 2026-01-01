@@ -2,8 +2,8 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 /** biome-ignore-all lint/style/useImportType: > */
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: > */
+export const dynamic = "force-dynamic";
 
-import ReviewSearchFilter from "@/components/admin/manageReviews/ReviewSearchFilter";
 import ExplorerRevewsTable from "@/components/explorer/review/ExplorerRevewsTable";
 import { getAllReviews } from "@/services/review/getAllReviews.services";
 
@@ -12,8 +12,8 @@ export default async function ReviewsPage() {
   console.log({ res });
 
   let reviews: any | [];
-  if (res.success) {
-    reviews = res.data;
+  if (res?.success) {
+    reviews = res?.data;
   } else {
     reviews = [];
   }
