@@ -1,10 +1,11 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 import MatchesGridSkeleton from "@/components/explorer/match/MatchesGridSkeleton";
 import TripCardForBook from "@/components/explorer/match/TripCardForBook";
-import TripCardForBookGrid from "@/components/explorer/match/TripCardForBookGrid";
 import EmptyTripCard from "@/components/shared/EmptyTripCard";
 import { Button } from "@/components/ui/button";
-import { getAvailableTrips } from "@/services/trips/getAvailableTrips.service";
+import { getAllTrips } from "@/services/trips/allTrips.service";
 import { IAvailableTrip } from "@/types/trip.interface";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -12,7 +13,7 @@ import { Suspense } from "react";
 
 export default async function PublicTripsPage() {
 
-    const res = await getAvailableTrips();
+    const res = await getAllTrips();
     let trips: any | [];
     if (res.success) {
         trips = res.data;

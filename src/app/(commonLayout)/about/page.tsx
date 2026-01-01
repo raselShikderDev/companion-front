@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: <explanation> */
 import { Users, Heart, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"

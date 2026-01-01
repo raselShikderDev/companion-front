@@ -46,7 +46,7 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-8">
           <Link
-            href="trips"
+            href="/trips"
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
             Trips
@@ -58,7 +58,7 @@ export default function Header() {
             Contact
           </Link>
           <Link
-            href="#"
+            href="/reviews"
             className="text-sm text-foreground hover:text-accent transition-colors"
           >
             Reviews
@@ -112,28 +112,34 @@ export default function Header() {
         <div className="md:hidden border-t border-border bg-background p-4">
           <nav className="flex flex-col gap-3">
             <Link
-              href="#"
+              href="/trips"
               className="text-sm text-foreground hover:text-accent py-2"
             >
               Trips
             </Link>
             <Link
-              href="#"
+              href="/contact"
               className="text-sm text-foreground hover:text-accent py-2"
             >
-              How It Works
+              Contact
             </Link>
             <Link
-              href="#"
+              href="/reviews"
               className="text-sm text-foreground hover:text-accent py-2"
             >
               Reviews
             </Link>
             <Link
-              href="#"
+              href="/pricing"
               className="text-sm text-foreground hover:text-accent py-2"
             >
               Pricing
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm text-foreground hover:text-accent py-2"
+            >
+              About
             </Link>
             {/* <Button variant="ghost" size="sm" className="justify-start mt-2">
               Sign In

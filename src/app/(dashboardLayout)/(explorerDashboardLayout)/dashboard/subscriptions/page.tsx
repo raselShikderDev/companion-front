@@ -68,6 +68,7 @@ export default async function DashboardSubscriptionsPage() {
     user,
   });
   
+console.log({currentSubscription});
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

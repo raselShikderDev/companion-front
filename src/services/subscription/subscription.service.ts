@@ -14,6 +14,7 @@ export async function initiateSubscription(plan: SubscriptionPlan) {
   });
 
   const data = await res.json();
+console.log({data});
 
   if (!res.ok || !data?.success) {
     return {
@@ -44,6 +45,7 @@ export async function getMySubscription() {
     if (!res.ok || !data?.success) {
       return null;
     }
+console.log(data);
 
     return data.data;
   } catch (error) {
