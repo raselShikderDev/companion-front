@@ -1,47 +1,52 @@
 /** biome-ignore-all lint/complexity/noUselessFragments: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/style/useImportType: > */
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { Loader2 } from "lucide-react"
-import { toast } from "sonner"
-import { initiateSubscription } from "@/services/subscription/subscription.service"
-import { SubscriptionPlan } from "@/types/enum.interface"
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { initiateSubscription } from "@/services/subscription/subscription.service";
+import { SubscriptionPlan } from "@/types/enum.interface";
 
 interface SubscribeButtonProps {
-  plan: SubscriptionPlan
-  isCurrentPlan: boolean
-  isFree: boolean
+  plan: SubscriptionPlan;
+  isCurrentPlan: boolean;
+  isFree: boolean;
 }
 
-export function SubscribeButton({ plan, isCurrentPlan, isFree }: SubscribeButtonProps) {
-  const [loading, setLoading] = useState(false)
+export function SubscribeButton({
+  plan,
+  isCurrentPlan,
+  isFree,
+}: SubscribeButtonProps) {
+  const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      
-      const result = await initiateSubscription(plan)
+      const result = await initiateSubscription(plan);
+      console.log({ result });
 
       if (!result.success) {
-        toast.error(result.message || "Failed to initiate subscription")
+        toast.error(result.message || "Failed to initiate subscription");
       }
+      
     } catch (error) {
-      console.error("Subscribe error:", error)
-      toast.error("An error occurred. Please try again.")
+      console.error("Subscribe error:", error);
+      toast.error("An error occurred. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (isCurrentPlan) {
     return (
       <Button disabled className="w-full">
         Current Plan
       </Button>
-    )
+    );
   }
 
   return (
@@ -59,5 +64,5 @@ export function SubscribeButton({ plan, isCurrentPlan, isFree }: SubscribeButton
         <>{isFree ? "Activate Free Plan" : "Subscribe Now"}</>
       )}
     </Button>
-  )
+  );
 }
