@@ -9,24 +9,28 @@ import Link from "next/link";
 import Logo from "./Logo";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { Role } from "@/types/enum.interface";
+import { IUser } from "@/types/user.interface";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+    const pathname = usePathname();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userInfo = await getUserInfo();
-        setUser(userInfo);
+        setUser(userInfo as IUser);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }
     };
 
     fetchUser();
-  }, []);
-  console.log(user);
+  }, [pathname]);
+  console.log({user, "!user?.id":!user?.id});
   const getSignupRedirect = () => {
     if (user?.role === Role.ADMIN) return "/admin/dashboard";
     if (user?.role === Role.SUPER_ADMIN) return "/admin/dashboard/";

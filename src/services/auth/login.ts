@@ -59,25 +59,39 @@ export const logInUser = async (_currentState: any, formData: any) => {
       throw new Error("Tokens missing");
     }
 
-    // ✅ ACCESS TOKEN
+    // ACCESS TOKEN
     await setCookie("accessToken", accessTokenObject.accessToken, {
-      httpOnly: true,
       secure: true,
-      sameSite: "none",
-      path: "/",
-      maxAge: Number(accessTokenObject["Max-Age"]) || 60 * 60,
+      httpOnly: true,
+      maxAge: parseInt(accessTokenObject['Max-Age']) || 1000 * 60 * 60,
+      path: accessTokenObject.Path || "/",
+      sameSite: accessTokenObject['SameSite'] || "none",
     });
+    // await setCookie("accessToken", accessTokenObject.accessToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "none",
+    //   path: "/",
+    //   maxAge: Number(accessTokenObject["Max-Age"]) || 60 * 60,
+    // });
 
-    // ✅ REFRESH TOKEN (FIXED BUG HERE)
+    // REFRESH TOKEN (FIXED BUG HERE)
     await setCookie("refreshToken", refreshTokenObject.refreshToken, {
-      httpOnly: true,
       secure: true,
-      sameSite: "none",
-      path: "/",
-      maxAge:
-        Number(refreshTokenObject["Max-Age"]) ||
-        60 * 60 * 24 * 30, // 30 days fallback
+      httpOnly: true,
+      maxAge: parseInt(refreshTokenObject['Max-Age']) || 1000 * 60 * 60 * 24 * 90,
+      path: refreshTokenObject.Path || "/",
+      sameSite: refreshTokenObject['SameSite'] || "none",
     });
+    // await setCookie("refreshToken", refreshTokenObject.refreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "none",
+    //   path: "/",
+    //   maxAge:
+    //     Number(refreshTokenObject["Max-Age"]) ||
+    //     60 * 60 * 24 * 30, // 30 days fallback
+    // });
 
     // Decode role
     const decoded: JwtPayload | any = jwt.verify(
@@ -113,10 +127,11 @@ export const logInUser = async (_currentState: any, formData: any) => {
       if (isValidRedirectRoute(requestedPath, userRole as UserRole)) {
         redirect(`${requestedPath}?loggedIn=true`);
       } else {
-        redirect(`${getDefaultDashboard(userRole as UserRole)}?loggedIn=true`);
+        // redirect(`${getDefaultDashboard(userRole as UserRole)}?loggedIn=true`);
+        redirect(`/`);
       }
     } else {
-      redirect(`${getDefaultDashboard(userRole as UserRole)}?loggedIn=true`);
+      redirect(`/`);
     }
     return data
   } catch (error: any) {
