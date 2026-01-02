@@ -53,3 +53,9 @@ console.log(data);
     return null;
   }
 }
+
+
+export async function getAllSubscriptions(queryString?: string) {
+  const res = await serverFetch.get(`/subscription${queryString ? `?${queryString}` : ""}`);
+  return res.json();
+}

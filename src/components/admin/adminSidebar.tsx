@@ -13,6 +13,9 @@ import {
   Menu,
   X,
   MessageCircle,
+  DollarSign,
+  EuroIcon,
+  Calendar1,
 } from "lucide-react";
 import { useState } from "react";
 import LogoutButton from "./LogOutButton";
@@ -24,6 +27,8 @@ const adminNavItems = [
   { href: "/admin/dashboard/trips", label: "Manage Trips", icon: MapPin },
   { href: "/admin/dashboard/reviews", label: "Monitor Reviews", icon: MessageCircle },
   { href: "/admin/dashboard/matches", label: "Manage Matches", icon: Share2 },
+  { href: "/admin/dashboard/subscriptions", label: "Subscriptions", icon: Calendar1 },
+  { href: "/admin/dashboard/payments", label: "All Payments", icon: EuroIcon },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -33,7 +38,7 @@ export function AdminSidebar() {
 
   return (
     <>
-      {/* ================= MOBILE TOP NAVBAR ================= */}
+      {/*  MOBILE TOP NAVBAR  */}
       <header className="md:hidden fixed top-0 inset-x-0 z-40 h-14 flex items-center justify-between px-4 border-b bg-background">
         {/* Hamburger LEFT */}
         <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
@@ -47,7 +52,7 @@ export function AdminSidebar() {
         </div>
       </header>
 
-      {/* ================= MOBILE OVERLAY ================= */}
+      {/*  MOBILE OVERLAY  */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/50 md:hidden"
@@ -55,7 +60,7 @@ export function AdminSidebar() {
         />
       )}
 
-      {/* ================= SIDEBAR ================= */}
+      {/*  SIDEBAR  */}
       <aside
         className={cn(
           "z-50 w-64 bg-sidebar border-r flex flex-col",
@@ -69,7 +74,7 @@ export function AdminSidebar() {
           "md:translate-x-0"
         )}
       >
-        {/* ================= MOBILE SIDEBAR HEADER ================= */}
+        {/*  MOBILE SIDEBAR HEADER  */}
         <div className="md:hidden flex items-center justify-between h-14 px-4 border-b">
           <div className={`flex items-center gap-2 `}>
             <Logo />
@@ -82,7 +87,7 @@ export function AdminSidebar() {
           </Button>
         </div>
 
-        {/* ================= DESKTOP LOGO ================= */}
+        {/*  DESKTOP LOGO  */}
         <div className="hidden md:block sticky top-0 z-10 p-6 border-b bg-sidebar">
           <Link href="/" className="flex items-center gap-2">
             <Logo />
@@ -91,7 +96,7 @@ export function AdminSidebar() {
           <p className="text-sm text-muted-foreground">Admin Portal</p>
         </div>
 
-        {/* ================= NAV ================= */}
+        {/*  NAV  */}
         <nav className="flex-1 px-4 py-4 space-y-2">
           {adminNavItems.map((item) => {
             const Icon = item.icon;
@@ -119,7 +124,7 @@ export function AdminSidebar() {
           })}
         </nav>
 
-        {/* ================= LOGOUT (STICKY BOTTOM) ================= */}
+        {/*  LOGOUT (STICKY BOTTOM)  */}
         <div className="sticky bottom-0 bg-sidebar border-t p-4">
           <LogoutButton />
         </div>
