@@ -4,6 +4,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwtVerify } from "jose";
 import {
   getDefaultDashboard,
   getRouteOwner,
@@ -37,29 +38,37 @@ export async function proxy(request: NextRequest) {
 
   // READ ACCESS TOKEN
 
-  const accessToken = request.cookies.get("accessToken")?.value || null;
+  const accessToken = request.cookies.get("accessToken")?.value || request.cookies.get("next-auth.session-token")?.value || request.cookies.get("__Secure-next-auth.session-token")?.value || null;
 
   let userRole: UserRole | null = null;
 
   // VERIFY JWT SAFELY (Handles expired token)
+  console.log({ accessToken });
 
   if (accessToken) {
     try {
+      console.log("verifying token...");
+      
       const verifiedToken: JwtPayload | any = jwt.verify(
         accessToken,
         process.env.JWT_ACCESS_SECRET as string
       );
+      console.log({ verifiedToken });
 
       // If token payload is string -> invalid token
-      if (typeof verifiedToken === "string") {
-        await deleteCookie("accessToken");
-        await deleteCookie("refreshToken");
-        return NextResponse.redirect(new URL("/signin", request.url));
-      }
+      // if (typeof verifiedToken === "string") {
+      //   console.log("accessToken is ot valid! its string");
+
+      //   await deleteCookie("accessToken");
+      //   await deleteCookie("refreshToken");
+      //   return NextResponse.redirect(new URL("/isignn", request.url));
+      // }
 
       userRole = verifiedToken.role;
     } catch (err: any) {
       // TOKEN EXPIRED OR INVALID
+      console.log("verification token is failed");
+      
       console.log(err);
 
       await deleteCookie("accessToken");
@@ -94,6 +103,8 @@ export async function proxy(request: NextRequest) {
   // NOT LOGGED IN → FORCE LOGIN
 
   if (!accessToken) {
+    console.log("token not found");
+    
     const loginUrl = new URL("/signin", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
@@ -141,6 +152,122 @@ export async function proxy(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+
+// export function proxy(request: NextRequest) {
+//   const { pathname } = request.nextUrl;
+
+//   // Read cookies (Edge-safe)
+//   const accessToken = request.cookies.get("accessToken")?.value;
+//   const role = request.cookies.get("role")?.value as UserRole | undefined;
+
+//   const routeOwner = getRouteOwner(pathname);
+//   const isAuth = isAuthRoute(pathname);
+
+//   /**
+//    * 1. Logged-in user visiting auth pages → redirect to dashboard
+//    */
+//   if (accessToken && role && isAuth) {
+//     return NextResponse.redirect(
+//       new URL(getDefaultDashboard(role), request.url)
+//     );
+//   }
+
+//   /**
+//    * 2. Public routes → allow
+//    */
+//   if (routeOwner === null) {
+//     return NextResponse.next();
+//   }
+
+//   /**
+//    * 3. Protected routes → must be logged in
+//    */
+//   if (!accessToken || !role) {
+//     const loginUrl = new URL("/signin", request.url);
+//     loginUrl.searchParams.set("redirect", pathname);
+//     return NextResponse.redirect(loginUrl);
+//   }
+
+//   /**
+//    * 4. Common protected routes → allow any logged-in user
+//    */
+//   if (routeOwner === "COMMON") {
+//     return NextResponse.next();
+//   }
+
+//   /**
+//    * 5. Admin-only routes
+//    */
+//   if (routeOwner === "ADMIN") {
+//     if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
+//       return NextResponse.redirect(
+//         new URL(getDefaultDashboard(role), request.url)
+//       );
+//     }
+//   }
+
+//   /**
+//    * 6. Explorer-only routes
+//    */
+//   if (routeOwner === "EXPLORER") {
+//     if (role !== "EXPLORER") {
+//       return NextResponse.redirect(
+//         new URL(getDefaultDashboard(role), request.url)
+//       );
+//     }
+//   }
+
+//   return NextResponse.next();
+// }
+
+
+
+
+// export async function proxy(request: NextRequest) {
+//  const token =
+//     request.cookies.get("accessToken")?.value ||
+//     request.cookies.get("next-auth.session-token")?.value ||
+//     request.cookies.get("__Secure-next-auth.session-token")?.value;
+
+//   const { pathname } = request.nextUrl;
+
+//   if (pathname.startsWith("/dashboard") && !token) {
+//     return NextResponse.redirect(new URL("/signin", request.url));
+//   }
+
+//   if (token) {
+//     try {
+//       const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET as string);
+//       const { payload } = await jwtVerify(token, secret);
+//       console.log("decoded in middleware:", payload);
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     } catch (error: any) {
+//       if (error.code === "ERR_JWT_EXPIRED") {
+//         console.log("Token expired, fetching new token from API...");
+
+//         const res = await getNewAccessToken()
+//         const data = await res.json();
+//         console.log("New token data:", data);
+//         if (res.ok) {
+//           return NextResponse.next();
+//         } else {
+//           return NextResponse.redirect(new URL("/signin", request.url));
+//         }
+//       } else {
+//         console.log("JWT verification error:", error);
+//         return NextResponse.redirect(new URL("/signin", request.url));
+//       }
+//     }
+//   }
+
+//   return NextResponse.next();
+// }
+
+
+
+
+
 
 export const config = {
   matcher: [

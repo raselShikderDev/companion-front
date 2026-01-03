@@ -42,6 +42,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
     });
 
     const data = await res.json();
+    console.log({ data });
 
     const setCookieHeader = res.headers.getSetCookie();
 
@@ -67,13 +68,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
       path: accessTokenObject.Path || "/",
       sameSite: accessTokenObject['SameSite'] || "none",
     });
-    // await setCookie("accessToken", accessTokenObject.accessToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    //   path: "/",
-    //   maxAge: Number(accessTokenObject["Max-Age"]) || 60 * 60,
-    // });
+  
 
     // REFRESH TOKEN (FIXED BUG HERE)
     await setCookie("refreshToken", refreshTokenObject.refreshToken, {
@@ -83,17 +78,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
       path: refreshTokenObject.Path || "/",
       sameSite: refreshTokenObject['SameSite'] || "none",
     });
-    // await setCookie("refreshToken", refreshTokenObject.refreshToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    //   path: "/",
-    //   maxAge:
-    //     Number(refreshTokenObject["Max-Age"]) ||
-    //     60 * 60 * 24 * 30, // 30 days fallback
-    // });
-
-    // Decode role
+    // Decoded role
     const decoded: JwtPayload | any = jwt.verify(
       accessTokenObject.accessToken,
       process.env.JWT_ACCESS_SECRET as string
@@ -114,14 +99,6 @@ export const logInUser = async (_currentState: any, formData: any) => {
       redirect("/reset-password");
     }
 
-    // if (redirectTo) {
-    //   if (isValidRedirectRoute(redirectTo, userRole)) {
-    //     redirect(`${redirectTo}?loggedIn=true`);
-    //   }
-    // }
-
-    // redirect(`${getDefaultDashboard(userRole)}?loggedIn=true`);
-    // return data
     if (redirectTo) {
       const requestedPath = redirectTo.toString();
       if (isValidRedirectRoute(requestedPath, userRole as UserRole)) {
