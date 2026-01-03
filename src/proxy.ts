@@ -19,56 +19,64 @@ export async function proxy(request: NextRequest) {
 
   // HANDLE TOKEN REFRESH CALLBACK
 
-  const hasTokenRefreshedParams =
-    request.nextUrl.searchParams.has("tokenRefreshed");
+  // const hasTokenRefreshedParams =
+  //   request.nextUrl.searchParams.has("tokenRefreshed");
 
-  if (hasTokenRefreshedParams) {
-    const url = request.nextUrl.clone();
-    url.searchParams.delete("tokenRefreshed");
-    return NextResponse.redirect(url);
-  }
+  // if (hasTokenRefreshedParams) {
+  //   const url = request.nextUrl.clone();
+  //   url.searchParams.delete("tokenRefreshed");
+  //   return NextResponse.redirect(url);
+  // }
 
-  const tokenRefreshedResult = await getNewAccessToken();
+  // const tokenRefreshedResult = await getNewAccessToken();
 
-  if (tokenRefreshedResult.tokenRefreshed) {
-    const url = request.nextUrl.clone();
-    url.searchParams.set("tokenRefreshed", "true");
-    return NextResponse.redirect(url);
-  }
+  // if (tokenRefreshedResult.tokenRefreshed) {
+  //   const url = request.nextUrl.clone();
+  //   url.searchParams.set("tokenRefreshed", "true");
+  //   return NextResponse.redirect(url);
+  // }
 
   // READ ACCESS TOKEN
 
-  const accessToken = request.cookies.get("accessToken")?.value || request.cookies.get("next-auth.session-token")?.value || request.cookies.get("__Secure-next-auth.session-token")?.value || null;
+  const accessToken =
+    request.cookies.get("accessToken")?.value ||
+    request.cookies.get("next-auth.session-token")?.value ||
+    request.cookies.get("__Secure-next-auth.session-token")?.value ||
+    null;
 
   let userRole: UserRole | null = null;
 
   // VERIFY JWT SAFELY (Handles expired token)
   console.log({ accessToken });
+  if (!accessToken) {
+    console.log("no access token");
+  }
+  // const secret = new TextEncoder().encode(
+  //   process.env.JWT_ACCESS_SECRET as string
+  // );
+
+  // const payload = await jwtVerify(accessToken as string, secret);
+  // console.log("decoded in middleware:", payload);
+  // if (!payload?.payload?.role) {
+  //   throw new Error("no role");
+  // }
+  // userRole = payload?.payload?.role as UserRole;
 
   if (accessToken) {
     try {
       console.log("verifying token...");
-      
+
       const verifiedToken: JwtPayload | any = jwt.verify(
         accessToken,
         process.env.JWT_ACCESS_SECRET as string
       );
-      console.log({ verifiedToken });
+      console.log( verifiedToken );
 
-      // If token payload is string -> invalid token
-      // if (typeof verifiedToken === "string") {
-      //   console.log("accessToken is ot valid! its string");
-
-      //   await deleteCookie("accessToken");
-      //   await deleteCookie("refreshToken");
-      //   return NextResponse.redirect(new URL("/isignn", request.url));
-      // }
-
-      userRole = verifiedToken.role;
+      userRole = verifiedToken.role as UserRole;
     } catch (err: any) {
       // TOKEN EXPIRED OR INVALID
       console.log("verification token is failed");
-      
+
       console.log(err);
 
       await deleteCookie("accessToken");
@@ -104,7 +112,7 @@ export async function proxy(request: NextRequest) {
 
   if (!accessToken) {
     console.log("token not found");
-    
+
     const loginUrl = new URL("/signin", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
@@ -152,7 +160,6 @@ export async function proxy(request: NextRequest) {
 
   return NextResponse.next();
 }
-
 
 // export function proxy(request: NextRequest) {
 //   const { pathname } = request.nextUrl;
@@ -221,9 +228,6 @@ export async function proxy(request: NextRequest) {
 //   return NextResponse.next();
 // }
 
-
-
-
 // export async function proxy(request: NextRequest) {
 //  const token =
 //     request.cookies.get("accessToken")?.value ||
@@ -263,11 +267,6 @@ export async function proxy(request: NextRequest) {
 
 //   return NextResponse.next();
 // }
-
-
-
-
-
 
 export const config = {
   matcher: [
