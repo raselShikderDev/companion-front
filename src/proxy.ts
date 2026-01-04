@@ -4,7 +4,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { jwtVerify } from "jose";
+// import { jwtVerify } from "jose";
 import {
   getDefaultDashboard,
   getRouteOwner,
@@ -19,22 +19,22 @@ export async function proxy(request: NextRequest) {
 
   // HANDLE TOKEN REFRESH CALLBACK
 
-  // const hasTokenRefreshedParams =
-  //   request.nextUrl.searchParams.has("tokenRefreshed");
+  const hasTokenRefreshedParams =
+    request.nextUrl.searchParams.has("tokenRefreshed");
 
-  // if (hasTokenRefreshedParams) {
-  //   const url = request.nextUrl.clone();
-  //   url.searchParams.delete("tokenRefreshed");
-  //   return NextResponse.redirect(url);
-  // }
+  if (hasTokenRefreshedParams) {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("tokenRefreshed");
+    return NextResponse.redirect(url);
+  }
 
-  // const tokenRefreshedResult = await getNewAccessToken();
+  const tokenRefreshedResult = await getNewAccessToken();
 
-  // if (tokenRefreshedResult.tokenRefreshed) {
-  //   const url = request.nextUrl.clone();
-  //   url.searchParams.set("tokenRefreshed", "true");
-  //   return NextResponse.redirect(url);
-  // }
+  if (tokenRefreshedResult.tokenRefreshed) {
+    const url = request.nextUrl.clone();
+    url.searchParams.set("tokenRefreshed", "true");
+    return NextResponse.redirect(url);
+  }
 
   // READ ACCESS TOKEN
 
@@ -160,6 +160,59 @@ export async function proxy(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+
+
+
+// export async function proxy(request: NextRequest) {
+//   const token =
+//     request.cookies.get("accessToken")?.value ||
+//     request.cookies.get("next-auth.session-token")?.value ||
+//     request.cookies.get("__Secure-next-auth.session-token")?.value;
+
+//   const { pathname } = request.nextUrl;
+
+//   if (
+//     pathname.startsWith("/dashboard") ||
+//     (pathname.startsWith("/admin/dashboard") && !token)
+//   ) {
+//     return NextResponse.redirect(new URL("/signin", request.url));
+//   }
+
+//   if (token) {
+//     try {
+//       const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
+//       const { payload } = await jwtVerify(token, secret);
+//       console.log("decoded in middleware:", payload);
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     } catch (error: any) {
+//       if (error.code === "ERR_JWT_EXPIRED") {
+//         console.log("Token expired, fetching new token from API...");
+
+//         const res = await fetch(
+//           `${process.env.NEXT_PUBLIC_API_URL}/auth/generate-token`,
+//           {
+//             method: "POST",
+//           }
+//         );
+//         const data = await res.json();
+//         console.log("New token data:", data);
+//         if (res.ok) {
+//           return NextResponse.next();
+//         } else {
+//           return NextResponse.redirect(new URL("/signin", request.url));
+//         }
+//       } else {
+//         console.log("JWT verification error:", error);
+//         return NextResponse.redirect(new URL("/signin", request.url));
+//       }
+//     }
+//   }
+
+//   return NextResponse.next();
+// }
+
+
 
 // export function proxy(request: NextRequest) {
 //   const { pathname } = request.nextUrl;
