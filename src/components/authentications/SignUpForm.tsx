@@ -4,11 +4,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -19,7 +15,7 @@ import {
 import { toast } from "react-toastify";
 import InputFeildError from "@/lib/inputFeildError";
 import { Label } from "@radix-ui/react-label";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, User2 } from "lucide-react";
 import { signupExplorer } from "@/services/auth/createExplorer.service";
 
 const SignUpForm = () => {
@@ -165,8 +161,17 @@ const SignUpForm = () => {
           {/* Submit */}
           <FieldGroup>
             <Field>
-              <Button disabled={isPending} type="submit" className="w-full bg-accent">
-                Create Account
+              <Button
+                disabled={isPending}
+                type="submit"
+                className="w-full bg-accent"
+              >
+                {isPending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <User2 className="w-5 h-5" />
+                )}
+                {!isPending && " Create Account"}
               </Button>
             </Field>
           </FieldGroup>
