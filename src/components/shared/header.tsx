@@ -1,4 +1,6 @@
 /** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: > */
+/** biome-ignore-all lint/style/useImportType: > */
 /** biome-ignore-all lint/suspicious/noExplicitAny: > */
 "use client";
 
@@ -13,7 +15,7 @@ import { IUser } from "@/types/user.interface";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);
@@ -30,7 +32,7 @@ export default function Header() {
 
     fetchUser();
   }, [pathname]);
-  console.log({user, "!user?.id":!user?.id});
+  console.log({ user, "!user?.id": !user?.id });
   const getSignupRedirect = () => {
     if (user?.role === Role.ADMIN) return "/admin/dashboard";
     if (user?.role === Role.SUPER_ADMIN) return "/admin/dashboard/";
@@ -49,6 +51,12 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-8">
+          <Link
+            href="/"
+            className="text-sm text-foreground hover:text-accent transition-colors"
+          >
+            Home
+          </Link>
           <Link
             href="/trips"
             className="text-sm text-foreground hover:text-accent transition-colors"
@@ -115,6 +123,12 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background p-4">
           <nav className="flex flex-col gap-3">
+            <Link
+              href="/"
+              className="text-sm text-foreground hover:text-accent transition-colors"
+            >
+              Home
+            </Link>
             <Link
               href="/trips"
               className="text-sm text-foreground hover:text-accent py-2"
