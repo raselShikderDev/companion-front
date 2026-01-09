@@ -1,9 +1,25 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 import { Button } from "@/components/ui/button"
+import { handlePaymentCancel } from "@/services/paymen/payment.service";
 import { AlertCircle } from "lucide-react"
 import Link from "next/link"
+import { notFound } from "next/navigation";
 
-export default function PaymentCancelPage() {
+interface Props {
+  searchParams: { tran_id?: string };
+}
+
+export default async function PaymentCancelPage({ searchParams }: Props) {
+  const tranId = searchParams.tran_id;
+
+  if (!tranId) {
+    notFound();
+  }
+
+  if (tranId) {
+    await handlePaymentCancel(tranId);
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="max-w-md w-full text-center">

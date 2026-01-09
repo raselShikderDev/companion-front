@@ -22,8 +22,8 @@ export function MyMatchesGrid({
     <section className="space-y-4 sm:space-y-6">
       <SearchFilterMatches />
 
-     <div
-  className="
+      <div
+        className="
     columns-1
     sm:columns-2
     lg:columns-3
@@ -31,16 +31,16 @@ export function MyMatchesGrid({
     2xl:columns-5
     gap-4
   "
->
-  {matches.data.map((match: Match) => (
-    <div key={match.id} className="mb-4 break-inside-avoid">
-      <MatchCard
-        match={match}
-        currentExplorerId={currentExplorerId}
-      />
-    </div>
-  ))}
-</div>
+      >
+        {matches.data.map((match: Match) => (
+          <div key={match.id} className="mb-4 break-inside-avoid">
+            <MatchCard
+              match={match}
+              currentExplorerId={currentExplorerId}
+            />
+          </div>
+        ))}
+      </div>
 
     </section>
   );

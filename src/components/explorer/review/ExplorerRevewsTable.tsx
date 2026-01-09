@@ -1,21 +1,25 @@
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all assist/source/organizeImports: > */
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IReview } from "@/types/review.interface";
-import {
-  formatDateTime,
-  getInitials
-} from "@/lib/allFormattors";
+import { formatDateTime, getInitials } from "@/lib/allFormattors";
 import Link from "next/link";
 import RatingStars from "@/components/shared/StarRating";
 import getAvarageRating from "@/lib/getAvarageRating";
 
-const ExplorerRevewsTable = ({ reviews }: { reviews: any }) => {
-  const rating = getAvarageRating(reviews)
+const ExplorerRevewsTable = ({ reviews }: { reviews: IReview[] }) => {
+  const rating = getAvarageRating(reviews);
+  console.log(reviews[3].reviewer?.fullName);
+  
   return (
     <div className="space-y-4">
       {reviews?.map((review: IReview) => (
-        <Link className="" key={review.id} href={`/dashboard/matches/${review.matchId}`}>
+        <Link
+          className=""
+          key={review.id}
+          href={`/dashboard/matches/${review.matchId}`}
+        >
           <Card className="mb-5" key={review.id}>
             <CardContent className="pt-6">
               <div className="flex gap-4">
@@ -43,8 +47,8 @@ const ExplorerRevewsTable = ({ reviews }: { reviews: any }) => {
                         <div className="flex flex-col items-center gap-2">
                           <RatingStars rating={Number(rating.averageRating)} />
                           <span className="text-xs text-muted-foreground">
-                            ({rating.averageRating}/5 · {rating.validReviews.length}{" "}
-                            reviews)
+                            ({rating.averageRating}/5 ·{" "}
+                            {rating.validReviews.length} reviews)
                           </span>
                         </div>
                       </div>
@@ -72,7 +76,7 @@ const ExplorerRevewsTable = ({ reviews }: { reviews: any }) => {
         </Link>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default ExplorerRevewsTable
+export default ExplorerRevewsTable;

@@ -36,6 +36,7 @@ const serverFetchHelper = async (
   );
 
   // console.log({ response });
+console.log("Fetched");
 
   return response;
 };

@@ -29,7 +29,6 @@ const SearchFilterMatches = () => {
           </div>
         </div>
       </div>
-      <CreateAdminModal />
     </div>
   );
 };

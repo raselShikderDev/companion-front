@@ -293,11 +293,7 @@ export async function getNewAccessToken() {
       throw new Error(result.message || "Token refresh failed");
     }
 
-    return {
-      tokenRefreshed: true,
-      success: true,
-      message: "Token refreshed successfully",
-    };
+    return result
   } catch (error: any) {
     return {
       tokenRefreshed: false,

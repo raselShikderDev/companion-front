@@ -4,6 +4,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
+// import { jwtVerify } from "jose";
 import {
   getDefaultDashboard,
   getRouteOwner,
@@ -12,12 +13,16 @@ import {
 } from "./lib/authUtils";
 import { getNewAccessToken } from "./services/auth/auth.services";
 import { deleteCookie } from "./lib/tokenHandeler";
+import { Role } from "./types/enum.interface";
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // HANDLE TOKEN REFRESH CALLBACK
+  if (request.nextUrl.pathname.startsWith("/payment")) {
+  return NextResponse.next();
+}
 
+  // HANDLE TOKEN REFRESH CALLBACK
   const hasTokenRefreshedParams =
     request.nextUrl.searchParams.has("tokenRefreshed");
 
@@ -37,29 +42,45 @@ export async function proxy(request: NextRequest) {
 
   // READ ACCESS TOKEN
 
-  const accessToken = request.cookies.get("accessToken")?.value || null;
+  const accessToken =
+    request.cookies.get("accessToken")?.value ||
+    request.cookies.get("next-auth.session-token")?.value ||
+    request.cookies.get("__Secure-next-auth.session-token")?.value ||
+    null;
 
   let userRole: UserRole | null = null;
 
   // VERIFY JWT SAFELY (Handles expired token)
+  console.log({ accessToken });
+  if (!accessToken) {
+    console.log("no access token");
+  }
+  // const secret = new TextEncoder().encode(
+  //   process.env.JWT_ACCESS_SECRET as string
+  // );
+
+  // const payload = await jwtVerify(accessToken as string, secret);
+  // console.log("decoded in middleware:", payload);
+  // if (!payload?.payload?.role) {
+  //   throw new Error("no role");
+  // }
+  // userRole = payload?.payload?.role as UserRole;
 
   if (accessToken) {
     try {
+      console.log("verifying token...");
+
       const verifiedToken: JwtPayload | any = jwt.verify(
         accessToken,
         process.env.JWT_ACCESS_SECRET as string
       );
+      console.log( verifiedToken );
 
-      // If token payload is string -> invalid token
-      if (typeof verifiedToken === "string") {
-        await deleteCookie("accessToken");
-        await deleteCookie("refreshToken");
-        return NextResponse.redirect(new URL("/signin", request.url));
-      }
-
-      userRole = verifiedToken.role;
+      userRole = verifiedToken.role as UserRole;
     } catch (err: any) {
       // TOKEN EXPIRED OR INVALID
+      console.log("verification token is failed");
+
       console.log(err);
 
       await deleteCookie("accessToken");
@@ -94,6 +115,8 @@ export async function proxy(request: NextRequest) {
   // NOT LOGGED IN → FORCE LOGIN
 
   if (!accessToken) {
+    console.log("token not found");
+
     const loginUrl = new URL("/signin", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
@@ -130,20 +153,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // if (routeOwner === "ADMIN" || routeOwner === "EXPLORER" || routeOwner === Role.SUPER_ADMIN) {
-  //   if (userRole !== routeOwner) {
-  //     return NextResponse.redirect(
-  //       new URL(getDefaultDashboard(userRole as UserRole), request.url)
-  //     );
-  //   }
-  //   return NextResponse.next();
-  // }
+  if (routeOwner === Role.ADMIN || routeOwner === Role.EXPLORER || routeOwner === Role.SUPER_ADMIN) {
+    if (userRole !== routeOwner) {
+      return NextResponse.redirect(
+        new URL(getDefaultDashboard(userRole as UserRole), request.url)
+      );
+    }
+    return NextResponse.next();
+  }
 
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)",
-  ],
-};
+
