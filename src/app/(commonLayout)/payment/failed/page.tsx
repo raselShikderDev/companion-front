@@ -5,20 +5,23 @@ import { XCircle } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation";
 
-interface Props {
-  searchParams: { tran_id?: string };
-}
 
+export default async function PaymentFailedPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const trans = await searchParams;
 
-
-export default async function PaymentFailedPage({ searchParams }: Props) {
-  const tranId = searchParams.tran_id;
- if (!tranId) {
+ if (!trans?.tran_id) {
   notFound();
  }
-  if (tranId) {
-    await handlePaymentFailed(tranId);
+  if (trans?.tranId) {
+    await handlePaymentFailed(trans?.tranId as string);
   }
+console.log({trans});
+console.log({"trans?.tranId":trans?.tran_id});
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="max-w-md w-full text-center">

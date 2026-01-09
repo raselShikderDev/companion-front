@@ -5,17 +5,16 @@ import PaymentSuccessContent from "@/components/payment/PaymentContent";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export default function PaymentSuccessPage({
+export default async function PaymentSuccessPage({
   searchParams,
 }: {
-  searchParams: { tran_id?: string };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const tranId = searchParams.tran_id;
+  const trans = await searchParams;
 
-  // ❌ NO TRANSACTION → BLOCK PAGE
-  if (!tranId) {
-    notFound();
-  }
+ if (!trans?.tran_id) {
+  notFound();
+ }
 
   return (
     <Suspense fallback={<PaymentSuccessFallback />}>

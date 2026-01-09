@@ -5,21 +5,22 @@ import { AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation";
 
-interface Props {
-  searchParams: { tran_id?: string };
-}
 
-export default async function PaymentCancelPage({ searchParams }: Props) {
-  const tranId = searchParams.tran_id;
 
-  if (!tranId) {
-    notFound();
+export default async function PaymentCancelPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const trans = await searchParams;
+
+ if (!trans?.tran_id) {
+  notFound();
+ }
+  if (trans?.tranId) {
+    await handlePaymentCancel(trans?.tranId as string);
   }
-
-  if (tranId) {
-    await handlePaymentCancel(tranId);
-  }
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="max-w-md w-full text-center">
