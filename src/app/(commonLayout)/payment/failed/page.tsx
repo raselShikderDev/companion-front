@@ -1,26 +1,26 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 import { Button } from "@/components/ui/button"
-import { handlePaymentFailed } from "@/services/paymen/payment.service";
+// import { handlePaymentFailed } from "@/services/paymen/payment.service";
 import { XCircle } from "lucide-react"
 import Link from "next/link"
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 
 
-export default async function PaymentFailedPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const trans = await searchParams;
+// export default async function PaymentFailedPage({
+//   searchParams,
+// }: {
+//   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+// }) {
+//   const trans = await searchParams;
 
- if (!trans?.tran_id) {
-  notFound();
- }
-  if (trans?.tranId) {
-    await handlePaymentFailed(trans?.tranId as string);
-  }
-console.log({trans});
-console.log({"trans?.tranId":trans?.tran_id});
+//  if (!trans?.tran_id) {
+//   notFound();
+//  }
+//   if (trans?.tranId) {
+//     await handlePaymentFailed(trans?.tranId as string);
+//   }
+export default async function PaymentFailedPage(){
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
