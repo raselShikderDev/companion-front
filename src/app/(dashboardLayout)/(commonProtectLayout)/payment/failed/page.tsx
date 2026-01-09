@@ -1,9 +1,19 @@
 /** biome-ignore-all assist/source/organizeImports: > */
 import { Button } from "@/components/ui/button"
+import { handlePaymentFailed } from "@/services/paymen/payment.service";
 import { XCircle } from "lucide-react"
 import Link from "next/link"
 
-export default function PaymentFailedPage() {
+interface Props {
+  searchParams: { tran_id?: string };
+}
+
+export default async function PaymentFailedPage({ searchParams }: Props) {
+  const tranId = searchParams.tran_id;
+
+  if (tranId) {
+    await handlePaymentFailed(tranId);
+  }
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="max-w-md w-full text-center">

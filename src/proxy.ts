@@ -17,8 +17,11 @@ import { deleteCookie } from "./lib/tokenHandeler";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // HANDLE TOKEN REFRESH CALLBACK
+  if (request.nextUrl.pathname.startsWith("/payment")) {
+  return NextResponse.next();
+}
 
+  // HANDLE TOKEN REFRESH CALLBACK
   const hasTokenRefreshedParams =
     request.nextUrl.searchParams.has("tokenRefreshed");
 
