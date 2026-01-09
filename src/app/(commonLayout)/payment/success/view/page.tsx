@@ -2,9 +2,21 @@
 
 
 import PaymentSuccessContent from "@/components/payment/PaymentContent";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export default function PaymentSuccessPage() {
+export default function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: { tran_id?: string };
+}) {
+  const tranId = searchParams.tran_id;
+
+  // ❌ NO TRANSACTION → BLOCK PAGE
+  if (!tranId) {
+    notFound();
+  }
+
   return (
     <Suspense fallback={<PaymentSuccessFallback />}>
       <PaymentSuccessContent />
