@@ -47,7 +47,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
     const setCookieHeader = res.headers.getSetCookie();
 
     if (!setCookieHeader || setCookieHeader.length === 0) {
-      throw new Error("No cookies received from backend");
+      throw new Error(data?.message);
     }
 
     setCookieHeader.forEach((cookie: string) => {
@@ -117,10 +117,7 @@ export const logInUser = async (_currentState: any, formData: any) => {
 
     return {
       success: false,
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Failed to login",
+      message: error.message || "Failed to login",
     };
   }
 };

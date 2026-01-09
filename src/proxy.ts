@@ -13,6 +13,7 @@ import {
 } from "./lib/authUtils";
 import { getNewAccessToken } from "./services/auth/auth.services";
 import { deleteCookie } from "./lib/tokenHandeler";
+import { Role } from "./types/enum.interface";
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -152,180 +153,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // if (routeOwner === "ADMIN" || routeOwner === "EXPLORER" || routeOwner === Role.SUPER_ADMIN) {
-  //   if (userRole !== routeOwner) {
-  //     return NextResponse.redirect(
-  //       new URL(getDefaultDashboard(userRole as UserRole), request.url)
-  //     );
-  //   }
-  //   return NextResponse.next();
-  // }
+  if (routeOwner === Role.ADMIN || routeOwner === Role.EXPLORER || routeOwner === Role.SUPER_ADMIN) {
+    if (userRole !== routeOwner) {
+      return NextResponse.redirect(
+        new URL(getDefaultDashboard(userRole as UserRole), request.url)
+      );
+    }
+    return NextResponse.next();
+  }
 
   return NextResponse.next();
 }
 
 
-
-
-// export async function proxy(request: NextRequest) {
-//   const token =
-//     request.cookies.get("accessToken")?.value ||
-//     request.cookies.get("next-auth.session-token")?.value ||
-//     request.cookies.get("__Secure-next-auth.session-token")?.value;
-
-//   const { pathname } = request.nextUrl;
-
-//   if (
-//     pathname.startsWith("/dashboard") ||
-//     (pathname.startsWith("/admin/dashboard") && !token)
-//   ) {
-//     return NextResponse.redirect(new URL("/signin", request.url));
-//   }
-
-//   if (token) {
-//     try {
-//       const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
-//       const { payload } = await jwtVerify(token, secret);
-//       console.log("decoded in middleware:", payload);
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     } catch (error: any) {
-//       if (error.code === "ERR_JWT_EXPIRED") {
-//         console.log("Token expired, fetching new token from API...");
-
-//         const res = await fetch(
-//           `${process.env.NEXT_PUBLIC_API_URL}/auth/generate-token`,
-//           {
-//             method: "POST",
-//           }
-//         );
-//         const data = await res.json();
-//         console.log("New token data:", data);
-//         if (res.ok) {
-//           return NextResponse.next();
-//         } else {
-//           return NextResponse.redirect(new URL("/signin", request.url));
-//         }
-//       } else {
-//         console.log("JWT verification error:", error);
-//         return NextResponse.redirect(new URL("/signin", request.url));
-//       }
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-
-
-// export function proxy(request: NextRequest) {
-//   const { pathname } = request.nextUrl;
-
-//   // Read cookies (Edge-safe)
-//   const accessToken = request.cookies.get("accessToken")?.value;
-//   const role = request.cookies.get("role")?.value as UserRole | undefined;
-
-//   const routeOwner = getRouteOwner(pathname);
-//   const isAuth = isAuthRoute(pathname);
-
-//   /**
-//    * 1. Logged-in user visiting auth pages → redirect to dashboard
-//    */
-//   if (accessToken && role && isAuth) {
-//     return NextResponse.redirect(
-//       new URL(getDefaultDashboard(role), request.url)
-//     );
-//   }
-
-//   /**
-//    * 2. Public routes → allow
-//    */
-//   if (routeOwner === null) {
-//     return NextResponse.next();
-//   }
-
-//   /**
-//    * 3. Protected routes → must be logged in
-//    */
-//   if (!accessToken || !role) {
-//     const loginUrl = new URL("/signin", request.url);
-//     loginUrl.searchParams.set("redirect", pathname);
-//     return NextResponse.redirect(loginUrl);
-//   }
-
-//   /**
-//    * 4. Common protected routes → allow any logged-in user
-//    */
-//   if (routeOwner === "COMMON") {
-//     return NextResponse.next();
-//   }
-
-//   /**
-//    * 5. Admin-only routes
-//    */
-//   if (routeOwner === "ADMIN") {
-//     if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
-//       return NextResponse.redirect(
-//         new URL(getDefaultDashboard(role), request.url)
-//       );
-//     }
-//   }
-
-//   /**
-//    * 6. Explorer-only routes
-//    */
-//   if (routeOwner === "EXPLORER") {
-//     if (role !== "EXPLORER") {
-//       return NextResponse.redirect(
-//         new URL(getDefaultDashboard(role), request.url)
-//       );
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export async function proxy(request: NextRequest) {
-//  const token =
-//     request.cookies.get("accessToken")?.value ||
-//     request.cookies.get("next-auth.session-token")?.value ||
-//     request.cookies.get("__Secure-next-auth.session-token")?.value;
-
-//   const { pathname } = request.nextUrl;
-
-//   if (pathname.startsWith("/dashboard") && !token) {
-//     return NextResponse.redirect(new URL("/signin", request.url));
-//   }
-
-//   if (token) {
-//     try {
-//       const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET as string);
-//       const { payload } = await jwtVerify(token, secret);
-//       console.log("decoded in middleware:", payload);
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     } catch (error: any) {
-//       if (error.code === "ERR_JWT_EXPIRED") {
-//         console.log("Token expired, fetching new token from API...");
-
-//         const res = await getNewAccessToken()
-//         const data = await res.json();
-//         console.log("New token data:", data);
-//         if (res.ok) {
-//           return NextResponse.next();
-//         } else {
-//           return NextResponse.redirect(new URL("/signin", request.url));
-//         }
-//       } else {
-//         console.log("JWT verification error:", error);
-//         return NextResponse.redirect(new URL("/signin", request.url));
-//       }
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)",
-  ],
-};
