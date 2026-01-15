@@ -1,5 +1,7 @@
-/** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: > */
+/** biome-ignore-all lint/style/useImportType: <explanation> */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
+/** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: > */
 "use client";
 
@@ -12,16 +14,16 @@ import {
   MapPin,
   Share2,
   BarChart3,
-  Settings,
   Menu,
-  X,
   MessageCircle,
   EuroIcon,
   Calendar1,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "../shared/Logo";
 import UserDropdown from "../shared/UserDropdown";
+import { IUser } from "@/types/user.interface";
+import { getUserInfo } from "@/services/auth/getUserInfo";
 
 const adminNavItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
@@ -39,30 +41,41 @@ const adminNavItems = [
     icon: Calendar1,
   },
   { href: "/admin/dashboard/payments", label: "All Payments", icon: EuroIcon },
-  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  const [user, setUser] = useState<IUser | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userInfo = await getUserInfo();
+        setUser(userInfo as IUser);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [pathname]);
+
   return (
     <>
-      {/*  MOBILE TOP NAVBAR  */}
+      {/* MOBILE TOP NAVBAR */}
       <header className="md:hidden fixed top-0 inset-x-0 z-40 h-14 flex items-center justify-between px-4 border-b bg-background">
-        {/* Hamburger LEFT */}
         <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
           <Menu className="h-5 w-5" />
         </Button>
-
-        {/* Logo RIGHT */}
         <div className={`${open ? "hidden" : ""} flex items-center gap-2`}>
           <Logo />
           <span className="font-semibold hidden sm:block">Companion</span>
         </div>
       </header>
 
-      {/*  MOBILE OVERLAY  */}
+      {/* MOBILE OVERLAY */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/50 md:hidden"
@@ -70,44 +83,30 @@ export function AdminSidebar() {
         />
       )}
 
-      {/*  SIDEBAR  */}
+      {/* SIDEBAR */}
       <aside
         className={cn(
-          "z-50 w-64 bg-sidebar border-r flex flex-col",
-          "transition-transform duration-300 ease-in-out",
-
-          // Mobile overlay behavior
+          "z-50 w-64 bg-sidebar border-r flex flex-col justify-between transition-transform duration-300 ease-in-out",
           "fixed inset-y-0 left-0 md:relative",
           open ? "translate-x-0" : "-translate-x-full",
-
-          // Desktop always visible
           "md:translate-x-0"
         )}
       >
-        {/*  MOBILE SIDEBAR HEADER  */}
-        <div className="md:hidden flex items-center justify-between h-14 px-4 border-b">
-          <div className={`flex items-center gap-2 `}>
-            <Logo />
-            <span className="font-semibold">Companion</span>
+        {/* TOP SECTION: UserDropdown */}
+        <div className="flex flex-row gap-3 px-4 py-6 border-b">
+          <UserDropdown />
+          <div className="flex self-center flex-col">
+            <p className="text-xl p-0 m-0 text-muted-foreground ">
+              {user?.admin?.fullName}
+            </p>
+            <span className="font-mono p-0 m-0 lowercase font-extralight text-[12px]">
+              {user?.role}
+            </span>
           </div>
-
-          {/* Close button */}
-          <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-            <X className="h-5 w-5" />
-          </Button>
         </div>
 
-        {/*  DESKTOP LOGO  */}
-        <div className="hidden md:block sticky top-0 z-10 p-6 border-b bg-sidebar">
-          <Link href="/" className="flex items-center gap-2">
-            <Logo />
-            <span className="text-xl font-bold">Companion</span>
-          </Link>
-          <p className="text-sm text-muted-foreground">Admin Portal</p>
-        </div>
-
-        {/*  NAV  */}
-        <nav className="flex-1 px-4 py-4 space-y-2">
+        {/* MIDDLE SECTION: Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           {adminNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -133,9 +132,12 @@ export function AdminSidebar() {
           })}
         </nav>
 
-        {/*  ( UserDropdown STICKY BOTTOM)  */}
-        <div className="sticky bottom-0 bg-sidebar border-t p-4">
-          <UserDropdown />
+        {/* BOTTOM SECTION: Logo + Portal Name */}
+        <div className="px-6 py-4 border-t flex flex-col items-center gap-1">
+          <Link href="/" className="flex items-center gap-2">
+            <Logo />
+            <span className="text-xl font-bold">Companion</span>
+          </Link>
         </div>
       </aside>
     </>
