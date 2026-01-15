@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: > */
 import { IAdmin } from "./admin/admin.interface";
 import { Role, UserStatus } from "./enum.interface";
 import { IExplorer } from "./explorer.interface";

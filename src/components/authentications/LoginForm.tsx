@@ -84,7 +84,7 @@ export default function ({ redirect }: { redirect?: string }) {
 
         {/* Remember me & forgot password */}
         <div className="flex items-center justify-between text-sm">
-          <Link href="/forget-password" className="text-blue-600 hover:underline">
+          <Link href="/forget-password" className="text-blue-600 hover:underline dark:text-gray-200">
             Forgot password?
           </Link>
         </div>

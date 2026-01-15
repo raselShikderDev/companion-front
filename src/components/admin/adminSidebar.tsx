@@ -1,3 +1,6 @@
+/** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: > */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: > */
 "use client";
 
 import Link from "next/link";
@@ -13,21 +16,28 @@ import {
   Menu,
   X,
   MessageCircle,
-  DollarSign,
   EuroIcon,
   Calendar1,
 } from "lucide-react";
 import { useState } from "react";
-import LogoutButton from "./LogOutButton";
 import Logo from "../shared/Logo";
+import UserDropdown from "../shared/UserDropdown";
 
 const adminNavItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: BarChart3 },
   { href: "/admin/dashboard/users", label: "All Users", icon: Users },
   { href: "/admin/dashboard/trips", label: "Manage Trips", icon: MapPin },
-  { href: "/admin/dashboard/reviews", label: "Monitor Reviews", icon: MessageCircle },
+  {
+    href: "/admin/dashboard/reviews",
+    label: "Monitor Reviews",
+    icon: MessageCircle,
+  },
   { href: "/admin/dashboard/matches", label: "Manage Matches", icon: Share2 },
-  { href: "/admin/dashboard/subscriptions", label: "Subscriptions", icon: Calendar1 },
+  {
+    href: "/admin/dashboard/subscriptions",
+    label: "Subscriptions",
+    icon: Calendar1,
+  },
   { href: "/admin/dashboard/payments", label: "All Payments", icon: EuroIcon },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
@@ -112,8 +122,7 @@ export function AdminSidebar() {
                   variant="ghost"
                   className={cn(
                     "w-full justify-start gap-3",
-                    isActive &&
-                      "bg-primary/10 text-primary font-semibold"
+                    isActive && "bg-primary/10 text-primary font-semibold"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -124,9 +133,9 @@ export function AdminSidebar() {
           })}
         </nav>
 
-        {/*  LOGOUT (STICKY BOTTOM)  */}
+        {/*  ( UserDropdown STICKY BOTTOM)  */}
         <div className="sticky bottom-0 bg-sidebar border-t p-4">
-          <LogoutButton />
+          <UserDropdown />
         </div>
       </aside>
     </>

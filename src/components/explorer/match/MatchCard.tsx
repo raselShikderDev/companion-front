@@ -55,7 +55,7 @@ export default async function MatchCard({
     <Card className="group flex flex-col overflow-hidden rounded-xl transition-all duration-200 hover:shadow-lg">
       {/* IMAGE */}
       {match.trip.image && (
-        <div className="relative aspect-[16/9] w-full bg-muted">
+        <div className="relative aspect-video w-full bg-muted">
           <Image
             src={match.trip.image}
             alt={match.trip.title}
@@ -84,7 +84,7 @@ export default async function MatchCard({
 
         <div className="flex items-start gap-2 text-sm text-muted-foreground">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-          <span className="break-words">
+          <span className="wrap-break-word">
             {match.trip.departureLocation} → {match.trip.destination}
           </span>
         </div>
