@@ -1,8 +1,8 @@
 /** biome-ignore-all assist/source/organizeImports: > */
-import { Button } from "@/components/ui/button"
-import { PlayCircle } from "lucide-react"
-import Image from "next/image"
-import travelersExploringCityAdventureTogether from "../../../public/travelers-exploring-city-adventure-together.png"
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import travelersExploringCityAdventureTogether from "../../../public/travelers-exploring-city-adventure-together.png";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,21 +18,26 @@ export default function Hero() {
             Connect with Travel Companions Around the World
           </h1>
           <p className="text-xl text-muted-foreground text-balance mb-8">
-            Discover curated trips, match with like-minded travelers, read authentic reviews, and book securely. Your
-            next unforgettable adventure starts here.
+            Discover curated trips, match with like-minded travelers, read
+            authentic reviews, and book securely. Your next unforgettable
+            adventure starts here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              Explore Trips
-            </Button>
             <Button
+              asChild
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
+            >
+              <Link href={"/trips"}>Explore Trips</Link>
+            </Button>
+            {/* <Button
               size="lg"
               variant="outline"
               className="border-accent text-accent hover:bg-accent/10 gap-2 bg-transparent"
             >
               <PlayCircle className="w-4 h-4" />
               Watch Demo
-            </Button>
+            </Button> */}
           </div>
 
           <div className="mt-12 flex items-center gap-8">
@@ -61,5 +66,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -24,5 +24,14 @@ NEXT_PUBLIC_SSL_SECRET_KEY=rasel68814ac47cc88@ssl
 # SSL_FAIL_FRONTEND_URL=https://tough-tour.vercel.app/payment/failed
 # SSL_CANCEL_FRONTEND_URL=https://tough-tour.vercel.app/payment/cancel
 
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+CLERK_SECRET_KEY=sk_test_xxx
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/signin
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/auth/callback
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/auth/callback
+
+
 এমন অভিশাপ দেও যাতে তোমার পরে যেন অন্য কোন দোয়া কাজে না লাগে। 
 https://www.youtube.com/watch?v=YS-Cfh-ZJUc&list=RDYS-Cfh-ZJUc&start_radio=1

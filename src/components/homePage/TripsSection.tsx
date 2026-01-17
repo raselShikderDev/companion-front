@@ -94,7 +94,7 @@ const TripsSection = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground bg-transparent"
+              className="border-accent dark:hover:text-white text-accent hover:bg-accent hover:text-accent-foreground bg-transparent"
             >
               View All Trips <ChevronRight className="w-4 h-4 ml-2" />
             </Button>

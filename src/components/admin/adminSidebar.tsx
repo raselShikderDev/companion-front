@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: > */
-/** biome-ignore-all lint/style/useImportType: <explanation> */
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
+/** biome-ignore-all lint/style/useImportType: > */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: > */
 /** biome-ignore-all assist/source/organizeImports: > */
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: > */
 "use client";

@@ -26,7 +26,7 @@ export default function NotFoundContent() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button asChild size="lg" variant="outline" className="gap-2">
+          <Button asChild size="lg" variant="ghost" className="gap-2">
             <Link href="/">
               <ArrowLeft className="h-4 w-4" />
               Go Home
