@@ -121,3 +121,134 @@ export const logInUser = async (_currentState: any, formData: any) => {
     };
   }
 };
+
+
+
+export async function demoAdminLogin() {
+  try {
+    // 🔑 DEMO ADMIN CREDENTIALS
+    const credentials = {
+      email: "demo.admin@test.com",
+      password: "DemoAdmin123!",
+    };
+
+    const res = await serverFetch.post("/auth/signin", {
+      body: JSON.stringify(credentials),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+
+    const cookies = res.headers.getSetCookie();
+    if (!cookies || cookies.length === 0) {
+      throw new Error("No cookies returned");
+    }
+
+    let accessToken: any = null;
+    let refreshToken: any = null;
+
+    cookies.forEach((c) => {
+      const parsed = parse(c);
+      if (parsed.accessToken) accessToken = parsed;
+      if (parsed.refreshToken) refreshToken = parsed;
+    });
+
+    if (!accessToken || !refreshToken) {
+      throw new Error("Missing auth tokens");
+    }
+
+    await setCookie("accessToken", accessToken.accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: Number(accessToken["Max-Age"]) || 60 * 60,
+    });
+
+    await setCookie("refreshToken", refreshToken.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: Number(refreshToken["Max-Age"]) || 60 * 60 * 24 * 30,
+    });
+
+    const decoded = jwt.verify(
+      accessToken.accessToken,
+      process.env.JWT_ACCESS_SECRET as string
+    ) as JwtPayload;
+
+    redirect(getDefaultDashboard(decoded.role as UserRole));
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Demo admin login failed",
+    };
+  }
+}
+
+
+export async function demoExplorerLogin() {
+  try {
+    // 🔑 DEMO CREDENTIALS
+    const credentials = {
+      email: "explorer2@test.com",
+      password: "SecurePass123!",
+    };
+
+    const res = await serverFetch.post("/auth/signin", {
+      body: JSON.stringify(credentials),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+
+    const cookies = res.headers.getSetCookie();
+    if (!cookies || cookies.length === 0) {
+      throw new Error("No cookies returned");
+    }
+
+    let accessToken: any = null;
+    let refreshToken: any = null;
+
+    cookies.forEach((c) => {
+      const parsed = parse(c);
+      if (parsed.accessToken) accessToken = parsed;
+      if (parsed.refreshToken) refreshToken = parsed;
+    });
+
+    if (!accessToken || !refreshToken) {
+      throw new Error("Missing auth tokens");
+    }
+
+    // ✅ Set cookies in Next.js
+    await setCookie("accessToken", accessToken.accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: Number(accessToken["Max-Age"]) || 60 * 60,
+    });
+
+    await setCookie("refreshToken", refreshToken.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: Number(refreshToken["Max-Age"]) || 60 * 60 * 24 * 30,
+    });
+
+    // Decode role
+    const decoded = jwt.verify(
+      accessToken.accessToken,
+      process.env.JWT_ACCESS_SECRET as string
+    ) as JwtPayload;
+
+    redirect(getDefaultDashboard(decoded.role as UserRole));
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Demo explorer login failed",
+    };
+  }
+}
