@@ -1,4 +1,6 @@
 /** biome-ignore-all assist/source/organizeImports: > */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: > */
+/** biome-ignore-all lint/style/useImportType: > */
 "use client";
 
 import { Button } from "@/components/ui/button";

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: > */
 import { IUser } from "../user.interface";
 
 export interface IAdmin {

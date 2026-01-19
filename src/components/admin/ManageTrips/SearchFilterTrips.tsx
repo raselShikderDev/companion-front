@@ -19,7 +19,9 @@ const SearchFilterTrips = () => {
                         { label: TripStatus.CANCELLED, value: "false" },
                     ]}
                 />
-                <DateRangeFilter />
+                <div className="hidden md:block">
+                    <DateRangeFilter />
+                </div>
                 <ClearFiltersButton />
             </div>
         </div>

@@ -13,6 +13,7 @@ import InputFeildError from "@/lib/inputFeildError";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 import { IInputErrorState } from "@/lib/getInputFeildError";
 import { Alert, AlertDescription } from "../ui/alert";
+import DemoLoginButtons from "../auth/DemoLoginButtons";
 
 
 export default function ({ redirect }: { redirect?: string }) {
@@ -26,8 +27,8 @@ export default function ({ redirect }: { redirect?: string }) {
       toast.error(state.message === "fetch failed" ? "Unexpected Error occured! Try again" : state.message);
     }
   }, [state]);
-  console.log({state});
-  
+  console.log({ state });
+
   return (
     <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
       <form action={formActoin} className="space-y-4">
@@ -84,15 +85,15 @@ export default function ({ redirect }: { redirect?: string }) {
 
         {/* Remember me & forgot password */}
         <div className="flex items-center justify-between text-sm">
-          <Link href="/forget-password" className="text-blue-600 hover:underline">
+          <Link href="/forget-password" className="text-blue-600 hover:underline dark:text-gray-200">
             Forgot password?
           </Link>
         </div>
-   {state?.success === false && !state?.errors && (
-        <Alert variant="destructive">
-          <AlertDescription>{state?.message}</AlertDescription>
-        </Alert>
-      )}
+        {state?.success === false && !state?.errors && (
+          <Alert variant="destructive">
+            <AlertDescription>{state?.message}</AlertDescription>
+          </Alert>
+        )}
         {/* Login button */}
         <Button
           type="submit"
@@ -106,6 +107,18 @@ export default function ({ redirect }: { redirect?: string }) {
           )}
           {!isPending && "LogIn"}
         </Button>
+        {/* Divider */}
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">
+              Or try a demo
+            </span>
+          </div>
+        </div>
+        <DemoLoginButtons />
       </form>
     </div>
   )

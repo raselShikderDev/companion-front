@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useImportType: > */
 import { Gender } from "./enum.interface";
 import { IMatch } from "./match.interface";
 import { IPayment } from "./payment.interface";

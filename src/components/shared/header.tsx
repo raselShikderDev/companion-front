@@ -13,6 +13,7 @@ import { getUserInfo } from "@/services/auth/getUserInfo";
 import { Role } from "@/types/enum.interface";
 import { IUser } from "@/types/user.interface";
 import { usePathname } from "next/navigation";
+import { ModeToggle } from "./ModeToggle";
 
 export default function Header() {
   const pathname = usePathname();
@@ -39,6 +40,8 @@ export default function Header() {
     if (user?.role === Role.EXPLORER) return "/dashboard";
     return "/signup";
   };
+
+  console.log({ pathname });
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
@@ -92,7 +95,7 @@ export default function Header() {
         <div className="hidden md:flex items-center py-1.5 gap-3">
           {!user?.id && (
             <Link href={"/signin"}>
-              <Button className="bg-transparent text-black hover:text-white">
+              <Button className={`${pathname === "/signin" && "hidden"} bg-transparent text-black hover:text-white dark:text-white dark:font-bold dark:hover:text-white`}>
                 Sign In
               </Button>
             </Link>
@@ -102,8 +105,14 @@ export default function Header() {
             href={getSignupRedirect()}
             className="bg-accent rounded-sm text-accent-foreground hover:bg-accent/90"
           >
-            <Button variant={"ghost"}>Get Started</Button>
+            <Button
+              className={`${pathname === "/signup" && "hidden"}`}
+              variant={"ghost"}
+            >
+              Get Started
+            </Button>
           </Link>
+          <ModeToggle />
         </div>
 
         <Button

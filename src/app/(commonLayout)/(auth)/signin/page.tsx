@@ -37,3 +37,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
+
+// https://chatgpt.com/share/694fb59a-4a4c-8003-8b21-48431e8614f4

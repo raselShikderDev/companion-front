@@ -30,7 +30,7 @@ export default function MatchActionButtons({
   const handleAction = async (nextStatus: MatchStatus) => {
     setLoading(nextStatus);
     try {
-      const res = await updateMatchStatus( matchId, status);
+      const res = await updateMatchStatus(matchId, status);
 
       if (!res.success) {
         toast.error(res.message || "Failed to update match");
@@ -54,7 +54,7 @@ export default function MatchActionButtons({
             <Button
               size="sm"
               variant="outline"
-              className="w-full gap-2 cursor-pointer"
+              className="w-full gap-2 cursor-pointer dark:hover:text-primary"
             >
               <Eye className="h-4 w-4" /> View
             </Button>
@@ -67,7 +67,7 @@ export default function MatchActionButtons({
     );
   }
 
-  if(isMatchCreator){
+  if (isMatchCreator) {
     return (
       <Button className="w-full" disabled variant={"outline"}>Request sent</Button>
     )

@@ -25,7 +25,7 @@ export default async function TripCardForBook({
   console.log("payload && payload.userId: ", payload && payload.userId);
 
   return (
-    <div className="rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 group cursor-pointer">
+    <div className="rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 group cursor-pointer bg-white/90 dark:bg-slate-900/80">
       <div className="relative h-48 overflow-hidden bg-card">
         <Image
           src={trip?.image || "/placeholder.svg"}
@@ -56,7 +56,7 @@ export default async function TripCardForBook({
         </p>
         <div className="flex items-center gap-1 mb-4">
           <Calendar className="h-4 w-4 text-primary" />
-         Starting at {formatDateTime(trip.startDate)}
+          Starting at {formatDateTime(trip.startDate)}
         </div>
         <div className="flex gap-2 flex-wrap mb-4">
           {trip?.journeyType.map((tag) => (

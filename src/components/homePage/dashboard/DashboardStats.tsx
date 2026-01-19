@@ -4,9 +4,7 @@
 "use client";
 
 import {
-  MapPin,
   Star,
-  Users,
   Zap,
   CheckCircle,
   TrendingUp,
