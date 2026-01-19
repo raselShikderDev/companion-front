@@ -24,6 +24,7 @@ NEXT_PUBLIC_SSL_SECRET_KEY=rasel68814ac47cc88@ssl
 # SSL_FAIL_FRONTEND_URL=https://tough-tour.vercel.app/payment/failed
 # SSL_CANCEL_FRONTEND_URL=https://tough-tour.vercel.app/payment/cancel
 
+এমন অভিশাপ দেও যাতে তোমার পরে যেন অন্য কোন দোয়া কাজে না লাগে। 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 CLERK_SECRET_KEY=sk_test_xxx
 
